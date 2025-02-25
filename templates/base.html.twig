@@ -12,6 +12,24 @@
         {% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+        <header class="site-header">
+            <a class="site-logo" href="{{ path('app_home') }}">Accueil</a>
+            <ul class="menu">
+                <li>
+                    <a class="button" href="{{ path('app_login') }}">Connexion</a>
+                </li>
+                <li>
+                    <a class="button" href="{{ path('app_register') }}">Inscription</a>
+                </li>
+            </ul>
+        </header>
+        <main class="site-main">
+            {% block body %}{% endblock %}
+        </main>
+        <footer class="site-footer">
+            <a href="https://electric-goat.net">Electric Goat</a>
+            <a href="https://electric-goat.net/products/4">Le jeu</a>
+            <a href="https://twitch.tv/bloubill">Twitch Du dev</a>
+        </footer>
     </body>
 </html>

@@ -41,4 +41,8 @@ return [
     '@hotwired/turbo' => [
         'version' => '7.3.0',
     ],
+    'tom-select/dist/css/tom-select.default.css' => [
+        'version' => '2.4.3',
+        'type' => 'css',
+    ],
 ];
