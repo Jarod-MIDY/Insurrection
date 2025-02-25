@@ -11,20 +11,39 @@
             {% block importmap %}{{ importmap('app') }}{% endblock %}
         {% endblock %}
     </head>
-    <body>
+    <body {{ stimulus_controller('modal') }}>
         <header class="site-header">
             <a class="site-logo" href="{{ path('app_home') }}">Accueil</a>
+            {% if app.user %}
+                <ul class="menu">
+                    <li>
+                        <a class="button" href="">Nouvelle Session</a>
+                    </li>
+                    <li>
+                        <a class="button" href="">Rejoindre une Session</a>
+                    </li>
+                    <li>
+                        <a class="button" href="">Historique de Jeu</a>
+                    </li>
+                </ul>
+            {% endif %}
             <ul class="menu">
                 <li>
-                    <a class="button" href="{{ path('app_login') }}">Connexion</a>
+                    <a {{ stimulus_action('modal', 'open') }} class="button" href="{{ path('app_login') }}">Connexion</a>
                 </li>
                 <li>
-                    <a class="button" href="{{ path('app_register') }}">Inscription</a>
+                    <a {{ stimulus_action('modal', 'open') }} class="button" href="{{ path('app_register') }}">Inscription</a>
                 </li>
+                {% if app.user %}
+                    <li>
+                        <a class="button" href="{{ path('app_logout') }}">Deconnexion</a>
+                    </li>
+                {% endif %}
             </ul>
         </header>
         <main class="site-main">
             {% block body %}{% endblock %}
+            {{ include('_modal.html.twig') }}
         </main>
         <footer class="site-footer">
             <a href="https://electric-goat.net">Electric Goat</a>

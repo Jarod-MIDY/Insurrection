@@ -3,21 +3,32 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
-    {% for flash_error in app.flashes('verify_email_error') %}
-        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
-    {% endfor %}
+    <turbo-stream action="update" target="modal">
+        <template>
+            {% for flash_error in app.flashes('verify_email_error') %}
+                <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+            {% endfor %}
 
-    <h1>Register</h1>
+            
+            {{ form_errors(registrationForm) }}
+            {{ form_start(registrationForm, {attr:
+                {
+                    class: 'form grid gap-2',
+                    action: path('app_register')
+                }
+            }) }}
+                <h1>Inscription</h1>
+                {{ form_row(registrationForm.username, {attr:{class:"form-row"}}) }}
+                {{ form_row(registrationForm.email, {
+                    attr:{class:"form-row"}
+                }) }}
+                {{ form_row(registrationForm.plainPassword, {
+                    attr:{class:"form-row"}
+                }) }}
+                {{ form_row(registrationForm.agreeTerms) }}
 
-    {{ form_errors(registrationForm) }}
-
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.username) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
-
-        <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+                <button type="submit" class="button">Inscription</button>
+            {{ form_end(registrationForm) }}
+            </template>
+    </turbo-stream>
 {% endblock %}
