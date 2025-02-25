@@ -17,7 +17,7 @@
             {% if app.user %}
                 <ul class="menu">
                     <li>
-                        <a class="button" href="">Nouvelle Session</a>
+                        <twig:NewGameButton author="{{ app.user }}"></twig:NewGameButton>
                     </li>
                     <li>
                         <a class="button" href="">Rejoindre une Session</a>

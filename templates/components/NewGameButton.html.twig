@@ -1,0 +1,5 @@
+{% if unfinishedGame == null %}
+    <a {{ stimulus_action('modal', 'open') }} class="button" href="{{ path('app_game_new') }}">Nouvelle Session</a>
+{% else %}
+    <a {{ stimulus_action('modal', 'open') }} class="button" href="{{ path('app_game_edit', { game: unfinishedGame.id }) }}">Editer ma Session</a>
+{% endif %}

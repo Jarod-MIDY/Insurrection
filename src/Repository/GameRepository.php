@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\Game;
+use App\Entity\User;
+use App\Enum\GameState;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -16,28 +18,23 @@ class GameRepository extends ServiceEntityRepository
         parent::__construct($registry, Game::class);
     }
 
-//    /**
-//     * @return Game[] Returns an array of Game objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('g')
-//            ->andWhere('g.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('g.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function save(Game $game, bool $flush)
+    {
+        $this->getEntityManager()->persist($game);
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
 
-//    public function findOneBySomeField($value): ?Game
-//    {
-//        return $this->createQueryBuilder('g')
-//            ->andWhere('g.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function findUnfinishedOrNull(?User $author = null): ?Game
+    {
+        return $this->createQueryBuilder('game')
+            ->andWhere('game.author = :author')
+            ->andWhere('game.state != :state')
+            ->setParameter('state', GameState::CLOSED)
+            ->setParameter('author', $author)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 }

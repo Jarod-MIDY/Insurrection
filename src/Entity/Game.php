@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\GameState;
 use App\Repository\GameRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -44,6 +45,13 @@ class Game
      */
     #[ORM\OneToMany(targetEntity: Scene::class, mappedBy: 'game', orphanRemoval: true)]
     private Collection $scenes;
+
+    #[ORM\ManyToOne(inversedBy: 'games')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $author = null;
+
+    #[ORM\Column(enumType: GameState::class)]
+    private ?GameState $state = null;
 
     public function __construct()
     {
@@ -172,6 +180,30 @@ class Game
                 $scene->setGame(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): static
+    {
+        $this->author = $author;
+
+        return $this;
+    }
+
+    public function getState(): ?GameState
+    {
+        return $this->state;
+    }
+
+    public function setState(GameState $state): static
+    {
+        $this->state = $state;
 
         return $this;
     }

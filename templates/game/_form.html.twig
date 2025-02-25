@@ -1,0 +1,29 @@
+{{ form_start(form, {attr:
+    {
+    action: path('app_game_new'),
+    class: 'form grid gap-2'
+    }
+}) }}
+    <h1 class="text-center">{{title}}</h1>
+    {{  form_row(form.name, {
+            attr:{class:"form-row"}
+        }) 
+    }}
+    {{  form_row(form.subject, {
+            attr:{class:"form-row"}
+        }) 
+    }}
+    {{  form_row(form.thingsToTalkAbout, {
+            attr:{class:"form-row"}
+        }) 
+    }}
+    {{  form_row(form.thingsToHalfTalk, {
+            attr:{class:"form-row"}
+        }) 
+    }}
+    {{  form_row(form.banedTopics, {
+            attr:{class:"form-row"}
+        }) 
+    }}
+    <button type="submit" class="button">Valider</button>
+{{  form_end(form) }}
