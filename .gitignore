@@ -1,0 +1,52 @@
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/public/library/files/
+/var/
+/vendor/
+/node_modules/
+/public/build/
+###< symfony/framework-bundle ###
+
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###
+
+###> symfony/phpunit-bridge ###
+.phpunit.result.cache
+/phpunit.xml
+###< symfony/phpunit-bridge ###
+# Ajout maison
+/.env
+compose.override.yaml
+.php-cs-fixer.php
+.php-cs-fixer.cache
+phpcs.xml.dist
+###< php-cs-fixer ###
+.prettierrc.json
+/assets/icons/
+/.vscode/*
+!/.vscode/settings.json
+/tools/
+/public/library/
+/public/-asset/
+/public/dev/
+composer-unused.phar
+/package-lock.json
+/public/sitemap*
+###> liip/imagine-bundle ###
+/public/media/cache/
+###< liip/imagine-bundle ###
+
+###> phpstan/phpstan ###
+phpstan.neon
+###< phpstan/phpstan ###
+
+###> symfony/asset-mapper ###
+/public/assets/
+/assets/vendor/
+###< symfony/asset-mapper ###
