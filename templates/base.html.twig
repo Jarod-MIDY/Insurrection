@@ -20,20 +20,19 @@
                         <twig:NewGameButton author="{{ app.user }}"></twig:NewGameButton>
                     </li>
                     <li>
-                        <a class="button" href="">Rejoindre une Session</a>
-                    </li>
-                    <li>
                         <a class="button" href="">Historique de Jeu</a>
                     </li>
                 </ul>
             {% endif %}
             <ul class="menu">
-                <li>
-                    <a {{ stimulus_action('modal', 'open') }} class="button" href="{{ path('app_login') }}">Connexion</a>
-                </li>
-                <li>
-                    <a {{ stimulus_action('modal', 'open') }} class="button" href="{{ path('app_register') }}">Inscription</a>
-                </li>
+                {% if not app.user %}
+                    <li>
+                        <a {{ stimulus_action('modal', 'open') }} class="button" href="{{ path('app_login') }}">Connexion</a>
+                    </li>
+                    <li>
+                        <a {{ stimulus_action('modal', 'open') }} class="button" href="{{ path('app_register') }}">Inscription</a>
+                    </li>
+                {% endif %}
                 {% if app.user %}
                     <li>
                         <a class="button" href="{{ path('app_logout') }}">Deconnexion</a>

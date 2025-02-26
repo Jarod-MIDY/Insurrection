@@ -26,6 +26,14 @@ class GameRepository extends ServiceEntityRepository
         }
     }
 
+    public function remove(Game $game, bool $flush)
+    {
+        $this->getEntityManager()->remove($game);
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
     public function findUnfinishedOrNull(?User $author = null): ?Game
     {
         return $this->createQueryBuilder('game')

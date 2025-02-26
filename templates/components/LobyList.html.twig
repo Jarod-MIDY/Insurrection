@@ -1,0 +1,16 @@
+<section id="lobyList" class="flex flex-column">
+    <h2>Sessions Ouvertes</h2>
+    <ul class="game-loby-list">
+        {% for game in games %}
+            <li class="game-loby-item">
+                <span>
+                    {{ game.name }}
+                </span>
+                <span>
+                    {{ game.players|length }} / 8
+                </span>
+                <a href="">rejoindre</a>
+            </li>
+        {% endfor %}
+    </ul>
+</section>

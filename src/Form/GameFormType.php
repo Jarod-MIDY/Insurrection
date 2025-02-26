@@ -35,6 +35,9 @@ class GameFormType extends AbstractType
             ->add('banedTopics', TextareaType::class, [
                 'label' => 'Sujets Bannis',
             ])
+            ->add('password', TextType::class, [
+                'label' => 'Mot de Passe',
+            ])
         ;
     }
 

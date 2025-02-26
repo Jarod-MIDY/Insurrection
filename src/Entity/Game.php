@@ -53,6 +53,9 @@ class Game
     #[ORM\Column(enumType: GameState::class)]
     private ?GameState $state = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $password = null;
+
     public function __construct()
     {
         $this->players = new ArrayCollection();
@@ -204,6 +207,18 @@ class Game
     public function setState(GameState $state): static
     {
         $this->state = $state;
+
+        return $this;
+    }
+
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): static
+    {
+        $this->password = $password;
 
         return $this;
     }

@@ -57,4 +57,39 @@ class GameController extends AbstractController
             'form' => $form,
         ]);
     }
+
+    #[Route('/game/create-loby/{game}', name: 'app_game_loby')]
+    public function createJoinableLoby(Game $game): Response
+    {
+        $game->setState(GameState::LOBY);
+        $this->gameRepository->save($game, true);
+
+        return $this->redirectToRoute('app_game_show', ['game' => $game->getId()]);
+    }
+
+    #[Route('/game/start/{game}', name: 'app_game_start')]
+    public function startGame(Game $game): Response
+    {
+        $game->setState(GameState::PLAYING);
+        $this->gameRepository->save($game, true);
+
+        return $this->redirectToRoute('app_game_show', ['game' => $game->getId()]);
+    }
+
+    #[Route('/game/close/{game}', name: 'app_game_close')]
+    public function closeGame(Game $game): Response
+    {
+        $game->setState(GameState::CLOSED);
+        $this->gameRepository->save($game, true);
+
+        return $this->redirectToRoute('app_game_show', ['game' => $game->getId()]);
+    }
+
+    #[Route('/game/show/{game}', name: 'app_game_show')]
+    public function game(Game $game): Response
+    {
+        return $this->render('game/index.html.twig', [
+            'game' => $game,
+        ]);
+    }
 }

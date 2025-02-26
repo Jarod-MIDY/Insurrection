@@ -1,11 +1,15 @@
 {{ form_start(form, {attr:
     {
-    action: path('app_game_new'),
+    action: path,
     class: 'form grid gap-2'
     }
 }) }}
     <h1 class="text-center">{{title}}</h1>
     {{  form_row(form.name, {
+            attr:{class:"form-row"}
+        }) 
+    }}
+    {{  form_row(form.password, {
             attr:{class:"form-row"}
         }) 
     }}
@@ -25,5 +29,10 @@
             attr:{class:"form-row"}
         }) 
     }}
-    <button type="submit" class="button">Valider</button>
+    <button type="submit" class="button">Sauvegarder</button>
+    {% if game is defined %}
+        <a class="button accent" href="{{ path('app_game_loby', { game: game.id }) }}">
+            Démarrer un loby
+        </a>
+    {% endif %}
 {{  form_end(form) }}
