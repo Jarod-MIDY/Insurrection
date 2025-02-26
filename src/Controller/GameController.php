@@ -3,9 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Game;
+use App\Entity\Player;
 use App\Enum\GameState;
 use App\Form\GameFormType;
+use App\Form\JoinFormType;
 use App\Repository\GameRepository;
+use App\Repository\PlayerRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,6 +19,7 @@ class GameController extends AbstractController
 {
     public function __construct(
         private GameRepository $gameRepository,
+        private PlayerRepository $playerRepository,
     ) {
     }
 
@@ -61,8 +65,13 @@ class GameController extends AbstractController
     #[Route('/game/create-loby/{game}', name: 'app_game_loby')]
     public function createJoinableLoby(Game $game): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
         $game->setState(GameState::LOBY);
         $this->gameRepository->save($game, true);
+        $player = new Player();
+        $player->setGame($game);
+        $player->setLinkedUser($this->getUser());
+        $this->playerRepository->save($player, true);
 
         return $this->redirectToRoute('app_game_show', ['game' => $game->getId()]);
     }
@@ -88,8 +97,46 @@ class GameController extends AbstractController
     #[Route('/game/show/{game}', name: 'app_game_show')]
     public function game(Game $game): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
+        if (!$this->playerRepository->findOneBy(['game' => $game, 'linkedUser' => $this->getUser()])) {
+            throw $this->createAccessDeniedException();
+        }
+
         return $this->render('game/index.html.twig', [
             'game' => $game,
+        ]);
+    }
+
+    #[Route('/game/join/{game}', name: 'app_game_join')]
+    public function joinGame(Game $game, Request $request): Response
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
+        if ($this->playerRepository->findOneBy(['game' => $game, 'linkedUser' => $this->getUser()])) {
+            return $this->redirectToRoute('app_game_show', ['game' => $game->getId()]);
+        }
+        if ($game->getPlayers()->count() >= 8) {
+            $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
+
+            return $this->renderBlock('game/join.html.twig', 'max_players', [
+                'game' => $game,
+            ]);
+        }
+        $form = $this->createForm(JoinFormType::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid() && $form->get('password')->getData() === $game->getPassword()) {
+            $player = new Player();
+            $player->setGame($game);
+            $player->setLinkedUser($this->getUser());
+            $this->playerRepository->save($player, true);
+
+            return $this->redirectToRoute('app_game_show', ['game' => $game->getId()]);
+        }
+
+        $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
+
+        return $this->renderBlock('game/join.html.twig', 'password_form', [
+            'game' => $game,
+            'form' => $form,
         ]);
     }
 }

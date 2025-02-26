@@ -25,7 +25,7 @@ class Player
     #[ORM\JoinColumn(nullable: false)]
     private ?Game $game = null;
 
-    #[ORM\Column(enumType: GameRoles::class)]
+    #[ORM\Column(enumType: GameRoles::class, nullable: true)]
     private ?GameRoles $roles = null;
 
     #[ORM\Column]

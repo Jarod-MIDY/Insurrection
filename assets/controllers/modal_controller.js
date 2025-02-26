@@ -1,5 +1,5 @@
 import { Controller } from '@hotwired/stimulus'
-
+import * as Turbo from '@hotwired/turbo'
 export default class extends Controller {
 	static targets = [
 		'button',
@@ -73,6 +73,7 @@ export default class extends Controller {
 
 		document.querySelector('body').classList.add('overflow-hidden')
 		this.dialogTarget.showModal()
+		Turbo.visit(this.frameTarget.src)
 	}
 
 	close(event) {

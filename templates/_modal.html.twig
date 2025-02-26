@@ -12,13 +12,12 @@
 			</span>
 		</button>
 	</nav>
-	<turbo-frame
+	<div
 		{{ stimulus_target('modal', 'frame') }}
 		tabindex="-1"
-		turbo-visit-control="reload"
 		id="{{ modal.frameId|default('modal') }}"
 		src="{{ modal.route|default('') }}"
 		class="modal-content"
 	>
-	</turbo-frame>
+	</div>
 </dialog>

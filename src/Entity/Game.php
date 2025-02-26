@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\GameRoles;
 use App\Enum\GameState;
 use App\Repository\GameRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -221,5 +222,17 @@ class Game
         $this->password = $password;
 
         return $this;
+    }
+
+    public function getRoles(?string $type = null): array
+    {
+        if ('trajectories' === $type) {
+            return GameRoles::getTrajectories();
+        }
+        if ('rightsOfWay' === $type) {
+            return GameRoles::getRightsOfWay();
+        }
+
+        return GameRoles::cases();
     }
 }

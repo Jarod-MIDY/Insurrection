@@ -23,7 +23,7 @@ enum GameRoles: string
     /**
      * @return GameRoles[]
      */
-    public static function getTrajectory(): array
+    public static function getTrajectories(): array
     {
         return [
             self::MOLOTOV,
@@ -44,5 +44,19 @@ enum GameRoles: string
             self::ECHO,
             self::PEOPLE,
         ];
+    }
+
+    public function label(): string
+    {
+        return match ($this) {
+            self::POWER => 'Pouvoir',
+            self::ORDER => 'Ordre',
+            self::ECHO => 'Echo',
+            self::PEOPLE => 'Peuple',
+            self::MOLOTOV => 'Molotov',
+            self::BADGE => 'Ecusson',
+            self::PAMPHLET => 'Pamphlet',
+            self::STAR => 'Etoile',
+        };
     }
 }

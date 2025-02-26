@@ -9,7 +9,11 @@
                 <span>
                     {{ game.players|length }} / 8
                 </span>
-                <a href="">rejoindre</a>
+                <a {{ stimulus_action('modal', 'open') }} 
+                class="button" 
+                href="{{ path('app_game_join', { game: game.id}) }}">
+                    rejoindre
+                </a>
             </li>
         {% endfor %}
     </ul>

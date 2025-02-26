@@ -1,0 +1,25 @@
+{% block password_form %}
+    <turbo-stream action="update" target="modal">
+        <template>
+            {{ form_start(form, {
+                attr: {
+                    action: path('app_game_join', { game: game.id })
+                }
+            }) }}
+                {{  form_row(form.password, {
+                        attr:{class:"form-row"}
+                    }) 
+                }}
+                <button type="submit" class="button">Rejoindre</button>
+            {{ form_end(form) }}
+        </template>
+    </turbo-stream>
+{% endblock %}
+{% block max_players %}
+    <turbo-stream action="update" target="modal">
+        <template>
+            <h2>Impossible de rejoindre</h2>
+            <p>La session est pleine</p>
+        </template>
+    </turbo-stream>
+{% endblock %}

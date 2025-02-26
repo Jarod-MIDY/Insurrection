@@ -3,5 +3,52 @@
     - {{ game.name }}
 {% endblock %}
 {% block body %}
+    <aside>
+        <h2>Joueurs</h2>
+        <ul>
+            {% for player in game.players %}
+                <li>
+                    <span class="player-name">
+                        {{ player.name ?? player.linkedUser.username }}
+                    </span>
+                    {% if app.user == player.linkedUser %}
+                        <span>
+                        - moi
+                        </span>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </aside>
+    <section class="roles-wrapper trajectories">
+        {% for role in game.roles('trajectories') %}
+            <article>
+                <h3>
+                    {{ role.label }}
+                </h3>
+                <ul>
+                    
+                </ul>
+                <button class="button">
+                    choisir ce role
+                </button>
+            </article>
+        {% endfor %}
+    </section>
+    <section class="roles-wrapper rights-of-way">
+        {% for role in game.roles('rightsOfWay') %}
+            <article>
+                <h3>
+                    {{ role.label }}
+                </h3>
+                <ul>
+                    
+                </ul>
+                <button class="button">
+                    choisir ce role
+                </button>
+            </article>
+        {% endfor %}
+    </section>
     {{ dump(game.name) }}
 {% endblock %}
