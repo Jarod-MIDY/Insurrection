@@ -40,10 +40,12 @@
                 {% endif %}
             </ul>
         </header>
-        <main class="site-main">
-            {% block body %}{% endblock %}
-            {{ include('_modal.html.twig') }}
-        </main>
+        {% block main %}
+            <main class="site-main">
+                {% block body %}{% endblock %}
+            </main>
+        {% endblock %}
+        {{ include('_modal.html.twig') }}
         <footer class="site-footer">
             <a href="https://electric-goat.net">Electric Goat</a>
             <a href="https://electric-goat.net/products/4">Le jeu</a>

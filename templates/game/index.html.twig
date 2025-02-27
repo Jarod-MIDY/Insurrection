@@ -2,53 +2,81 @@
 {% block title %}
     - {{ game.name }}
 {% endblock %}
+{% block main %}
+    <main class="site-main game-loby">
+        {{ block('body') }}
+    </main>
+{% endblock %}
 {% block body %}
-    <aside>
-        <h2>Joueurs</h2>
-        <ul>
-            {% for player in game.players %}
-                <li>
-                    <span class="player-name">
-                        {{ player.name ?? player.linkedUser.username }}
-                    </span>
-                    {% if app.user == player.linkedUser %}
-                        <span>
-                        - moi
+    <aside class="game-loby-aside">
+        <h1>{{ game.name }}</h1>
+        <div>
+            <h2>Thème</h2>
+            <p>
+                {{ game.subject }}
+            </p>
+        </div>
+        <div>
+            <h2>Joueurs</h2>
+            <ul>
+                {% for player in game.players %}
+                    <li>
+                        <span class="player-name">
+                            {{ player.name ?? player.linkedUser.username }}
                         </span>
-                    {% endif %}
-                </li>
-            {% endfor %}
-        </ul>
+                        {% if app.user == player.linkedUser %}
+                            <span>
+                            - moi
+                            </span>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
     </aside>
-    <section class="roles-wrapper trajectories">
-        {% for role in game.roles('trajectories') %}
+    <form class="game-loby-content">
+        <p class="h1">Selectionnez vos rôles</p>
+        <h2>Trajectoires</h2>
+        <section class="roles-wrapper trajectories">
+            {% for role in game.roles('trajectories') %}
+                <article>
+                    <input type="checkbox" id="roles[{{ role.value }}]" name="roles[{{ role.value }}]" value="{{ role.value }}">
+                    <h3>
+                        <span>
+                            {{ role.label }}
+                        </span>
+                        <twig:RoleIcon role="{{ role }}"></twig:RoleIcon> 
+                    </h3>
+                    <label for="roles[{{ role.value }}]">
+                        {{ role.description }}
+                    </label>
+                </article>
+            {% endfor %}
+        </section>
+        <h2>Emprises</h2>
+        <section class="roles-wrapper rights-of-way">
+            {% for role in game.roles('rightsOfWay') %}
+                <article>
+                    <input type="checkbox" id="roles[{{ role.value }}]" name="roles[{{ role.value }}]" value="{{ role.value }}">
+                    <h3>
+                        <span>
+                            {{ role.label }}
+                        </span>
+                        <twig:RoleIcon role="{{ role }}"></twig:RoleIcon> 
+                    </h3>
+                    <label for="roles[{{ role.value }}]">
+                        {{ role.description }}
+                    </label>
+                </article>
+            {% endfor %}
+        </section>
+        <section class="roles-wrapper submit">
             <article>
-                <h3>
-                    {{ role.label }}
-                </h3>
-                <ul>
-                    
-                </ul>
-                <button class="button">
-                    choisir ce role
-                </button>
+                <p>
+                    Un roles vous sera attribué au démarage de la partie en fonction de votre selection et de celles des autres joueurs et joueuses.
+                </p>
+                <button type="submit" class="button">Valider ma selection</button>
             </article>
-        {% endfor %}
-    </section>
-    <section class="roles-wrapper rights-of-way">
-        {% for role in game.roles('rightsOfWay') %}
-            <article>
-                <h3>
-                    {{ role.label }}
-                </h3>
-                <ul>
-                    
-                </ul>
-                <button class="button">
-                    choisir ce role
-                </button>
-            </article>
-        {% endfor %}
-    </section>
-    {{ dump(game.name) }}
+        </section>
+    </form>
 {% endblock %}

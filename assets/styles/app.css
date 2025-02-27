@@ -62,6 +62,13 @@ input {
     box-sizing: border-box;
 }
 
+.h1 {
+    font-size: 1.75rem;
+    text-align: center;
+    margin: 0;
+    margin-bottom: 1rem;
+}
+
 .site-main {
     background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="%23661b1c" d="M329.8 235.69l62.83-82.71 42.86 32.56-62.83 82.75zm-12.86-9.53l66.81-88-45-34.15-66.81 88zm-27.48-97.78l-19.3 39.57 57-75-42.51-32.3-36.24 47.71zm-20.74-73.24l-46.64-35.43-42 55.31 53.67 26.17zm107 235.52l-139-102.71-9.92.91 4.56 2 62.16 138.43-16.52 2.25-57.68-128.5-40-17.7-4-30.84 39.41 19.42 36.36-3.33 17-34.83-110.9-54.09-80.68 112.51L177.6 346.67l-22.7 145.62H341V372.62l35.29-48.93L387 275.77z"/></svg>');
     background-position: right;
@@ -214,6 +221,27 @@ input {
 .gap-3 {
     gap: 0.75rem;
 }
+.game-loby {
+    display: grid;
+    grid-template-areas: 'aside main';
+    grid-template-columns: 1fr 5fr;
+}
+
+.game-loby-aside {
+    grid-area: aside;
+    background-color: var(--dark);
+    padding: 0.5rem;
+}
+.game-loby-content {
+    grid-area: main;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+}
+.game-loby-content h2 {
+    margin-top: 0.75rem;
+    margin-bottom: 0.25rem;
+}
 .game-loby-list {
     background-color: #12151CAF;
     flex-grow: 1;
@@ -236,10 +264,67 @@ input {
     justify-content: space-between;
     align-items: center;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    margin-bottom: 1rem;
+    padding-block: 1rem;
 }
 
 .roles-wrapper article {
     background-color: #12151CAF;
     padding: 1rem;
+    gap: 1rem;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    position: relative;
+    transition: color 0.3s ease-in-out;
+}
+
+.roles-wrapper article:hover {
+    color: var(--light-red);
+}
+
+.roles-wrapper article label::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    cursor: pointer;
+}
+
+.roles-wrapper article input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.roles-wrapper article input[type="checkbox"]:checked + h3,
+.roles-wrapper article input[type="checkbox"]:checked + h3 + label {
+    color: var(--light-red);
+}
+
+.roles-wrapper article input[type="checkbox"]:focus + h3 + label::after,
+.roles-wrapper article input[type="checkbox"]:checked + h3  + label::after {
+    outline: 2px solid currentColor;
+}
+
+.roles-wrapper article input[type="checkbox"]:focus + h3 + label::after {
+    color: var(--light);
+}
+
+
+.roles-wrapper h3 {
+    margin: 0;
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.roles-wrapper svg {
+    fill: currentColor;
+    height: 3rem;
+    width: auto;
+}
+
+.roles-wrapper.submit {
+    margin: auto;
+    max-width: 45ch;
 }
