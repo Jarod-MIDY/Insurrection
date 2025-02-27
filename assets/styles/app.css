@@ -278,7 +278,7 @@ input {
     transition: color 0.3s ease-in-out;
 }
 
-.roles-wrapper article:hover {
+.roles-wrapper:not(.submit) article:hover {
     color: var(--light-red);
 }
 
@@ -327,4 +327,10 @@ input {
 .roles-wrapper.submit {
     margin: auto;
     max-width: 45ch;
+
+}
+
+.roles-wrapper.submit article {
+    justify-content: space-between;
+    height: fit-content;
 }
