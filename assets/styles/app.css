@@ -276,6 +276,7 @@ input {
     height: 100%;
     position: relative;
     transition: color 0.3s ease-in-out;
+    box-sizing: border-box;
 }
 
 .roles-wrapper:not(.submit) article:hover {
@@ -333,4 +334,20 @@ input {
 .roles-wrapper.submit article {
     justify-content: space-between;
     height: fit-content;
+}
+
+.roles-wrapper .players-list {
+    list-style: none;
+    display: flex;
+    padding: 0;
+    margin: 0;
+    align-items: center;
+    gap: 0.25rem;
+    margin-top: auto;
+}
+.roles-wrapper .players-list li {
+    padding-right: 0.25rem;
+}
+.roles-wrapper .players-list li:not(:last-child) {
+    border-right: 1px solid currentColor;
 }

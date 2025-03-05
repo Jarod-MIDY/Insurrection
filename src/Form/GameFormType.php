@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Game;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -21,6 +22,15 @@ class GameFormType extends AbstractType
                 'constraints' => [
                     new NotBlank(),
                     new NotNull(),
+                ],
+            ])
+            ->add('maxPlayers', ChoiceType::class, [
+                'label' => 'Nombre de Joueurs Maximum',
+                'choices' => [
+                    '5' => 5,
+                    '6' => 6,
+                    '7' => 7,
+                    '8' => 8,
                 ],
             ])
             ->add('subject', TextareaType::class, [

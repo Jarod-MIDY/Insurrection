@@ -87,4 +87,34 @@ enum GameRoles: string
             self::STAR => 'round-star',
         };
     }
+
+    public function isTrajectory(): bool
+    {
+        return in_array($this, self::getTrajectories());
+    }
+
+    public function isRightOfWay(): bool
+    {
+        return in_array($this, self::getRightsOfWay());
+    }
+
+    /**
+     * @param GameRoles[] $roles
+     *
+     * @return GameRoles[]
+     */
+    public static function filterTrajectories(array $roles): array
+    {
+        return array_filter($roles, fn (GameRoles $role): bool => $role->isTrajectory());
+    }
+
+    /**
+     * @param GameRoles[] $roles
+     *
+     * @return GameRoles[]
+     */
+    public static function filterRightsOfWay(array $roles): array
+    {
+        return array_filter($roles, fn (GameRoles $role): bool => $role->isRightOfWay());
+    }
 }

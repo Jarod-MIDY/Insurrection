@@ -1,0 +1,73 @@
+{% block roles_form %}
+<turbo-frame id="Loby">
+    {{ form_start(form) }}
+        <p class="h1">Selectionnez vos rôles</p>
+        <h2>Trajectoires</h2>
+        <section class="roles-wrapper trajectories">
+            {% for role in form.trajectories %}
+                {{ _self.renderRole(role, player) }}
+            {% endfor %}
+        </section>
+        <h2>Emprises</h2>
+        <section class="roles-wrapper rights-of-way">
+            {% for role in form.rightsOfWay %}
+                {{ _self.renderRole(role, player) }}
+            {% endfor %}
+        </section>
+        <section class="roles-wrapper submit">
+            <article>
+                <p>
+                    Vous n'êtes pas obliger de selectioner un rôle.
+                    <br>
+                    Votre rôle vous sera toujours attribué au démarage de la partie en fonction de votre selection et de celles des autres joueurs et joueuses.
+                </p>
+                <button type="submit" class="button">Valider ma selection</button>
+            </article>
+        </section>
+    {{ form_end(form) }}
+</turbo-frame>
+{% endblock %}
+{% block waiting_for_other %}
+    <turbo-frame id="Loby">
+        <p class="h2">
+            Votre selection à été effectuée, en attente des autres joueurs
+        </p>
+        <a href="{{ path('app_player_clear_roles_preferences', { player: player.id }) }}">
+            Reinitialiser ma selection
+        </a>
+        <section>
+            <header>
+                <p>
+                    Vous avez choisit :
+                </p>
+            </header>
+        </section>
+        <section class="roles-wrapper">
+            {% for role in player.preferedRoles %}
+                <article>
+                    <h3>
+                        <twig:RoleIcon roleValue="{{ role.value }}"></twig:RoleIcon> 
+                    </h3>
+                    {{ role.description }}
+                </article>
+            {% endfor %}
+        </section>
+    </turbo-frame>
+{% endblock %}
+
+{% macro renderRole(role, player) %}
+    <article>
+        {{ form_widget(role) }}
+        <h3>
+            <twig:RoleIcon roleValue="{{ role.vars.value }}"></twig:RoleIcon> 
+        </h3>
+        {{ form_label(role) }}
+        <ul class="players-list">
+        {% for otherPlayer in player.game.getPlayersWithPreferedRole(role.vars.value) %}
+            <li>
+                {{ otherPlayer.linkedUser.username }}
+            </li>
+        {% endfor %}
+        </ul>
+    </article>
+{% endmacro %}

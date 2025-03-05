@@ -98,12 +98,14 @@ class GameController extends AbstractController
     public function game(Game $game): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
-        if (!$this->playerRepository->findOneBy(['game' => $game, 'linkedUser' => $this->getUser()])) {
+        $player = $this->playerRepository->findOneBy(['game' => $game, 'linkedUser' => $this->getUser()]);
+        if (!$player) {
             throw $this->createAccessDeniedException();
         }
 
         return $this->render('game/index.html.twig', [
             'game' => $game,
+            'player' => $player,
         ]);
     }
 

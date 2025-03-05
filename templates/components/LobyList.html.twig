@@ -7,7 +7,7 @@
                     {{ game.name }}
                 </span>
                 <span>
-                    {{ game.players|length }} / 8
+                    {{ game.players|length }} / {{ game.maxPlayers }}
                 </span>
                 <a {{ stimulus_action('modal', 'open') }} 
                 class="button" 

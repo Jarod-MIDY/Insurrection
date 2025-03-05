@@ -49,6 +49,9 @@ class Player
     #[ORM\OneToMany(targetEntity: InfluenceToken::class, mappedBy: 'player', orphanRemoval: true)]
     private Collection $influenceTokens;
 
+    #[ORM\Column(type: Types::SIMPLE_ARRAY, nullable: true, enumType: GameRoles::class)]
+    private ?array $preferedRoles = null;
+
     public function __construct()
     {
         $this->characters = new ArrayCollection();
@@ -188,6 +191,21 @@ class Player
                 $influenceToken->setPlayer(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return GameRoles[]|null
+     */
+    public function getPreferedRoles(): ?array
+    {
+        return $this->preferedRoles;
+    }
+
+    public function setPreferedRoles(?array $preferedRoles): static
+    {
+        $this->preferedRoles = $preferedRoles;
 
         return $this;
     }

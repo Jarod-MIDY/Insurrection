@@ -4,4 +4,5 @@
     <a {{ stimulus_action('modal', 'open') }} class="button" href="{{ path('app_game_edit', { game: unfinishedGame.id }) }}">Editer ma Session</a>
 {% elseif unfinishedGame.state.value == 'loby' %}
     <a class="button" href="{{ path('app_game_show', { game: unfinishedGame.id }) }}">Voir ma Session</a>
+    <a {{ stimulus_action('modal', 'open') }} class="button" href="{{ path('app_game_edit', { game: unfinishedGame.id }) }}">Editer ma Session</a>
 {% endif %}

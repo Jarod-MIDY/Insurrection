@@ -19,9 +19,19 @@
         <div>
             <h2>Joueurs</h2>
             <ul>
+                {% set emptySpot = game.maxPlayers - game.players.count %}
+                {% for i in 1..emptySpot %}
+                    {% if emptySpot != 0 %}
+                        <li>
+                            <span>
+                               place libre
+                            </span>
+                        </li>
+                    {% endif %}
+                {% endfor %}
                 {% for player in game.players %}
                     <li>
-                        <span class="player-name">
+                        <span class="player-name {{ app.user == game.author ? 'game-author' : '' }}">
                             {{ player.name ?? player.linkedUser.username }}
                         </span>
                         {% if app.user == player.linkedUser %}
@@ -29,56 +39,20 @@
                             - moi
                             </span>
                         {% endif %}
+                        {% if player.preferedRoles|length > 0 and not player.roles  %}
+                            <span>
+                                roles choisits, en attente des autres joueurs
+                            </span>
+                        {% endif %}
                     </li>
                 {% endfor %}
             </ul>
         </div>
     </aside>
-    <form class="game-loby-content">
-        <p class="h1">Selectionnez vos rôles</p>
-        <h2>Trajectoires</h2>
-        <section class="roles-wrapper trajectories">
-            {% for role in game.roles('trajectories') %}
-                <article>
-                    <input type="checkbox" id="roles[{{ role.value }}]" name="roles[{{ role.value }}]" value="{{ role.value }}">
-                    <h3>
-                        <span>
-                            {{ role.label }}
-                        </span>
-                        <twig:RoleIcon role="{{ role }}"></twig:RoleIcon> 
-                    </h3>
-                    <label for="roles[{{ role.value }}]">
-                        {{ role.description }}
-                    </label>
-                </article>
-            {% endfor %}
-        </section>
-        <h2>Emprises</h2>
-        <section class="roles-wrapper rights-of-way">
-            {% for role in game.roles('rightsOfWay') %}
-                <article>
-                    <input type="checkbox" id="roles[{{ role.value }}]" name="roles[{{ role.value }}]" value="{{ role.value }}">
-                    <h3>
-                        <span>
-                            {{ role.label }}
-                        </span>
-                        <twig:RoleIcon role="{{ role }}"></twig:RoleIcon> 
-                    </h3>
-                    <label for="roles[{{ role.value }}]">
-                        {{ role.description }}
-                    </label>
-                </article>
-            {% endfor %}
-        </section>
-        <section class="roles-wrapper submit">
-            <article>
-                <p>
-                    Vous n'êtes pas obliger de selectioner un rôle.
-                    <br>
-                    Votre rôle vous sera toujours attribué au démarage de la partie en fonction de votre selection et de celles des autres joueurs et joueuses.
-                </p>
-                <button type="submit" class="button">Valider ma selection</button>
-            </article>
-        </section>
-    </form>
+    <turbo-frame 
+        class="game-loby-content" 
+        id="Loby" 
+        src="{{ path('app_player_save_roles_preferences', { player: player.id }) }}"
+    >
+    </turbo-frame>
 {% endblock %}

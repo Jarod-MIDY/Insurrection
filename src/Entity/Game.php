@@ -43,6 +43,13 @@ class Game
     #[ORM\OneToMany(targetEntity: Player::class, mappedBy: 'game', orphanRemoval: true)]
     private Collection $players;
 
+    #[Assert\Range(
+        min: 5,
+        max: 8,
+    )]
+    #[ORM\Column]
+    private int $maxPlayers = 8;
+
     /**
      * @var Collection<int, Scene>
      */
@@ -236,5 +243,28 @@ class Game
         }
 
         return GameRoles::cases();
+    }
+
+    public function getMaxPlayers(): int
+    {
+        return $this->maxPlayers;
+    }
+
+    public function setMaxPlayers(int $maxPlayers): static
+    {
+        $this->maxPlayers = $maxPlayers;
+
+        return $this;
+    }
+
+    public function getPlayersWithPreferedRole(string|GameRoles $role): array
+    {
+        if (!$role instanceof GameRoles) {
+            $role = GameRoles::from($role);
+        }
+
+        return $this->players->filter(function (Player $player) use ($role) {
+            return in_array($role, $player->getPreferedRoles());
+        })->toArray();
     }
 }

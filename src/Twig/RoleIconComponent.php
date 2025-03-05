@@ -11,6 +11,8 @@ class RoleIconComponent
 {
     public string $icon;
 
+    public GameRoles $role;
+
     public const SVG_DIRECTORY = 'icons/roles';
 
     public function __construct(
@@ -21,8 +23,9 @@ class RoleIconComponent
         }
     }
 
-    public function mount(GameRoles $role): void
+    public function mount(string $roleValue): void
     {
-        $this->icon = $this->filesystem->readFile(self::SVG_DIRECTORY.'/'.$role->getIconName().'.svg');
+        $this->role = GameRoles::from($roleValue);
+        $this->icon = $this->filesystem->readFile(self::SVG_DIRECTORY.'/'.$this->role->getIconName().'.svg');
     }
 }

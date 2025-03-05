@@ -9,6 +9,10 @@
             attr:{class:"form-row"}
         }) 
     }}
+    {{ form_row(form.maxPlayers, {
+            attr:{class:"form-row"}
+        }) 
+    }}
     {{  form_row(form.password, {
             attr:{class:"form-row"}
         }) 
@@ -30,7 +34,7 @@
         }) 
     }}
     <button type="submit" class="button">Sauvegarder</button>
-    {% if game is defined %}
+    {% if game is defined and game.state.value != 'loby' %}
         <a class="button accent" href="{{ path('app_game_loby', { game: game.id }) }}">
             Démarrer un loby
         </a>
