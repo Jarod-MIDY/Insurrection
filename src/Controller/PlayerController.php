@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Player;
 use App\Enum\GameRoles;
+use App\Form\PlayerInfoFormType;
 use App\Form\RolesSelectionFormType;
 use App\Records\RolesSelection;
 use App\Repository\GameRepository;
@@ -12,6 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\UX\Turbo\TurboBundle;
 
 class PlayerController extends AbstractController
 {
@@ -36,6 +38,7 @@ class PlayerController extends AbstractController
 
         return $this->render('player/index.html.twig', [
             'player' => $player,
+            'informations' => $player->getRole()->getCharacterSheet($player->getInformations()),
         ]);
     }
 
@@ -104,5 +107,43 @@ class PlayerController extends AbstractController
         $this->playerRepository->remove($player, true);
 
         return $this->redirectToRoute('app_home');
+    }
+
+    #[Route('/player/{player}/edit', name: 'app_player_edit')]
+    public function edit(Player $player, Request $request): Response
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
+        if ($this->getUser() !== $player->getLinkedUser()) {
+            throw $this->createAccessDeniedException();
+        }
+        if (null === $player->getRole()) {
+            return $this->redirectToRoute('app_player_save_roles_preferences', [
+                'player' => $player->getId(),
+            ]);
+        }
+
+        $playerInfoDto = $player->getRole()->getCharacterSheet($player->getInformations());
+        $form = $this->createForm(PlayerInfoFormType::class, $playerInfoDto, [
+            'action' => $this->generateUrl('app_player_edit', [
+                'player' => $player->getId(),
+            ]),
+        ]);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $player->setInformations($playerInfoDto->__serialize());
+            $this->playerRepository->save($player, true);
+
+            return $this->redirectToRoute('app_game_show', [
+                'game' => $player->getGame()->getId(),
+            ]);
+        }
+
+        $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
+
+        return $this->render('player/form.html.twig', [
+            'form' => $form,
+            'player' => $player,
+        ]);
     }
 }

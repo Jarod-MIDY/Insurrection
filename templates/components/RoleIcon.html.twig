@@ -1,4 +1,6 @@
-<span>
-    {{ role.label }}
-</span>
+{% if not iconOnly %}
+    <span>
+        {{ role.label }}
+    </span>
+{% endif %}
 {{ icon | raw }}

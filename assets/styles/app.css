@@ -166,9 +166,10 @@ input {
     background-color: var(--red-1);
     color: var(--light);
 }
+.button-link svg,
 .button svg {
     height: 1rem;
-    width: 1rem;
+    width: auto;
     fill: currentColor;
 }
 
@@ -237,6 +238,8 @@ input {
     padding: 0.5rem;
     display: flex;
     flex-direction: column;
+    position: relative;
+    isolation: isolate;
 }
 .game-loby-content h2 {
     margin-top: 0.75rem;
@@ -350,4 +353,107 @@ input {
 }
 .roles-wrapper .players-list li:not(:last-child) {
     border-right: 1px solid currentColor;
+}
+.player-sheet {
+    display: grid;
+    grid-template-areas:
+    'header right' 
+    'infos  right' 
+    'notes  notes';
+    flex-grow: 1;
+    grid-template-rows: min-content min-content auto;
+    grid-template-columns: 7fr 5fr;
+    column-gap: 2rem;
+    row-gap: 1rem;
+}
+.player-sheet > svg {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+    width: 100%;
+    z-index: -1;
+    fill: var(--red-1);
+    background-color: var(--gray-1);
+}
+
+.immersion-text {
+    max-width: 50ch;
+    background-color: #12151CAF;
+    margin: 0;
+    margin-left: -0.5rem;
+    margin-top: -0.5rem;
+    padding: 0.5rem;
+    position: relative;
+    grid-area: header;
+    height: fit-content;
+}
+.immersion-text::after {
+    position: absolute;
+    display: block;
+    content: "";
+    background-color: #12151CAF;
+    left: 100%;
+    top: 0;
+    bottom: 0;
+    width: 32px;
+    clip-path: polygon(0 0, 0% 100%, 125% 0);
+}
+.immersion-text p {
+    margin: 0;
+}
+.agents-wrapper {
+    grid-area: right;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.agents-list {
+    flex-grow: 1;
+    display: flex;
+    gap: 0.25rem;
+    padding: 0;
+    margin: 0;
+    flex-direction: column-reverse;
+    list-style: none;
+    border-radius: 0.125rem;
+    background: #12151CAF;
+    max-height: 450px;
+    overflow: scroll;
+}
+.agents-list li {
+    background-color: #12151CAF;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.125rem;
+    display: grid;
+}
+
+.agents-list li div {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+.player-character-infos {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    grid-area: infos;
+}
+.player-character-notes {
+    grid-area: notes;
+    background-color: #12151CAF;
+    margin-inline: -0.5rem;
+    margin-bottom: -0.5rem;
+    display: flex;
+    flex-direction: column;
+    padding-inline: 0.5rem;
+    overflow: scroll;
+    max-height: 260px;
+    margin-top: auto;
+}
+.solid-lines {
+    flex-grow: 1;
+    line-height: 2rem;
+    background-image: linear-gradient(#3e4248af 1px, transparent 1px);
+    background-size: 20px 30px;
 }

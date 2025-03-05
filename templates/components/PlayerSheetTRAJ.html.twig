@@ -1,0 +1,37 @@
+<ul class="player-character-infos">
+    {% set data = informations.renderData %}
+    {% for item in data.listable %}
+        <li>
+            <h4>
+                {{item.label}}
+            </h4>
+            <p>
+                <em>
+                    {{ item.value|default('<Non renseigné>') }}
+                </em>
+            </p>
+        </li>
+    {% endfor %}
+    <li>
+        <h4>
+            {{ data.row_question.question|default('<Question non renseigné>') }}
+        </h4>
+        <p>
+            {{ data.row_question.role|default('<trajectoire>') }} à répondu : 
+            <em>
+                {{ data.row_question.answer|default('<Non renseigné>') }}
+            </em>
+        </p>
+    </li>
+    <li>
+        <h4>
+            {{ data.traj_question.question|default('<Question non renseigné>') }}
+        </h4>
+        <p>
+            {{ data.traj_question.role|default('<trajectoire>') }} à répondu : 
+            <em>
+                {{ data.traj_question.answer|default('<Non renseigné>') }}
+            </em>
+        </p>
+    </li>
+</ul>

@@ -1,0 +1,56 @@
+<ul class="player-character-infos">
+    {% set data = informations.renderData %}
+    {% for item in data.listable %}
+        <li>
+            <h4>
+                {{item.label}}
+            </h4>
+            <p>
+                <em>
+                    {{ item.value|default('<Non renseigné>') }}
+                </em>
+            </p>
+        </li>
+    {% endfor %}
+    <li>
+        <h4>
+            {{ data.question.question|default('<Question non renseigné>') }}
+        </h4>
+        <p>
+            {{ data.question.trajectorie|default('<trajectoire>') }} à répondu : 
+            <em>
+                {{ data.question.answer|default('<Non renseigné>') }}
+            </em>
+        </p>
+    </li>
+</ul>
+<div class="agents-wrapper">
+    <ul class="agents-list">
+        {% for agent in player.characters %}
+            <li>
+                <span>
+                    <b>
+                        {{ agent.name }}
+                    </b>
+                </span>
+                <span>{{ agent.features }}</span>
+                <div>
+                    <a {{ stimulus_action('modal', 'open') }} 
+                        href="{{ path('app_character_edit', {player: player.id, character: agent.id}) }}" 
+                        class="button">
+                        Modifier
+                    </a>
+                    <a  href="{{ path('app_character_delete', {player: player.id, character: agent.id}) }}" 
+                        class="button">
+                        Supprimer
+                    </a>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+    <a {{ stimulus_action('modal', 'open') }} 
+        href="{{ path('app_character_add', {player: player.id}) }}" 
+        class="button mt-auto">
+        Ajouter un agent
+    </a>
+</div>
