@@ -28,7 +28,7 @@ class PlayerController extends AbstractController
         if ($this->getUser() !== $player->getLinkedUser()) {
             throw $this->createAccessDeniedException();
         }
-        if (null === $player->getRoles()) {
+        if (null === $player->getRole()) {
             return $this->redirectToRoute('app_player_save_roles_preferences', [
                 'player' => $player->getId(),
             ]);
@@ -46,7 +46,7 @@ class PlayerController extends AbstractController
         if ($this->getUser() !== $player->getLinkedUser()) {
             throw $this->createAccessDeniedException();
         }
-        if (null !== $player->getRoles()) {
+        if (null !== $player->getRole()) {
             return $this->redirectToRoute('app_player_show', [
                 'player' => $player->getId(),
             ]);

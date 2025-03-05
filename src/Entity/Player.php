@@ -26,7 +26,7 @@ class Player
     private ?Game $game = null;
 
     #[ORM\Column(enumType: GameRoles::class, nullable: true)]
-    private ?GameRoles $roles = null;
+    private ?GameRoles $role = null;
 
     #[ORM\Column]
     private array $informations = [];
@@ -87,14 +87,14 @@ class Player
         return $this;
     }
 
-    public function getRoles(): ?GameRoles
+    public function getRole(): ?GameRoles
     {
-        return $this->roles;
+        return $this->role;
     }
 
-    public function setRoles(GameRoles $roles): static
+    public function setRole(GameRoles $role): static
     {
-        $this->roles = $roles;
+        $this->role = $role;
 
         return $this;
     }

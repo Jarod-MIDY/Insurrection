@@ -37,7 +37,7 @@ class RolesSelector
                         && $playerMissingRoles > ($this->missingTrajectories + $this->missingRightsOfWay);
             $role = $this->selectRole($player->getPreferedRoles(), $freeChoice);
             if (in_array($role, $this->unAssignedroles)) {
-                $player->setRoles($role);
+                $player->setRole($role);
                 --$playerMissingRoles;
                 $this->unAssignedroles = array_udiff($this->unAssignedroles, [$role], fn (GameRoles $a, GameRoles $b): int => strcmp($a->value, $b->value));
             } else {
@@ -48,6 +48,11 @@ class RolesSelector
         return $sortedPlayers;
     }
 
+    /**
+     * @param Collection<int,Player> $players
+     *
+     * @return Player[]
+     */
     private function sortPlayersByChoiceWeight(Collection $players): array
     {
         $playerArray = $players->toArray();

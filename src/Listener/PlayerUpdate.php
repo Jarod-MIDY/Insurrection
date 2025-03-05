@@ -26,7 +26,7 @@ class PlayerUpdate
         }
         $startRoleAttribution = true;
         foreach ($players as $player) {
-            if ([] === $player->getPreferedRoles() || null !== $player->getRoles()) {
+            if ([] === $player->getPreferedRoles() || null !== $player->getRole()) {
                 $startRoleAttribution = false;
                 break;
             }
