@@ -1,6 +1,8 @@
 :root {
     --red-1: #661b1c;
     --red-2: #531516;
+    --yellow-1: #eaab23;
+    --yellow-2: #d4a43c;
     --green-1: #195316;
     --gray-1: #1b222c;
     --gray-2: #191d26;
@@ -173,6 +175,15 @@ input {
     fill: currentColor;
 }
 
+.button.success {
+    background-color: var(--green-1);
+    color: var(--light);
+}
+.button.success:hover {
+    background-color: var(--light);
+    color: var(--dark);
+}
+
 .modal {
     background-color: var(--gray-2);
     color: var(--light);
@@ -194,6 +205,43 @@ input {
     display: flex;
     justify-content: flex-end;
 }
+
+.tabs-title {
+    --border-width : 3px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    display: flex;
+    border-top: solid var(--border-width) var(--red-1);
+}
+
+.tabs-title li {
+    transition: all 0.3s ease-in-out;
+    padding: 0.5rem 1rem;
+    background-color: var(--gray-2);
+    border-top: var(--border-width) solid;
+    border-color: var(--red-2);
+    margin-top: calc(-1 * var(--border-width));
+    cursor: pointer;
+    color: var(--light);
+}
+.tabs-title li:hover {
+    background-color: var(--dark);
+    color: var(--yellow-1);
+}
+
+.tabs-title li a {
+    text-decoration: none;
+    color: currentColor;
+    font-size: 1.25rem;
+}
+
+
+.tabs-title li:hover, 
+.tabs-title li.active {
+    border-color: var(--yellow-1);
+}
+
 .grid {
     display: grid;
 }
@@ -222,18 +270,18 @@ input {
 .gap-3 {
     gap: 0.75rem;
 }
-.game-loby {
+.game-lobby {
     display: grid;
     grid-template-areas: 'aside main';
     grid-template-columns: 1fr 5fr;
 }
 
-.game-loby-aside {
+.game-lobby-aside {
     grid-area: aside;
     background-color: var(--dark);
     padding: 0.5rem;
 }
-.game-loby-content {
+.game-lobby-content {
     grid-area: main;
     padding: 0.5rem;
     display: flex;
@@ -241,23 +289,23 @@ input {
     position: relative;
     isolation: isolate;
 }
-.game-loby-content h2 {
+.game-lobby-content h2 {
     margin-top: 0.75rem;
     margin-bottom: 0.25rem;
 }
-.game-loby-list {
+.game-lobby-list {
     background-color: #12151CAF;
     flex-grow: 1;
     margin: 0;
     padding: 1rem;
 }
-.game-loby-item {
+.game-lobby-item {
     display: flex;
     gap: 0.75rem;
     padding-block: 0.5rem;
     align-items: center;
 }
-.game-loby-item:not(:last-child) {
+.game-lobby-item:not(:last-child) {
     border-bottom: 1px solid var(--light);
 }
 
@@ -456,4 +504,59 @@ input {
     line-height: 2rem;
     background-image: linear-gradient(#3e4248af 1px, transparent 1px);
     background-size: 20px 30px;
+}
+
+.game-author {
+    color: #eaab23;
+}
+
+.player-role svg {
+    height: 2rem;
+    width: auto;
+    fill: currentColor;
+}
+
+.players-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.players-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem;
+    background-color: var(--gray-2);
+}
+
+.player-me {
+    order: 1;
+}
+
+.player-ready-wrapper {
+    margin-left: auto;
+}
+
+.player-ready {
+    display: flex;
+    margin-left: auto;
+    gap: 0.25rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.player-ready svg {
+    height: 1.25rem;
+    fill: var(--green-1);
+}
+
+.player-role
+{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }

@@ -97,7 +97,7 @@ final class CharacterController extends AbstractController
         }
         $this->characterRepository->remove($character, true);
 
-        return $this->redirectToRoute('app_player_show', [
+        return $this->redirectToRoute('app_player_role_edit', [
             'player' => $character->getOwner()->getId(),
         ]);
     }

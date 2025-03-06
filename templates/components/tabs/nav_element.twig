@@ -1,0 +1,10 @@
+<li>
+	<a
+		href="#tabs-{{ label|trans|replace({' ': '-'}) }}"
+		{{ stimulus_target('tabs', 'tabButton') }}
+		{{ stimulus_action('tabs', 'clickTab') }}
+	>
+		{% block content %}{% endblock %}
+		<span>{{ label | trans }}</span>
+	</a>
+</li>

@@ -32,6 +32,12 @@ class Character
     #[ORM\ManyToMany(targetEntity: Scene::class, mappedBy: 'characters')]
     private Collection $scenes;
 
+    #[ORM\Column]
+    private bool $isDead = false;
+
+    #[ORM\ManyToOne(inversedBy: 'deadCharacters')]
+    private ?Scene $dyingScene = null;
+
     public function __construct()
     {
         $this->scenes = new ArrayCollection();
@@ -101,6 +107,30 @@ class Character
         if ($this->scenes->removeElement($scene)) {
             $scene->removeCharacter($this);
         }
+
+        return $this;
+    }
+
+    public function isDead(): bool
+    {
+        return $this->isDead;
+    }
+
+    public function setIsDead(bool $isDead): static
+    {
+        $this->isDead = $isDead;
+
+        return $this;
+    }
+
+    public function getDyingScene(): ?Scene
+    {
+        return $this->dyingScene;
+    }
+
+    public function setDyingScene(?Scene $dyingScene): static
+    {
+        $this->dyingScene = $dyingScene;
 
         return $this;
     }

@@ -95,4 +95,9 @@ class PeopleSheet implements CharacterSheet
             'notes' => $this->notes,
         ];
     }
+
+    public function isReady(): bool
+    {
+        return '' !== $this->trust && '' !== $this->priority && '' !== $this->blamedFor && '' !== $this->chosenQuestion && null !== $this->chosenTrajectorie;
+    }
 }

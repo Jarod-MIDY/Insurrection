@@ -17,7 +17,6 @@ use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class PlayerInfoFormType extends AbstractType
 {
@@ -39,10 +38,6 @@ class PlayerInfoFormType extends AbstractType
                 'label' => 'Notes sur mon Rôle',
             ])
         ;
-    }
-
-    public function configureOptions(OptionsResolver $resolver): void
-    {
     }
 
     private function buildPowerInfoForm(FormBuilderInterface $builder, array $options)
@@ -359,7 +354,7 @@ class PlayerInfoFormType extends AbstractType
                     return $choice->label();
                 },
                 'choice_filter' => function (?GameRoles $choice) {
-                    return in_array($choice, GameRoles::getTrajectories());
+                    return in_array($choice, GameRoles::getTrajectories()) && GameRoles::PAMPHLET !== $choice;
                 },
             ])
             ->add('trajAnswer', TextType::class, [
@@ -431,7 +426,7 @@ class PlayerInfoFormType extends AbstractType
                     return $choice->label();
                 },
                 'choice_filter' => function (?GameRoles $choice) {
-                    return in_array($choice, GameRoles::getTrajectories());
+                    return in_array($choice, GameRoles::getTrajectories()) && GameRoles::MOLOTOV !== $choice;
                 },
             ])
             ->add('trajAnswer', TextType::class, [
@@ -503,7 +498,7 @@ class PlayerInfoFormType extends AbstractType
                     return $choice->label();
                 },
                 'choice_filter' => function (?GameRoles $choice) {
-                    return in_array($choice, GameRoles::getTrajectories());
+                    return in_array($choice, GameRoles::getTrajectories()) && GameRoles::BADGE !== $choice;
                 },
             ])
             ->add('trajAnswer', TextType::class, [
@@ -518,7 +513,7 @@ class PlayerInfoFormType extends AbstractType
         $this->buildTrajectory($builder, $options);
         $builder
             ->add('bestQuality', ChoiceType::class, [
-                'label' => 'Tu as déjà franchi la ligne rouge',
+                'label' => 'Ta plus grande qualité, c\'est',
                 'autocomplete' => true,
                 'tom_select_options' => [
                     'create' => true,
@@ -528,7 +523,7 @@ class PlayerInfoFormType extends AbstractType
                 ],
             ])
             ->add('shineIn', ChoiceType::class, [
-                'label' => 'Tout ce que tu souhaites, c\'est',
+                'label' => 'Tu brilles',
                 'autocomplete' => true,
                 'tom_select_options' => [
                     'create' => true,
@@ -575,7 +570,7 @@ class PlayerInfoFormType extends AbstractType
                     return $choice->label();
                 },
                 'choice_filter' => function (?GameRoles $choice) {
-                    return in_array($choice, GameRoles::getTrajectories());
+                    return in_array($choice, GameRoles::getTrajectories()) && GameRoles::STAR !== $choice;
                 },
             ])
             ->add('trajAnswer', TextType::class, [

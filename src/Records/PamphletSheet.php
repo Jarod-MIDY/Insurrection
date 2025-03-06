@@ -119,4 +119,10 @@ class PamphletSheet implements CharacterSheet
             'notes' => $this->notes,
         ];
     }
+
+    public function isReady(): bool
+    {
+        return '' !== $this->name && '' !== $this->features && '' !== $this->origins && '' !== $this->modusOperendi && '' !== $this->ROWQuestion && '' !== $this->ROWAnswer && '' !== $this->trajQuestion && '' !== $this->trajAnswer
+        && null !== $this->ROWRole && null !== $this->trajRole;
+    }
 }

@@ -95,4 +95,9 @@ class PowerSheet implements CharacterSheet
             'notes' => $this->notes,
         ];
     }
+
+    public function isReady(): bool
+    {
+        return '' !== $this->legitimacy && '' !== $this->importantAgentType && '' !== $this->blamedFor && '' !== $this->chosenQuestion && null !== $this->chosenTrajectorie;
+    }
 }

@@ -62,25 +62,16 @@ class GameController extends AbstractController
         ]);
     }
 
-    #[Route('/game/create-loby/{game}', name: 'app_game_loby')]
-    public function createJoinableLoby(Game $game): Response
+    #[Route('/game/create-lobby/{game}', name: 'app_game_lobby')]
+    public function createJoinableLobby(Game $game): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
-        $game->setState(GameState::LOBY);
+        $game->setState(GameState::LOBBY);
         $this->gameRepository->save($game, true);
         $player = new Player();
         $player->setGame($game);
         $player->setLinkedUser($this->getUser());
         $this->playerRepository->save($player, true);
-
-        return $this->redirectToRoute('app_game_show', ['game' => $game->getId()]);
-    }
-
-    #[Route('/game/start/{game}', name: 'app_game_start')]
-    public function startGame(Game $game): Response
-    {
-        $game->setState(GameState::PLAYING);
-        $this->gameRepository->save($game, true);
 
         return $this->redirectToRoute('app_game_show', ['game' => $game->getId()]);
     }

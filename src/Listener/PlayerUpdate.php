@@ -2,7 +2,12 @@
 
 namespace App\Listener;
 
+use App\Entity\Character;
+use App\Entity\Game;
 use App\Entity\Player;
+use App\Enum\GameState;
+use App\Repository\CharacterRepository;
+use App\Repository\GameRepository;
 use App\Repository\PlayerRepository;
 use App\Service\RolesSelector;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
@@ -13,6 +18,8 @@ class PlayerUpdate
 {
     public function __construct(
         private PlayerRepository $playerRepository,
+        private GameRepository $gameRepository,
+        private CharacterRepository $characterRepository,
         private RolesSelector $rolesSelector,
     ) {
     }
@@ -20,6 +27,43 @@ class PlayerUpdate
     public function postUpdate(Player $savedPlayer): void
     {
         $game = $savedPlayer->getGame();
+        $this->rolesSelection($game);
+        $this->startGame($game);
+    }
+
+    private function startGame(Game $game): void
+    {
+        if (GameState::LOBBY !== $game->getState()) {
+            return;
+        }
+        $players = $game->getPlayers();
+        $startGame = true;
+        $characters = [];
+        foreach ($players as $player) {
+            if (!$player->isReadyToPlay()) {
+                $startGame = false;
+                break;
+            }
+            if ($player->getRole()->isTrajectory()) {
+                $character = new Character();
+                $character->setOwner($player);
+                $character->setName($player->getInformations()['name']);
+                $character->setFeatures($player->getInformations()['features']);
+                $characters[] = $character;
+            }
+        }
+        if ($startGame) {
+            $game->setState(GameState::PLAYING);
+            $this->gameRepository->save($game, true);
+            foreach ($characters as $character) {
+                $this->characterRepository->save($character, false);
+            }
+            $this->characterRepository->getEntityManager()->flush();
+        }
+    }
+
+    private function rolesSelection(Game $game): void
+    {
         $players = $game->getPlayers();
         if ($players->count() < $game->getMaxPlayers()) {
             return;
@@ -32,7 +76,7 @@ class PlayerUpdate
             }
         }
         if ($startRoleAttribution) {
-            $playersWithRoles = $this->rolesSelector->attributeRolesToPlayer($game->getPlayers());
+            $playersWithRoles = $this->rolesSelector->attributeRolesToPlayer($players);
             foreach ($playersWithRoles as $player) {
                 $this->playerRepository->save($player);
             }

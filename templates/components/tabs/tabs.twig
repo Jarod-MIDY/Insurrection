@@ -1,0 +1,17 @@
+<div
+	class="tabs-container"
+	data-selected="{{ defaultSelected }}"
+	{{ stimulus_controller('tabs') }}
+	{{ stimulus_target('tabs', 'tabsContainer') }}
+	{{ stimulus_action('tabs', 'keyTab', 'keydown') }}
+>
+	<nav>
+		<ul class="tabs-title" aria-labelledby="tabs-title" {{ stimulus_target('tabs', 'tabsList') }}>
+			{% block nav %}{% endblock %}
+		</ul>
+	</nav>
+
+	<div class="tabs-panels">
+		{% block content %}{% endblock %}
+	</div>
+</div>

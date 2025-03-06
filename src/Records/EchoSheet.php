@@ -98,4 +98,9 @@ class EchoSheet implements CharacterSheet
             'notes' => $this->notes,
         ];
     }
+
+    public function isReady(): bool
+    {
+        return '' !== $this->financedBy && '' !== $this->importantAgentType && '' !== $this->blamedFor && '' !== $this->chosenQuestion && null !== $this->chosenTrajectorie;
+    }
 }

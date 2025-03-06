@@ -38,9 +38,16 @@ class Scene
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $story = null;
 
+    /**
+     * @var Collection<int, Character>
+     */
+    #[ORM\OneToMany(targetEntity: Character::class, mappedBy: 'dyingScene')]
+    private Collection $deadCharacters;
+
     public function __construct()
     {
         $this->characters = new ArrayCollection();
+        $this->deadCharacters = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -128,6 +135,36 @@ class Scene
     public function setStory(?string $story): static
     {
         $this->story = $story;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Character>
+     */
+    public function getDeadCharacters(): Collection
+    {
+        return $this->deadCharacters;
+    }
+
+    public function addDeadCharacter(Character $deadCharacter): static
+    {
+        if (!$this->deadCharacters->contains($deadCharacter)) {
+            $this->deadCharacters->add($deadCharacter);
+            $deadCharacter->setDyingScene($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDeadCharacter(Character $deadCharacter): static
+    {
+        if ($this->deadCharacters->removeElement($deadCharacter)) {
+            // set the owning side to null (unless already changed)
+            if ($deadCharacter->getDyingScene() === $this) {
+                $deadCharacter->setDyingScene(null);
+            }
+        }
 
         return $this;
     }

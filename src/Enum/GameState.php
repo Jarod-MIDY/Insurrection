@@ -6,7 +6,7 @@ enum GameState: string
 {
     case PLANNED = 'planned';
 
-    case LOBY = 'loby';
+    case LOBBY = 'lobby';
 
     case PLAYING = 'playing';
 

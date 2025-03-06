@@ -95,4 +95,9 @@ class OrderSheet implements CharacterSheet
             'notes' => $this->notes,
         ];
     }
+
+    public function isReady(): bool
+    {
+        return '' !== $this->fearedBecause && '' !== $this->accountableTo && '' !== $this->blamedFor && '' !== $this->chosenQuestion && null !== $this->chosenTrajectorie;
+    }
 }

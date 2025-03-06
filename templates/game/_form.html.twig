@@ -34,9 +34,9 @@
         }) 
     }}
     <button type="submit" class="button">Sauvegarder</button>
-    {% if game is defined and game.state.value != 'loby' %}
-        <a class="button accent" href="{{ path('app_game_loby', { game: game.id }) }}">
-            Démarrer un loby
+    {% if game is defined and game.state.value != 'lobby' %}
+        <a class="button accent" href="{{ path('app_game_lobby', { game: game.id }) }}">
+            Démarrer un lobby
         </a>
     {% endif %}
 {{  form_end(form) }}

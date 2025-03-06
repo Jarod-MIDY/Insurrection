@@ -3,12 +3,12 @@
     - {{ game.name }}
 {% endblock %}
 {% block main %}
-    <main class="site-main game-loby">
+    <main class="site-main game-lobby">
         {{ block('body') }}
     </main>
 {% endblock %}
 {% block body %}
-    <aside class="game-loby-aside">
+    <aside class="game-lobby-aside">
         <h1>{{ game.name }}</h1>
         <div>
             <h2>Thème</h2>
@@ -18,7 +18,7 @@
         </div>
         <div>
             <h2>Joueurs</h2>
-            <ul>
+            <ul class="players-list">
                 {% set emptySpot = game.maxPlayers - game.players.count %}
                 {% for i in 1..emptySpot %}
                     {% if emptySpot != 0 %}
@@ -30,29 +30,60 @@
                     {% endif %}
                 {% endfor %}
                 {% for player in game.players %}
-                    <li>
-                        <span class="player-name {{ app.user == game.author ? 'game-author' : '' }}">
-                            {{ player.name ?? player.linkedUser.username }}
-                        </span>
-                        {% if app.user == player.linkedUser %}
-                            <span>
-                            - moi
+                    <li class="{{ player.linkedUser == game.author ? 'game-author' : '' }} {{ app.user == player.linkedUser ? 'player-me' : '' }}">
+                        {% if  player.role %}
+                            <span class="player-role">
+                                <twig:RoleIcon roleValue="{{ player.role.value }}" iconOnly="true"></twig:RoleIcon>
                             </span>
                         {% endif %}
+                        <span class="player-name">
+                            {{ player.name ?? player.linkedUser.username }}
+                        </span>
                         {% if player.preferedRoles|length > 0 and not player.role  %}
                             <span>
                                 roles choisits, en attente des autres joueurs
                             </span>
+                        {% endif %}
+                        {% if player.role and game.state.value == 'lobby' %}
+                            {% if app.user == player.linkedUser %}
+                                <twig:PlayerReady player="{{ player }}"></twig:PlayerReady>
+                            {% else %}
+                                {% if player.isReadyToPlay %}
+                                    <span class="player-ready">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M256 16C123.5 16 16 123.5 16 256c0 132.6 107.5 240 240 240 132.6 0 240-107.4 240-240S388.6 16 256 16zm0 60c99.4 0 180 80.6 180 180s-80.6 180-180 180S76 355.4 76 256 156.6 76 256 76zm91.3 64.2c-6.5 0-12.5 2.4-16.8 8.2-52 70.1-69 96.5-106 169.8-8.4-11.1-65.6-72.4-93.9-94.1-14.2-10.9-41.3 27.2-31.6 37.1C142.6 306.1 220.1 406 232.7 405c21.4-1.7 75.1-136.8 148.8-233.7 8-10.4-15-31.3-34.2-31.1z"/></svg>
+                                    </span>
+                                {% endif %}
+                            {% endif %}
                         {% endif %}
                     </li>
                 {% endfor %}
             </ul>
         </div>
     </aside>
-    <turbo-frame 
-        class="game-loby-content" 
-        id="Loby" 
-        src="{{ path('app_player_save_roles_preferences', { player: player.id }) }}"
-    >
-    </turbo-frame>
+    {% if game.state.value == 'lobby' %}
+        <turbo-frame 
+            class="game-lobby-content" 
+            id="Lobby" 
+            src="{{ path('app_player_save_roles_preferences', { player: player.id }) }}"
+        >
+        </turbo-frame>
+    {% endif %}
+    {% if game.state.value == 'playing' %}
+        <twig:tabs>
+            <twig:block name="nav">
+                <twig:tabsNavElement label="Ma Fiche">
+                </twig:tabsNavElement>
+                <twig:tabsNavElement label="Partie en cours">
+                </twig:tabsNavElement>
+            </twig:block>
+            <twig:block name="content">
+                <twig:tabsContentElement label="Ma Fiche" index="0">
+                    plop
+                </twig:tabsContentElement>
+                <twig:tabsContentElement label="Partie en cours" index="1">
+                    pouet
+                </twig:tabsContentElement>
+            </twig:block>
+        </twig:tabs>
+    {% endif %}
 {% endblock %}

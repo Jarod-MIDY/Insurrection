@@ -23,7 +23,7 @@ class PlayerController extends AbstractController
     ) {
     }
 
-    #[Route('/player/{player}', name: 'app_player_show')]
+    #[Route('/player/{player}/role-edit', name: 'app_player_role_edit')]
     public function show(Player $player): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
@@ -50,7 +50,7 @@ class PlayerController extends AbstractController
             throw $this->createAccessDeniedException();
         }
         if (null !== $player->getRole()) {
-            return $this->redirectToRoute('app_player_show', [
+            return $this->redirectToRoute('app_player_role_edit', [
                 'player' => $player->getId(),
             ]);
         }

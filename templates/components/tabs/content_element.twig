@@ -1,0 +1,9 @@
+<div
+	id="tabs-{{ label|trans|replace({' ': '-'}) }}"
+	aria-labelledby="tab-{{ index }}"
+	{{ stimulus_target('tabs', 'tabPanel') }}
+>
+	{% block content %}
+		something whent wrong, this tabs should not be empty
+	{% endblock %}
+</div>

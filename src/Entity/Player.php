@@ -52,6 +52,9 @@ class Player
     #[ORM\Column(type: Types::SIMPLE_ARRAY, nullable: true, enumType: GameRoles::class)]
     private ?array $preferedRoles = null;
 
+    #[ORM\Column]
+    private ?bool $readyToPlay = null;
+
     public function __construct()
     {
         $this->characters = new ArrayCollection();
@@ -206,6 +209,18 @@ class Player
     public function setPreferedRoles(?array $preferedRoles): static
     {
         $this->preferedRoles = $preferedRoles;
+
+        return $this;
+    }
+
+    public function isReadyToPlay(): ?bool
+    {
+        return $this->readyToPlay;
+    }
+
+    public function setReadyToPlay(bool $readyToPlay): static
+    {
+        $this->readyToPlay = $readyToPlay;
 
         return $this;
     }

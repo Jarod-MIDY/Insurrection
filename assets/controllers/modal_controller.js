@@ -61,16 +61,15 @@ export default class extends Controller {
 
 	open(event) {
 		event.preventDefault()
-		this.currentButton = event.currentTarget
-		this.frameTarget.src = event.currentTarget.dataset.route
-			? event.currentTarget.dataset.route
-			: event.currentTarget.href
-			console.log(this.frameTarget.src);
-			
-		this.frameTarget.id = event.currentTarget.dataset.frameId
-			? event.currentTarget.dataset.frameId
+		const target = event.type !== 'click' && this.hasButtonTarget ? this.buttonTarget : event.currentTarget
+		this.currentButton = target
+		this.frameTarget.src = target.dataset.route
+			? target.dataset.route
+			: target.href
+		console.log(this.frameTarget.src);
+		this.frameTarget.id = target.dataset.frameId
+			? target.dataset.frameId
 			: this.frameTarget.id
-
 		document.querySelector('body').classList.add('overflow-hidden')
 		this.dialogTarget.showModal()
 		Turbo.visit(this.frameTarget.src)
