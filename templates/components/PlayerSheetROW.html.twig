@@ -25,6 +25,7 @@
     </li>
 </ul>
 <div class="agents-wrapper">
+    <h3 class="h3 m-0 p-050">Mes Agents</h3>
     <ul class="agents-list">
         {% for agent in player.characters %}
             <li>
@@ -40,17 +41,21 @@
                         class="button">
                         Modifier
                     </a>
-                    <a  href="{{ path('app_character_delete', {player: player.id, character: agent.id}) }}" 
-                        class="button">
-                        Supprimer
-                    </a>
+                    {% if player.game.state.value == 'lobby' %}
+                        <a  href="{{ path('app_character_delete', {player: player.id, character: agent.id}) }}" 
+                            class="button">
+                            Supprimer
+                        </a>
+                    {% endif %}
                 </div>
             </li>
         {% endfor %}
     </ul>
-    <a {{ stimulus_action('modal', 'open') }} 
-        href="{{ path('app_character_add', {player: player.id}) }}" 
-        class="button mt-auto">
-        Ajouter un agent
-    </a>
+    {% if player.game.state.value == 'lobby' %}
+        <a {{ stimulus_action('modal', 'open') }} 
+            href="{{ path('app_character_add', {player: player.id}) }}" 
+            class="button mt-auto">
+            Ajouter un agent
+        </a>
+    {% endif %}
 </div>

@@ -1,0 +1,102 @@
+<turbo-frame id="ListPlayers">
+    <ul class="players-info-list">
+        {% for player in game.players %}
+            <li>
+                <article>
+                    <header>
+                        <span class="player-role">
+                            <twig:RoleIcon roleValue="{{ player.role.value }}" iconOnly="true"></twig:RoleIcon>
+                        </span>
+                        <span class="player-name">
+                            {{ player.name ?? player.linkedUser.username }}
+                        </span>
+                    </header>
+                    {% set data = player.formatedInformations.renderData %}
+                    {% if player.role.isRightOfWay %}
+                        <section>
+                            <ul class="player-character-infos">
+                                {% for item in data.listable %}
+                                    <li>
+                                        <h4>
+                                            {{item.label}}
+                                        </h4>
+                                        <p>
+                                            <em>
+                                                {{ item.value|default('<Non renseigné>') }}
+                                            </em>
+                                        </p>
+                                    </li>
+                                {% endfor %}
+                                <li>
+                                    <h4>
+                                        {{ data.question.question|default('<Question non renseigné>') }}
+                                    </h4>
+                                    <p>
+                                        {{ data.question.trajectorie|default('<trajectoire>') }} à répondu : 
+                                        <em>
+                                            {{ data.question.answer|default('<Non renseigné>') }}
+                                        </em>
+                                    </p>
+                                </li>
+                            </ul>
+                        </section>
+                        <section>
+                            <h2>
+                                Liste des agents
+                            </h2>
+                            <ul>
+                                {% for agent in player.characters %}
+                                    <li>
+                                        <b>
+                                            {{ agent.name }}
+                                        </b>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </section>
+                    {% else %}
+                        <section>
+                            <ul class="player-character-infos">
+                                {% for item in data.listable %}
+                                    <li>
+                                        <h4>
+                                            {{item.label}}
+                                        </h4>
+                                        <p>
+                                            <em>
+                                                {{ item.value|default('<Non renseigné>') }}
+                                            </em>
+                                        </p>
+                                    </li>
+                                {% endfor %}
+                                <li>
+                                    <h4>
+                                        {{ data.row_question.question|default('<Question non renseigné>') }}
+                                    </h4>
+                                    <p>
+                                        {{ data.row_question.role|default('<trajectoire>') }} à répondu : 
+                                        <em>
+                                            {{ data.row_question.answer|default('<Non renseigné>') }}
+                                        </em>
+                                    </p>
+                                </li>
+                                <li>
+                                    <h4>
+                                        {{ data.traj_question.question|default('<Question non renseigné>') }}
+                                    </h4>
+                                    <p>
+                                        {{ data.traj_question.role|default('<trajectoire>') }} à répondu : 
+                                        <em>
+                                            {{ data.traj_question.answer|default('<Non renseigné>') }}
+                                        </em>
+                                    </p>
+                                </li>
+                            </ul>
+                        </section>
+                    {% endif %}
+
+                </article>
+            </li>
+        {% endfor %}
+    </ul>
+</turbo-frame>

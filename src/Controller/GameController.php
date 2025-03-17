@@ -132,4 +132,17 @@ class GameController extends AbstractController
             'form' => $form,
         ]);
     }
+
+    #[Route('/game/list-players/{game}', name: 'app_game_list_players')]
+    public function listPlayers(Game $game, Request $request): Response
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
+        if (GameState::PLAYING !== $game->getState()) {
+            $this->redirectToRoute('app_game_show', ['game' => $game->getId()]);
+        }
+
+        return $this->render('game/list_players.html.twig', [
+            'game' => $game,
+        ]);
+    }
 }

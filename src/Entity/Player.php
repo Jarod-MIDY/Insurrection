@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Enum\GameRoles;
+use App\Interface\CharacterSheet;
 use App\Repository\PlayerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -112,6 +113,11 @@ class Player
         $this->informations = $informations;
 
         return $this;
+    }
+
+    public function getFormatedInformations(): CharacterSheet
+    {
+        return $this->getRole()->getCharacterSheet($this->getInformations());
     }
 
     /**

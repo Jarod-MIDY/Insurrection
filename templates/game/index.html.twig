@@ -71,17 +71,32 @@
     {% if game.state.value == 'playing' %}
         <twig:tabs>
             <twig:block name="nav">
+                <twig:tabsNavElement label="Partie en cours">
+                </twig:tabsNavElement>
                 <twig:tabsNavElement label="Ma Fiche">
                 </twig:tabsNavElement>
-                <twig:tabsNavElement label="Partie en cours">
+                <twig:tabsNavElement label="Tous les Joueurs">
                 </twig:tabsNavElement>
             </twig:block>
             <twig:block name="content">
-                <twig:tabsContentElement label="Ma Fiche" index="0">
-                    plop
-                </twig:tabsContentElement>
                 <twig:tabsContentElement label="Partie en cours" index="1">
                     pouet
+                </twig:tabsContentElement>
+                <twig:tabsContentElement label="Ma Fiche" index="0">
+                    <turbo-frame 
+                        class="game-lobby-content test" 
+                        id="Lobby" 
+                        src="{{ path('app_player_save_roles_preferences', { player: player.id }) }}"
+                    >
+                    </turbo-frame>
+                </twig:tabsContentElement>
+                <twig:tabsContentElement label="Tous les Joueurs" index="0">
+                    <turbo-frame 
+                        class="game-lobby-content test" 
+                        id="ListPlayers" 
+                        src="{{ path('app_game_list_players', { game: game.id }) }}"
+                    >
+                    </turbo-frame>
                 </twig:tabsContentElement>
             </twig:block>
         </twig:tabs>

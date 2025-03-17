@@ -71,6 +71,20 @@ input {
     margin-bottom: 1rem;
 }
 
+.h3 {
+    font-size: 1.25rem;
+    margin: 0;
+    margin-bottom: 0.5rem;
+}
+
+.m-0 {
+    margin: 0;
+}
+
+.p-050 {
+    padding: 0.5rem;
+}
+
 .site-main {
     background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="%23661b1c" d="M329.8 235.69l62.83-82.71 42.86 32.56-62.83 82.75zm-12.86-9.53l66.81-88-45-34.15-66.81 88zm-27.48-97.78l-19.3 39.57 57-75-42.51-32.3-36.24 47.71zm-20.74-73.24l-46.64-35.43-42 55.31 53.67 26.17zm107 235.52l-139-102.71-9.92.91 4.56 2 62.16 138.43-16.52 2.25-57.68-128.5-40-17.7-4-30.84 39.41 19.42 36.36-3.33 17-34.83-110.9-54.09-80.68 112.51L177.6 346.67l-22.7 145.62H341V372.62l35.29-48.93L387 275.77z"/></svg>');
     background-position: right;
@@ -206,6 +220,21 @@ input {
     justify-content: flex-end;
 }
 
+.tabs-container {
+    position: relative;
+    isolation: isolate;
+}
+
+.tabs-container,
+.tabs-panels,
+.tabs-panels > div:not([hidden]),
+.tabs-panels > div:not([hidden]) > turbo-frame
+ {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
 .tabs-title {
     --border-width : 3px;
     padding: 0;
@@ -224,6 +253,7 @@ input {
     margin-top: calc(-1 * var(--border-width));
     cursor: pointer;
     color: var(--light);
+    position: relative;
 }
 .tabs-title li:hover {
     background-color: var(--dark);
@@ -234,6 +264,13 @@ input {
     text-decoration: none;
     color: currentColor;
     font-size: 1.25rem;
+}
+
+.tabs-title li a::after{
+    display: block;
+    content: '';
+    inset: 0;
+    position: absolute;
 }
 
 
@@ -454,6 +491,8 @@ input {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    border-radius: 0.125rem;
+    background: #12151CAF;
 }
 .agents-list {
     flex-grow: 1;
@@ -463,8 +502,6 @@ input {
     margin: 0;
     flex-direction: column-reverse;
     list-style: none;
-    border-radius: 0.125rem;
-    background: #12151CAF;
     max-height: 450px;
     overflow: scroll;
 }
@@ -487,6 +524,20 @@ input {
     margin: 0;
     grid-area: infos;
 }
+
+.player-character-infos h4 {
+    margin-block: 1rem;
+    font-family: Luciole-bold;
+}
+
+.player-character-infos em {
+    font-family: Luciole;
+}
+
+.player-character-infos p {
+    margin: 0;
+}
+
 .player-character-notes {
     grid-area: notes;
     background-color: #12151CAF;
@@ -559,4 +610,40 @@ input {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+}
+
+.tabs-container .player-sheet,
+.tabs-container .game-lobby-content {
+    position: unset;
+    isolation: unset;
+}
+
+.players-info-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    gap: 0.5rem;
+}
+.players-info-list > li {
+    display: flex;
+}
+
+.players-info-list article {
+    border-radius: 0.125rem;
+    background: #12151CAF;
+    padding: 0.75rem;
+    overflow-y: scroll;
+    max-height: 450px;
+}
+.players-info-list article header{
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    position: sticky;
+    top: -0.75rem;
+    background-color: var(--dark);
+    margin: -0.75rem;
+    padding: 0.5rem;
 }

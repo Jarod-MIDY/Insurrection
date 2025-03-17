@@ -2,7 +2,9 @@
 
 namespace App\Form;
 
+use App\Entity\Game;
 use App\Enum\GameRoles;
+use App\Enum\GameState;
 use App\Records\BadgeSheet;
 use App\Records\EchoSheet;
 use App\Records\MolotovSheet;
@@ -17,27 +19,37 @@ use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class PlayerInfoFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        match ($options['data_class']) {
-            PowerSheet::class => $this->buildPowerInfoForm($builder, $options),
-            OrderSheet::class => $this->buildOrderInfoForm($builder, $options),
-            EchoSheet::class => $this->buildEchoInfoForm($builder, $options),
-            PeopleSheet::class => $this->buildPeopleInfoForm($builder, $options),
-            PamphletSheet::class => $this->buildPamphletInfoForm($builder, $options),
-            MolotovSheet::class => $this->buildMolotovInfoForm($builder, $options),
-            BadgeSheet::class => $this->buildBadgeInfoForm($builder, $options),
-            StarSheet::class => $this->buildStarInfoForm($builder, $options),
-            default => throw new \UnexpectedValueException('Unexpected data class'.$options['data_class']),
-        };
+        if ($options['game'] instanceof Game && GameState::LOBBY === $options['game']->getState()) {
+            match ($options['data_class']) {
+                PowerSheet::class => $this->buildPowerInfoForm($builder, $options),
+                OrderSheet::class => $this->buildOrderInfoForm($builder, $options),
+                EchoSheet::class => $this->buildEchoInfoForm($builder, $options),
+                PeopleSheet::class => $this->buildPeopleInfoForm($builder, $options),
+                PamphletSheet::class => $this->buildPamphletInfoForm($builder, $options),
+                MolotovSheet::class => $this->buildMolotovInfoForm($builder, $options),
+                BadgeSheet::class => $this->buildBadgeInfoForm($builder, $options),
+                StarSheet::class => $this->buildStarInfoForm($builder, $options),
+                default => throw new \UnexpectedValueException('Unexpected data class'.$options['data_class']),
+            };
+        }
         $builder
             ->add('notes', TextareaType::class, [
                 'label' => 'Notes sur mon Rôle',
             ])
         ;
+    }
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'game' => null,
+        ]);
     }
 
     private function buildPowerInfoForm(FormBuilderInterface $builder, array $options)

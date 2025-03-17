@@ -38,7 +38,7 @@ class PlayerController extends AbstractController
 
         return $this->render('player/index.html.twig', [
             'player' => $player,
-            'informations' => $player->getRole()->getCharacterSheet($player->getInformations()),
+            'informations' => $player->getFormatedInformations(),
         ]);
     }
 
@@ -124,6 +124,7 @@ class PlayerController extends AbstractController
 
         $playerInfoDto = $player->getRole()->getCharacterSheet($player->getInformations());
         $form = $this->createForm(PlayerInfoFormType::class, $playerInfoDto, [
+            'game' => $player->getGame(),
             'action' => $this->generateUrl('app_player_edit', [
                 'player' => $player->getId(),
             ]),
