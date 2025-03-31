@@ -44,10 +44,17 @@ class Scene
     #[ORM\OneToMany(targetEntity: Character::class, mappedBy: 'dyingScene')]
     private Collection $deadCharacters;
 
+    /**
+     * @var Collection<int, SceneLeaderVote>
+     */
+    #[ORM\OneToMany(targetEntity: SceneLeaderVote::class, mappedBy: 'scene', orphanRemoval: true)]
+    private Collection $sceneLeaderVotes;
+
     public function __construct()
     {
         $this->characters = new ArrayCollection();
         $this->deadCharacters = new ArrayCollection();
+        $this->sceneLeaderVotes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -163,6 +170,36 @@ class Scene
             // set the owning side to null (unless already changed)
             if ($deadCharacter->getDyingScene() === $this) {
                 $deadCharacter->setDyingScene(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SceneLeaderVote>
+     */
+    public function getSceneLeaderVotes(): Collection
+    {
+        return $this->sceneLeaderVotes;
+    }
+
+    public function addSceneLeaderVote(SceneLeaderVote $sceneLeaderVote): static
+    {
+        if (!$this->sceneLeaderVotes->contains($sceneLeaderVote)) {
+            $this->sceneLeaderVotes->add($sceneLeaderVote);
+            $sceneLeaderVote->setScene($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSceneLeaderVote(SceneLeaderVote $sceneLeaderVote): static
+    {
+        if ($this->sceneLeaderVotes->removeElement($sceneLeaderVote)) {
+            // set the owning side to null (unless already changed)
+            if ($sceneLeaderVote->getScene() === $this) {
+                $sceneLeaderVote->setScene(null);
             }
         }
 

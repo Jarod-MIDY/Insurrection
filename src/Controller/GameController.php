@@ -145,4 +145,19 @@ class GameController extends AbstractController
             'game' => $game,
         ]);
     }
+
+    #[Route('/game/board/{game}', name: 'app_game_board')]
+    public function showGameBoard(Game $game): Response
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
+        $player = $this->playerRepository->findOneBy(['game' => $game, 'linkedUser' => $this->getUser()]);
+        if (!$player) {
+            throw $this->createAccessDeniedException();
+        }
+
+        return $this->render('game/board.html.twig', [
+            'game' => $game,
+            'player' => $player,
+        ]);
+    }
 }

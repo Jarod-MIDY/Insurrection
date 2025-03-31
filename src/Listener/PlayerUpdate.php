@@ -5,10 +5,12 @@ namespace App\Listener;
 use App\Entity\Character;
 use App\Entity\Game;
 use App\Entity\Player;
+use App\Entity\Scene;
 use App\Enum\GameState;
 use App\Repository\CharacterRepository;
 use App\Repository\GameRepository;
 use App\Repository\PlayerRepository;
+use App\Repository\SceneRepository;
 use App\Service\RolesSelector;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
 use Doctrine\ORM\Events;
@@ -21,6 +23,7 @@ class PlayerUpdate
         private GameRepository $gameRepository,
         private CharacterRepository $characterRepository,
         private RolesSelector $rolesSelector,
+        private SceneRepository $sceneRepository,
     ) {
     }
 
@@ -55,6 +58,9 @@ class PlayerUpdate
         if ($startGame) {
             $game->setState(GameState::PLAYING);
             $this->gameRepository->save($game, true);
+            $startingScene = new Scene();
+            $startingScene->setGame($game);
+            $this->sceneRepository->save($startingScene, true);
             foreach ($characters as $character) {
                 $this->characterRepository->save($character, false);
             }

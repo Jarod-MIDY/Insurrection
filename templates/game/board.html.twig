@@ -1,0 +1,24 @@
+
+<turbo-frame id="PlayingBoard">
+    <section class="game-board" >
+        <ul id="Board" class="board" {{ stimulus_target('sortable-gameboard', 'board') }}>
+        </ul>
+        <a class="button" href="">
+            Prêt pour la scène
+        </a>
+    </section>
+    <ul class="game-board-character-list" {{ stimulus_target('sortable-gameboard', 'characterList') }}>
+        {% for character in player.characters %}
+            <li>
+                <div class="character-wrapper">
+                    <span class="character-token">
+                        <twig:RoleIcon roleValue="{{ player.role.value }}" iconOnly="true"></twig:RoleIcon>
+                    </span>
+                    <span class="tooltip">
+                        {{ character.name }}
+                    </span>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+</turbo-frame>

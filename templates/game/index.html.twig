@@ -80,11 +80,17 @@
             </twig:block>
             <twig:block name="content">
                 <twig:tabsContentElement label="Partie en cours" index="1">
-                    pouet
+                    <turbo-frame 
+                        class="game-board-content" 
+                        id="PlayingBoard" 
+                        src="{{ path('app_game_board', { game: game.id }) }}"
+                        {{ stimulus_controller('sortable-gameboard') }}
+                    >
+                    </turbo-frame>
                 </twig:tabsContentElement>
                 <twig:tabsContentElement label="Ma Fiche" index="0">
                     <turbo-frame 
-                        class="game-lobby-content test" 
+                        class="game-lobby-content" 
                         id="Lobby" 
                         src="{{ path('app_player_save_roles_preferences', { player: player.id }) }}"
                     >
@@ -92,7 +98,7 @@
                 </twig:tabsContentElement>
                 <twig:tabsContentElement label="Tous les Joueurs" index="0">
                     <turbo-frame 
-                        class="game-lobby-content test" 
+                        class="game-lobby-content" 
                         id="ListPlayers" 
                         src="{{ path('app_game_list_players', { game: game.id }) }}"
                     >

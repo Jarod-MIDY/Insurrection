@@ -647,3 +647,97 @@ input {
     margin: -0.75rem;
     padding: 0.5rem;
 }
+
+.game-board-content {
+    justify-content: space-between;
+}
+
+.game-board {
+    display: grid;
+    margin: auto;
+    gap: 0.75rem;
+}
+
+.game-board-character-list {
+    padding: 1rem;
+    margin: 0;
+    list-style: none;
+    display: flex;
+    gap: 0.5rem;
+    border-radius: 0.125rem;
+    background: #12151CAF;
+    min-height: 70px;
+    justify-content: space-around;
+}
+
+.game-board-character-list > li {
+    width: fit-content;
+}
+
+.character-wrapper {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    position: relative;
+}
+
+.character-token {
+    border: 2px double var(--red-2);
+    border-radius: 99px;
+    width: 64px;
+    height: 64px;
+    position: relative;
+    background-color: var(--red-1);
+    color: var(--light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.character-token svg {
+    fill: currentColor;
+    height: 3.5rem;
+}
+
+.board {
+    --cell-width: 70px;
+    display: grid;
+    grid-template-columns: repeat(5, var(--cell-width));
+    grid-template-rows: repeat(5, var(--cell-width));
+    background-color: var(--light);
+    width: max-content;
+    height: max-content;
+    background-image:
+    conic-gradient(
+      var(--light) 90deg,
+      var(--dark) 90deg 180deg,
+      var(--light) 180deg 270deg,
+      var(--dark) 270deg
+      )
+    ;
+  background-size: calc(var(--cell-width) * 2) calc(var(--cell-width) * 2);
+  background-repeat: repeat;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.board .character-wrapper .tooltip {
+    position: absolute;
+    text-align: center;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    background-color: var(--light);
+    border-radius: 0.125rem;
+    background: #12151CAF;
+    padding: 0.25rem;
+    margin: auto;
+    z-index: 10;
+}
+.board .character-wrapper:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+}
