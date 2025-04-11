@@ -1,0 +1,787 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Cannot call method getGame\(\) on App\\Entity\\Player\|null\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Controller/CharacterController.php
+
+		-
+			message: '#^Cannot call method getId\(\) on App\\Entity\\Game\|null\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: src/Controller/CharacterController.php
+
+		-
+			message: '#^Cannot call method getId\(\) on App\\Entity\\Player\|null\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: src/Controller/CharacterController.php
+
+		-
+			message: '#^Cannot call method getLinkedUser\(\) on App\\Entity\\Player\|null\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: src/Controller/CharacterController.php
+
+		-
+			message: '#^Parameter \#1 \$author of method App\\Entity\\Game\:\:setAuthor\(\) expects App\\Entity\\User\|null, Symfony\\Component\\Security\\Core\\User\\UserInterface\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Controller/GameController.php
+
+		-
+			message: '#^Parameter \#1 \$linkedUser of method App\\Entity\\Player\:\:setLinkedUser\(\) expects App\\Entity\\User\|null, Symfony\\Component\\Security\\Core\\User\\UserInterface\|null given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Controller/GameController.php
+
+		-
+			message: '#^Call to an undefined method App\\Repository\\PlayerRepository\:\:remove\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Controller/PlayerController.php
+
+		-
+			message: '#^Cannot call method getId\(\) on App\\Entity\\Game\|null\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Controller/PlayerController.php
+
+		-
+			message: '#^Property App\\Controller\\PlayerController\:\:\$gameRepository is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: src/Controller/PlayerController.php
+
+		-
+			message: '#^Method App\\Controller\\RegistrationController\:\:register\(\) should return Symfony\\Component\\HttpFoundation\\Response but returns Symfony\\Component\\HttpFoundation\\Response\|null\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Controller/RegistrationController.php
+
+		-
+			message: '#^Property App\\Entity\\Character\:\:\$id \(int\|null\) is never assigned int so it can be removed from the property type\.$#'
+			identifier: property.unusedType
+			count: 1
+			path: src/Entity/Character.php
+
+		-
+			message: '#^Method App\\Entity\\Game\:\:getPlayersWithPreferedRole\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/Game.php
+
+		-
+			message: '#^Method App\\Entity\\Game\:\:getRoles\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/Game.php
+
+		-
+			message: '#^Parameter \#2 \$haystack of function in_array expects array, array\<App\\Enum\\GameRoles\>\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Entity/Game.php
+
+		-
+			message: '#^Property App\\Entity\\Game\:\:\$id \(int\|null\) is never assigned int so it can be removed from the property type\.$#'
+			identifier: property.unusedType
+			count: 1
+			path: src/Entity/Game.php
+
+		-
+			message: '#^Property App\\Entity\\InfluenceToken\:\:\$id \(int\|null\) is never assigned int so it can be removed from the property type\.$#'
+			identifier: property.unusedType
+			count: 1
+			path: src/Entity/InfluenceToken.php
+
+		-
+			message: '#^Cannot call method getCharacterSheet\(\) on App\\Enum\\GameRoles\|null\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Entity/Player.php
+
+		-
+			message: '#^Method App\\Entity\\Player\:\:getInformations\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/Player.php
+
+		-
+			message: '#^Method App\\Entity\\Player\:\:getPreferedRoles\(\) should return array\<App\\Enum\\GameRoles\>\|null but returns array\|null\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Entity/Player.php
+
+		-
+			message: '#^Method App\\Entity\\Player\:\:setInformations\(\) has parameter \$informations with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/Player.php
+
+		-
+			message: '#^Method App\\Entity\\Player\:\:setPreferedRoles\(\) has parameter \$preferedRoles with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/Player.php
+
+		-
+			message: '#^Property App\\Entity\\Player\:\:\$id \(int\|null\) is never assigned int so it can be removed from the property type\.$#'
+			identifier: property.unusedType
+			count: 1
+			path: src/Entity/Player.php
+
+		-
+			message: '#^Property App\\Entity\\Player\:\:\$informations type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/Player.php
+
+		-
+			message: '#^Property App\\Entity\\Player\:\:\$preferedRoles type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/Player.php
+
+		-
+			message: '#^Property App\\Entity\\Scene\:\:\$id \(int\|null\) is never assigned int so it can be removed from the property type\.$#'
+			identifier: property.unusedType
+			count: 1
+			path: src/Entity/Scene.php
+
+		-
+			message: '#^Property App\\Entity\\SceneLeaderVote\:\:\$id \(int\|null\) is never assigned int so it can be removed from the property type\.$#'
+			identifier: property.unusedType
+			count: 1
+			path: src/Entity/SceneLeaderVote.php
+
+		-
+			message: '#^Method App\\Entity\\User\:\:getRoles\(\) should return list\<string\> but returns non\-empty\-array\<int\<0, max\>, string\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Entity/User.php
+
+		-
+			message: '#^Method App\\Entity\\User\:\:getUserIdentifier\(\) should return non\-empty\-string but returns string\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Entity/User.php
+
+		-
+			message: '#^Property App\\Entity\\User\:\:\$id \(int\|null\) is never assigned int so it can be removed from the property type\.$#'
+			identifier: property.unusedType
+			count: 1
+			path: src/Entity/User.php
+
+		-
+			message: '#^Method App\\Enum\\GameRoles\:\:getCharacterSheet\(\) has parameter \$data with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Enum/GameRoles.php
+
+		-
+			message: '#^Parameter \#1 \$data of class App\\Records\\BadgeSheet constructor expects array\<string, string\>\|null, array\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Enum/GameRoles.php
+
+		-
+			message: '#^Parameter \#1 \$data of class App\\Records\\EchoSheet constructor expects array\<string, string\>\|null, array\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Enum/GameRoles.php
+
+		-
+			message: '#^Parameter \#1 \$data of class App\\Records\\MolotovSheet constructor expects array\<string, string\>\|null, array\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Enum/GameRoles.php
+
+		-
+			message: '#^Parameter \#1 \$data of class App\\Records\\OrderSheet constructor expects array\<string, string\>\|null, array\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Enum/GameRoles.php
+
+		-
+			message: '#^Parameter \#1 \$data of class App\\Records\\PamphletSheet constructor expects array\<string, string\>\|null, array\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Enum/GameRoles.php
+
+		-
+			message: '#^Parameter \#1 \$data of class App\\Records\\PeopleSheet constructor expects array\<string, string\>\|null, array\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Enum/GameRoles.php
+
+		-
+			message: '#^Parameter \#1 \$data of class App\\Records\\PowerSheet constructor expects array\<string, string\>\|null, array\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Enum/GameRoles.php
+
+		-
+			message: '#^Parameter \#1 \$data of class App\\Records\\StarSheet constructor expects array\<string, string\>\|null, array\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Enum/GameRoles.php
+
+		-
+			message: '#^Binary operation "\+" between mixed and non\-empty\-array results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 20
+			path: src/Form/PlayerInfoFormType.php
+
+		-
+			message: '#^Binary operation "\." between ''Unexpected data…'' and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: src/Form/PlayerInfoFormType.php
+
+		-
+			message: '#^Cannot access constant CHOICES_ACCOUNTABLE_TO on mixed\.$#'
+			identifier: classConstant.nonObject
+			count: 1
+			path: src/Form/PlayerInfoFormType.php
+
+		-
+			message: '#^Cannot access constant CHOICES_BLAMED_FOR on mixed\.$#'
+			identifier: classConstant.nonObject
+			count: 3
+			path: src/Form/PlayerInfoFormType.php
+
+		-
+			message: '#^Cannot access constant CHOICES_DISSENT_GOAL on mixed\.$#'
+			identifier: classConstant.nonObject
+			count: 1
+			path: src/Form/PlayerInfoFormType.php
+
+		-
+			message: '#^Cannot access constant CHOICES_DISSENT_REASON on mixed\.$#'
+			identifier: classConstant.nonObject
+			count: 1
+			path: src/Form/PlayerInfoFormType.php
+
+		-
+			message: '#^Cannot access constant CHOICES_FEARED_BECAUSE on mixed\.$#'
+			identifier: classConstant.nonObject
+			count: 1
+			path: src/Form/PlayerInfoFormType.php
+
+		-
+			message: '#^Cannot access constant CHOICES_FINANCED_BY on mixed\.$#'
+			identifier: classConstant.nonObject
+			count: 1
+			path: src/Form/PlayerInfoFormType.php
+
+		-
+			message: '#^Cannot access constant CHOICES_IMPORTANT_AGENT_TYPE on mixed\.$#'
+			identifier: classConstant.nonObject
+			count: 1
+			path: src/Form/PlayerInfoFormType.php
+
+		-
+			message: '#^Cannot access constant CHOICES_MODUS_OPERENDI on mixed\.$#'
+			identifier: classConstant.nonObject
+			count: 1
+			path: src/Form/PlayerInfoFormType.php
+
+		-
+			message: '#^Cannot access constant CHOICES_ORIGINS on mixed\.$#'
+			identifier: classConstant.nonObject
+			count: 1
+			path: src/Form/PlayerInfoFormType.php
+
+		-
+			message: '#^Cannot access constant CHOICES_PART_OF on mixed\.$#'
+			identifier: classConstant.nonObject
+			count: 1
+			path: src/Form/PlayerInfoFormType.php
+
+		-
+			message: '#^Cannot access constant CHOICES_PRIORITY on mixed\.$#'
+			identifier: classConstant.nonObject
+			count: 1
+			path: src/Form/PlayerInfoFormType.php
+
+		-
+			message: '#^Cannot access constant CHOICES_QUALITY on mixed\.$#'
+			identifier: classConstant.nonObject
+			count: 1
+			path: src/Form/PlayerInfoFormType.php
+
+		-
+			message: '#^Cannot access constant CHOICES_RED_TAPE on mixed\.$#'
+			identifier: classConstant.nonObject
+			count: 1
+			path: src/Form/PlayerInfoFormType.php
+
+		-
+			message: '#^Cannot access constant CHOICES_SHINE on mixed\.$#'
+			identifier: classConstant.nonObject
+			count: 1
+			path: src/Form/PlayerInfoFormType.php
+
+		-
+			message: '#^Cannot access constant CHOICES_TRUST on mixed\.$#'
+			identifier: classConstant.nonObject
+			count: 1
+			path: src/Form/PlayerInfoFormType.php
+
+		-
+			message: '#^Cannot access constant CHOICE_AGENT_TYPE on mixed\.$#'
+			identifier: classConstant.nonObject
+			count: 1
+			path: src/Form/PlayerInfoFormType.php
+
+		-
+			message: '#^Cannot access constant CHOICE_BLAME on mixed\.$#'
+			identifier: classConstant.nonObject
+			count: 1
+			path: src/Form/PlayerInfoFormType.php
+
+		-
+			message: '#^Cannot access constant CHOICE_LEGITIMACY on mixed\.$#'
+			identifier: classConstant.nonObject
+			count: 1
+			path: src/Form/PlayerInfoFormType.php
+
+		-
+			message: '#^Cannot access property \$accountableTo on mixed\.$#'
+			identifier: property.nonObject
+			count: 2
+			path: src/Form/PlayerInfoFormType.php
+
+		-
+			message: '#^Cannot access property \$bestQuality on mixed\.$#'
+			identifier: property.nonObject
+			count: 2
+			path: src/Form/PlayerInfoFormType.php
+
+		-
+			message: '#^Cannot access property \$blamedFor on mixed\.$#'
+			identifier: property.nonObject
+			count: 8
+			path: src/Form/PlayerInfoFormType.php
+
+		-
+			message: '#^Cannot access property \$dissentGoal on mixed\.$#'
+			identifier: property.nonObject
+			count: 2
+			path: src/Form/PlayerInfoFormType.php
+
+		-
+			message: '#^Cannot access property \$dissentReason on mixed\.$#'
+			identifier: property.nonObject
+			count: 2
+			path: src/Form/PlayerInfoFormType.php
+
+		-
+			message: '#^Cannot access property \$fearedBecause on mixed\.$#'
+			identifier: property.nonObject
+			count: 2
+			path: src/Form/PlayerInfoFormType.php
+
+		-
+			message: '#^Cannot access property \$financedBy on mixed\.$#'
+			identifier: property.nonObject
+			count: 2
+			path: src/Form/PlayerInfoFormType.php
+
+		-
+			message: '#^Cannot access property \$firstRedTapeRisk on mixed\.$#'
+			identifier: property.nonObject
+			count: 2
+			path: src/Form/PlayerInfoFormType.php
+
+		-
+			message: '#^Cannot access property \$importantAgentType on mixed\.$#'
+			identifier: property.nonObject
+			count: 4
+			path: src/Form/PlayerInfoFormType.php
+
+		-
+			message: '#^Cannot access property \$legitimacy on mixed\.$#'
+			identifier: property.nonObject
+			count: 2
+			path: src/Form/PlayerInfoFormType.php
+
+		-
+			message: '#^Cannot access property \$modusOperendi on mixed\.$#'
+			identifier: property.nonObject
+			count: 2
+			path: src/Form/PlayerInfoFormType.php
+
+		-
+			message: '#^Cannot access property \$origins on mixed\.$#'
+			identifier: property.nonObject
+			count: 2
+			path: src/Form/PlayerInfoFormType.php
+
+		-
+			message: '#^Cannot access property \$partOf on mixed\.$#'
+			identifier: property.nonObject
+			count: 2
+			path: src/Form/PlayerInfoFormType.php
+
+		-
+			message: '#^Cannot access property \$priority on mixed\.$#'
+			identifier: property.nonObject
+			count: 2
+			path: src/Form/PlayerInfoFormType.php
+
+		-
+			message: '#^Cannot access property \$shineIn on mixed\.$#'
+			identifier: property.nonObject
+			count: 2
+			path: src/Form/PlayerInfoFormType.php
+
+		-
+			message: '#^Cannot access property \$trust on mixed\.$#'
+			identifier: property.nonObject
+			count: 2
+			path: src/Form/PlayerInfoFormType.php
+
+		-
+			message: '#^Method App\\Form\\PlayerInfoFormType\:\:buildBadgeInfoForm\(\) has parameter \$options with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Form/PlayerInfoFormType.php
+
+		-
+			message: '#^Method App\\Form\\PlayerInfoFormType\:\:buildEchoInfoForm\(\) has parameter \$options with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Form/PlayerInfoFormType.php
+
+		-
+			message: '#^Method App\\Form\\PlayerInfoFormType\:\:buildMolotovInfoForm\(\) has parameter \$options with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Form/PlayerInfoFormType.php
+
+		-
+			message: '#^Method App\\Form\\PlayerInfoFormType\:\:buildOrderInfoForm\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Form/PlayerInfoFormType.php
+
+		-
+			message: '#^Method App\\Form\\PlayerInfoFormType\:\:buildOrderInfoForm\(\) has parameter \$options with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Form/PlayerInfoFormType.php
+
+		-
+			message: '#^Method App\\Form\\PlayerInfoFormType\:\:buildPamphletInfoForm\(\) has parameter \$options with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Form/PlayerInfoFormType.php
+
+		-
+			message: '#^Method App\\Form\\PlayerInfoFormType\:\:buildPeopleInfoForm\(\) has parameter \$options with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Form/PlayerInfoFormType.php
+
+		-
+			message: '#^Method App\\Form\\PlayerInfoFormType\:\:buildPowerInfoForm\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Form/PlayerInfoFormType.php
+
+		-
+			message: '#^Method App\\Form\\PlayerInfoFormType\:\:buildPowerInfoForm\(\) has parameter \$options with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Form/PlayerInfoFormType.php
+
+		-
+			message: '#^Method App\\Form\\PlayerInfoFormType\:\:buildStarInfoForm\(\) has parameter \$options with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Form/PlayerInfoFormType.php
+
+		-
+			message: '#^Method App\\Form\\PlayerInfoFormType\:\:buildTrajectory\(\) has parameter \$options with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Form/PlayerInfoFormType.php
+
+		-
+			message: '#^Call to an undefined method App\\Repository\\SceneRepository\:\:save\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Listener/PlayerUpdate.php
+
+		-
+			message: '#^Call to protected method getEntityManager\(\) of class Doctrine\\ORM\\EntityRepository\<App\\Entity\\Character\>\.$#'
+			identifier: method.protected
+			count: 1
+			path: src/Listener/PlayerUpdate.php
+
+		-
+			message: '#^Call to protected method getEntityManager\(\) of class Doctrine\\ORM\\EntityRepository\<App\\Entity\\Player\>\.$#'
+			identifier: method.protected
+			count: 1
+			path: src/Listener/PlayerUpdate.php
+
+		-
+			message: '#^Cannot call method isTrajectory\(\) on App\\Enum\\GameRoles\|null\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Listener/PlayerUpdate.php
+
+		-
+			message: '#^Parameter \#1 \$entity of method App\\Repository\\PlayerRepository\:\:save\(\) expects App\\Entity\\Player, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Listener/PlayerUpdate.php
+
+		-
+			message: '#^Parameter \#1 \$features of method App\\Entity\\Character\:\:setFeatures\(\) expects string\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Listener/PlayerUpdate.php
+
+		-
+			message: '#^Parameter \#1 \$game of method App\\Listener\\PlayerUpdate\:\:rolesSelection\(\) expects App\\Entity\\Game, App\\Entity\\Game\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Listener/PlayerUpdate.php
+
+		-
+			message: '#^Parameter \#1 \$game of method App\\Listener\\PlayerUpdate\:\:startGame\(\) expects App\\Entity\\Game, App\\Entity\\Game\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Listener/PlayerUpdate.php
+
+		-
+			message: '#^Parameter \#1 \$name of method App\\Entity\\Character\:\:setName\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Listener/PlayerUpdate.php
+
+		-
+			message: '#^Method App\\Records\\BadgeSheet\:\:__serialize\(\) should return array\<string, string\> but returns array\<string, string\|null\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Records/BadgeSheet.php
+
+		-
+			message: '#^Method App\\Records\\BadgeSheet\:\:getRenderData\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Records/BadgeSheet.php
+
+		-
+			message: '#^Method App\\Records\\EchoSheet\:\:__serialize\(\) should return array\<string, string\> but returns array\<string, string\|null\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Records/EchoSheet.php
+
+		-
+			message: '#^Method App\\Records\\EchoSheet\:\:getRenderData\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Records/EchoSheet.php
+
+		-
+			message: '#^Method App\\Records\\MolotovSheet\:\:__serialize\(\) should return array\<string, string\> but returns array\<string, string\|null\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Records/MolotovSheet.php
+
+		-
+			message: '#^Method App\\Records\\MolotovSheet\:\:getRenderData\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Records/MolotovSheet.php
+
+		-
+			message: '#^Method App\\Records\\OrderSheet\:\:__serialize\(\) should return array\<string, string\> but returns array\<string, string\|null\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Records/OrderSheet.php
+
+		-
+			message: '#^Method App\\Records\\OrderSheet\:\:getRenderData\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Records/OrderSheet.php
+
+		-
+			message: '#^Method App\\Records\\PamphletSheet\:\:__serialize\(\) should return array\<string, string\> but returns array\<string, string\|null\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Records/PamphletSheet.php
+
+		-
+			message: '#^Method App\\Records\\PamphletSheet\:\:getRenderData\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Records/PamphletSheet.php
+
+		-
+			message: '#^Method App\\Records\\PeopleSheet\:\:__serialize\(\) should return array\<string, string\> but returns array\<string, string\|null\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Records/PeopleSheet.php
+
+		-
+			message: '#^Method App\\Records\\PeopleSheet\:\:getRenderData\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Records/PeopleSheet.php
+
+		-
+			message: '#^Method App\\Records\\PowerSheet\:\:__serialize\(\) should return array\<string, string\> but returns array\<string, string\|null\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Records/PowerSheet.php
+
+		-
+			message: '#^Method App\\Records\\PowerSheet\:\:getRenderData\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Records/PowerSheet.php
+
+		-
+			message: '#^Method App\\Records\\StarSheet\:\:__serialize\(\) should return array\<string, string\> but returns array\<string, string\|null\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Records/StarSheet.php
+
+		-
+			message: '#^Method App\\Records\\StarSheet\:\:getRenderData\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Records/StarSheet.php
+
+		-
+			message: '#^Method App\\Repository\\GameRepository\:\:findUnfinishedOrNull\(\) should return App\\Entity\\Game\|null but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Repository/GameRepository.php
+
+		-
+			message: '#^Method App\\Repository\\GameRepository\:\:remove\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Repository/GameRepository.php
+
+		-
+			message: '#^Method App\\Repository\\GameRepository\:\:save\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Repository/GameRepository.php
+
+		-
+			message: '#^Cannot use \-\- on mixed\.$#'
+			identifier: preDec.type
+			count: 1
+			path: src/Service/RolesSelector.php
+
+		-
+			message: '#^Method App\\Service\\RolesSelector\:\:attributeRolesToPlayer\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/RolesSelector.php
+
+		-
+			message: '#^Method App\\Service\\RolesSelector\:\:preferedOrRandom\(\) has parameter \$intersection with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/RolesSelector.php
+
+		-
+			message: '#^PHPDoc tag @return with type Doctrine\\Common\\Collections\\Collection\<int, App\\Entity\\Player\> is incompatible with native type array\.$#'
+			identifier: return.phpDocType
+			count: 1
+			path: src/Service/RolesSelector.php
+
+		-
+			message: '#^Parameter \#1 \$array1 of method App\\Service\\RolesSelector\:\:rolesIntersect\(\) expects array\<App\\Enum\\GameRoles\>, array given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Service/RolesSelector.php
+
+		-
+			message: '#^Parameter \#1 \$preferedRoles of method App\\Service\\RolesSelector\:\:selectRole\(\) expects array\<App\\Enum\\GameRoles\>, array\<App\\Enum\\GameRoles\>\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Service/RolesSelector.php
+
+		-
+			message: '#^Parameter \#1 \$value of function count expects array\|Countable, array\<App\\Enum\\GameRoles\>\|null given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Service/RolesSelector.php
+
+		-
+			message: '#^Parameter \#2 \$array2 of method App\\Service\\RolesSelector\:\:rolesIntersect\(\) expects array\<App\\Enum\\GameRoles\>, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Service/RolesSelector.php
+
+		-
+			message: '#^Parameter \#3 \$data_compare_func of function array_uintersect expects callable\(mixed, mixed\)\: int, Closure\(App\\Enum\\GameRoles, App\\Enum\\GameRoles\)\: int\<\-1, 1\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Service/RolesSelector.php
+
+		-
+			message: '#^Property App\\Twig\\LobbyListComponent\:\:\$games type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Twig/LobbyListComponent.php
+
+		-
+			message: '#^Method App\\Twig\\NewGameButtonComponent\:\:mount\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Twig/NewGameButtonComponent.php
+
+		-
+			message: '#^Cannot call method getCharacterSheet\(\) on App\\Enum\\GameRoles\|null\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Twig/PlayerReadyComponent.php
+
+		-
+			message: '#^Cannot call method getInformations\(\) on App\\Entity\\Player\|null\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Twig/PlayerReadyComponent.php
+
+		-
+			message: '#^Cannot call method getRole\(\) on App\\Entity\\Player\|null\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Twig/PlayerReadyComponent.php
+
+		-
+			message: '#^Cannot call method setReadyToPlay\(\) on App\\Entity\\Player\|null\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Twig/PlayerReadyComponent.php
+
+		-
+			message: '#^Parameter \#1 \$entity of method App\\Repository\\PlayerRepository\:\:save\(\) expects App\\Entity\\Player, App\\Entity\\Player\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Twig/PlayerReadyComponent.php
+
+		-
+			message: '#^Property App\\Twig\\PlayerReadyComponent\:\:\$playerId \(int\) does not accept int\|null\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: src/Twig/PlayerReadyComponent.php
+
+		-
+			message: '#^Property App\\Twig\\PlayerReadyComponent\:\:\$readyToPlay \(bool\) does not accept bool\|null\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: src/Twig/PlayerReadyComponent.php
