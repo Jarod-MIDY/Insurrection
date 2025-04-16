@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Character;
 use App\Entity\Scene;
 use App\Form\NewSceneFormType;
 use App\Repository\SceneRepository;
@@ -41,5 +42,26 @@ class SceneController extends AbstractController
         return $this->render('scene/form.html.twig', [
             'form' => $form,
         ]);
+    }
+
+    #[Route('/scene/{scene}/character/{character}/{isPresent}', name: 'app_scene_update_character_presence')]
+    public function updateCharacterPresence(Scene $scene, Character $character, bool $isPresent = true): Response
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
+        if (
+            null === $scene->getLeader()
+            || ($scene->getGame() !== $character->getOwner()->getGame())
+            || ($this->getUser() !== $character->getOwner()->getLinkedUser())
+        ) {
+            throw $this->createAccessDeniedException();
+        }
+        if ($isPresent) {
+            $scene->addCharacter($character);
+        } else {
+            $scene->removeCharacter($character);
+        }
+        $this->sceneRepository->save($scene, true);
+
+        return $this->redirectToRoute('app_game_show', ['game' => $scene->getGame()->getId()]);
     }
 }

@@ -46,6 +46,11 @@ class Character
         $this->scenes = new ArrayCollection();
     }
 
+    public function __toString(): string
+    {
+        return $this->getName().' ('.$this->getId().')';
+    }
+
     public function getId(): ?int
     {
         return $this->id;

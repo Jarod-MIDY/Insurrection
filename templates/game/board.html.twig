@@ -34,6 +34,26 @@
         <div class="flex flex-column gap-2 p-100 flex-justify-center flex-align-center">
             {% if currentScene.leader %}
                 <ul id="Board" class="board" {{ stimulus_target('sortable-gameboard', 'board') }}>
+                    {% for character in currentScene.characters %}
+                        {% set isNotOwner = character.owner.linkedUser != app.user %}
+                        <li class="{{ isNotOwner ? 'static' : '' }}" 
+                            data-route="{{ path('app_scene_update_character_presence', { 
+                            character: character.id,
+                            scene: currentScene.id,
+                            isPresent: 1
+                            }) }}"
+                            
+                        >
+                            <div class="character-wrapper">
+                                <span class="character-token">
+                                    <twig:RoleIcon roleValue="{{ character.owner.role.value }}" iconOnly="true"></twig:RoleIcon>
+                                </span>
+                                <span class="tooltip">
+                                    {{ character.name }}
+                                </span>
+                            </div>
+                        </li>
+                    {% endfor %}
                 </ul>
                 <div class="board-scene-flags flex gap-3">
                     <button class="button flag-red">
@@ -65,8 +85,12 @@
         </aside>
     </section>
     <ul class="game-board-character-list" {{ stimulus_target('sortable-gameboard', 'characterList') }}>
-        {% for character in player.characters %}
-            <li>
+        {% for character in unUsedCharacters %}
+            <li data-route="{{ path('app_scene_update_character_presence', { 
+                character: character.id, 
+                scene: currentScene.id, 
+                isPresent: 0
+                }) }}">
                 <div class="character-wrapper">
                     <span class="character-token">
                         <twig:RoleIcon roleValue="{{ player.role.value }}" iconOnly="true"></twig:RoleIcon>
@@ -76,6 +100,8 @@
                     </span>
                 </div>
             </li>
+        {% else %}
+            <span id="noCharacters">Vous n'avez pas de personnages à ajouter à la scène</span>
         {% endfor %}
     </ul>
 </turbo-frame>

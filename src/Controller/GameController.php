@@ -153,22 +153,28 @@ class GameController extends AbstractController
     public function showGameBoard(Game $game): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
-        $player = $this->playerRepository->findOneBy(['game' => $game, 'linkedUser' => $this->getUser()]);
+        $player = $game->getPlayers()->findFirst(fn (int $index, Player $player): bool => $player->getLinkedUser() === $this->getUser());
         if (!$player) {
             throw $this->createAccessDeniedException();
         }
 
-        $lastScene = $this->sceneRepository->findOneBy(['game' => $game], ['id' => 'desc']);
-        if (null === $lastScene) {
+        $lastScene = $game->getScenes()->last();
+        if (!$lastScene instanceof Scene) {
             $lastScene = new Scene();
             $lastScene->setGame($game);
             $this->sceneRepository->save($lastScene, true);
         }
 
+        $unUsedCharacters = array_diff(
+            $player->getCharacters()->toArray(),
+            $lastScene->getCharacters()->toArray()
+        );
+
         return $this->render('game/board.html.twig', [
             'game' => $game,
             'player' => $player,
             'currentScene' => $lastScene,
+            'unUsedCharacters' => $unUsedCharacters,
         ]);
     }
 }
