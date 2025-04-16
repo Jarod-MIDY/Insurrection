@@ -56,6 +56,12 @@ class PlayerUpdate
             }
         }
         if ($startGame) {
+            for ($i = 0; $i < 8; ++$i) {
+                $arrayPlayers = $players->toArray();
+                $playerIndex = array_rand($arrayPlayers);
+                $arrayPlayers[$playerIndex]->addRadianceToken();
+                $this->playerRepository->save($arrayPlayers[$playerIndex]);
+            }
             $game->setState(GameState::PLAYING);
             $this->gameRepository->save($game, true);
             $startingScene = new Scene();

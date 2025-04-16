@@ -4,22 +4,29 @@ namespace App\Entity;
 
 use App\Enum\GameRoles;
 use App\Repository\InfluenceTokenRepository;
+use App\Traits\TraitTimestampable;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: InfluenceTokenRepository::class)]
 class InfluenceToken
 {
+    use TraitTimestampable;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(enumType: GameRoles::class)]
-    private ?GameRoles $linkedRole = null;
-
     #[ORM\ManyToOne(inversedBy: 'influenceTokens')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Player $player = null;
+    private ?Player $receiver = null;
+
+    #[ORM\ManyToOne(inversedBy: 'givenInfluenceTokens')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Player $sender = null;
+
+    #[ORM\Column]
+    private bool $isUsed = false;
 
     public function getId(): ?int
     {
@@ -28,24 +35,47 @@ class InfluenceToken
 
     public function getLinkedRole(): ?GameRoles
     {
-        return $this->linkedRole;
+        return $this->sender->getRole();
     }
 
-    public function setLinkedRole(GameRoles $linkedRole): static
+    public function getReceiver(): ?Player
     {
-        $this->linkedRole = $linkedRole;
+        return $this->receiver;
+    }
+
+    public function setReceiver(?Player $receiver): self
+    {
+        $this->receiver = $receiver;
 
         return $this;
     }
 
-    public function getPlayer(): ?Player
+    public function getSender(): ?Player
     {
-        return $this->player;
+        return $this->sender;
     }
 
-    public function setPlayer(?Player $player): static
+    public function setSender(?Player $sender): self
     {
-        $this->player = $player;
+        $this->sender = $sender;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of isUsed.
+     */
+    public function isIsUsed(): bool
+    {
+        return $this->isUsed;
+    }
+
+    /**
+     * Set the value of isUsed.
+     */
+    public function setIsUsed(bool $isUsed): self
+    {
+        $this->isUsed = $isUsed;
 
         return $this;
     }

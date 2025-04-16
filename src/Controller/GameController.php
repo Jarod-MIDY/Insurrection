@@ -4,11 +4,13 @@ namespace App\Controller;
 
 use App\Entity\Game;
 use App\Entity\Player;
+use App\Entity\Scene;
 use App\Enum\GameState;
 use App\Form\GameFormType;
 use App\Form\JoinFormType;
 use App\Repository\GameRepository;
 use App\Repository\PlayerRepository;
+use App\Repository\SceneRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,6 +22,7 @@ class GameController extends AbstractController
     public function __construct(
         private GameRepository $gameRepository,
         private PlayerRepository $playerRepository,
+        private SceneRepository $sceneRepository,
     ) {
     }
 
@@ -36,7 +39,7 @@ class GameController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->gameRepository->save($game, true);
 
-            return $this->redirectToRoute('app_game_edit', ['game' => $game]);
+            return $this->redirectToRoute('app_game_edit', ['game' => $game->getId()]);
         }
 
         return $this->render('game/new.html.twig', [
@@ -155,9 +158,17 @@ class GameController extends AbstractController
             throw $this->createAccessDeniedException();
         }
 
+        $lastScene = $this->sceneRepository->findOneBy(['game' => $game], ['id' => 'desc']);
+        if (null === $lastScene) {
+            $lastScene = new Scene();
+            $lastScene->setGame($game);
+            $this->sceneRepository->save($lastScene, true);
+        }
+
         return $this->render('game/board.html.twig', [
             'game' => $game,
             'player' => $player,
+            'currentScene' => $lastScene,
         ]);
     }
 }

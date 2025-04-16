@@ -3,11 +3,18 @@
 namespace App\Repository;
 
 use App\Entity\InfluenceToken;
+use App\Entity\Player;
+use App\Enum\GameRoles;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<InfluenceToken>
+ *
+ * @method InfluenceToken|null find($id, $lockMode = null, $lockVersion = null)
+ * @method InfluenceToken|null findOneBy(mixed[] $criteria, mixed[] $orderBy = null)
+ * @method InfluenceToken[]    findAll()
+ * @method InfluenceToken[]    findBy(mixed[] $criteria, mixed[] $orderBy = null, $limit = null, $offset = null)
  */
 class InfluenceTokenRepository extends ServiceEntityRepository
 {
@@ -16,28 +23,17 @@ class InfluenceTokenRepository extends ServiceEntityRepository
         parent::__construct($registry, InfluenceToken::class);
     }
 
-//    /**
-//     * @return InfluenceToken[] Returns an array of InfluenceToken objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('i')
-//            ->andWhere('i.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('i.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?InfluenceToken
-//    {
-//        return $this->createQueryBuilder('i')
-//            ->andWhere('i.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function findUsableToken(Player $receiver, GameRoles $senderRole): ?InfluenceToken
+    {
+        return $this->createQueryBuilder('influenceToken')
+            ->join('influenceToken.sender', 'sender')
+            ->where('influenceToken.receiver = :receiver')
+            ->andWhere('sender.role = :role ')
+            ->andWhere('influenceToken.isUsed = false')
+            ->setParameter('role', $senderRole)
+            ->setParameter('receiver', $receiver)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

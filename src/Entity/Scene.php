@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\SceneRepository;
+use App\Traits\TraitTimestampable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -11,6 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: SceneRepository::class)]
 class Scene
 {
+    use TraitTimestampable;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -27,16 +30,13 @@ class Scene
     private Collection $characters;
 
     #[ORM\Column(nullable: true)]
-    private ?\DateInterval $estimatedDuration = null;
+    private ?int $estimatedDuration = 0;
 
     #[ORM\Column(nullable: true)]
-    private ?\DateInterval $realDuration = null;
+    private ?int $realDuration = 0;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $goal = null;
-
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $story = null;
 
     /**
      * @var Collection<int, Character>
@@ -50,11 +50,32 @@ class Scene
     #[ORM\OneToMany(targetEntity: SceneLeaderVote::class, mappedBy: 'scene', orphanRemoval: true)]
     private Collection $sceneLeaderVotes;
 
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Player $leader = null;
+
+    /**
+     * @var Collection<int, SceneStory>
+     */
+    #[ORM\OneToMany(targetEntity: SceneStory::class, mappedBy: 'scene')]
+    private Collection $stories;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $startedAt = null;
+
+    /**
+     * @var Collection<int, TokenAction>
+     */
+    #[ORM\OneToMany(targetEntity: TokenAction::class, mappedBy: 'scene')]
+    private Collection $tokenActions;
+
     public function __construct()
     {
         $this->characters = new ArrayCollection();
         $this->deadCharacters = new ArrayCollection();
         $this->sceneLeaderVotes = new ArrayCollection();
+        $this->stories = new ArrayCollection();
+        $this->tokenActions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -98,24 +119,24 @@ class Scene
         return $this;
     }
 
-    public function getEstimatedDuration(): ?\DateInterval
+    public function getEstimatedDuration(): ?int
     {
         return $this->estimatedDuration;
     }
 
-    public function setEstimatedDuration(?\DateInterval $estimatedDuration): static
+    public function setEstimatedDuration(?int $estimatedDuration): static
     {
         $this->estimatedDuration = $estimatedDuration;
 
         return $this;
     }
 
-    public function getRealDuration(): ?\DateInterval
+    public function getRealDuration(): ?int
     {
         return $this->realDuration;
     }
 
-    public function setRealDuration(?\DateInterval $realDuration): static
+    public function setRealDuration(?int $realDuration): static
     {
         $this->realDuration = $realDuration;
 
@@ -130,18 +151,6 @@ class Scene
     public function setGoal(?string $goal): static
     {
         $this->goal = $goal;
-
-        return $this;
-    }
-
-    public function getStory(): ?string
-    {
-        return $this->story;
-    }
-
-    public function setStory(?string $story): static
-    {
-        $this->story = $story;
 
         return $this;
     }
@@ -200,6 +209,95 @@ class Scene
             // set the owning side to null (unless already changed)
             if ($sceneLeaderVote->getScene() === $this) {
                 $sceneLeaderVote->setScene(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getLeader(): ?Player
+    {
+        return $this->leader;
+    }
+
+    public function setLeader(?Player $leader): static
+    {
+        $this->leader = $leader;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SceneStory>
+     */
+    public function getStories(): Collection
+    {
+        return $this->stories;
+    }
+
+    public function addStory(SceneStory $story): static
+    {
+        if (!$this->stories->contains($story)) {
+            $this->stories->add($story);
+            $story->setScene($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStory(SceneStory $story): static
+    {
+        if ($this->stories->removeElement($story)) {
+            // set the owning side to null (unless already changed)
+            if ($story->getScene() === $this) {
+                $story->setScene(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getStartedAt(): ?\DateTimeImmutable
+    {
+        return $this->startedAt;
+    }
+
+    public function setStartedAt(?\DateTimeImmutable $startedAt): static
+    {
+        $this->startedAt = $startedAt;
+
+        return $this;
+    }
+
+    public function isStarted(): bool
+    {
+        return null !== $this->startedAt;
+    }
+
+    /**
+     * @return Collection<int, TokenAction>
+     */
+    public function getTokenActions(): Collection
+    {
+        return $this->tokenActions;
+    }
+
+    public function addTokenAction(TokenAction $tokenAction): static
+    {
+        if (!$this->tokenActions->contains($tokenAction)) {
+            $this->tokenActions->add($tokenAction);
+            $tokenAction->setScene($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTokenAction(TokenAction $tokenAction): static
+    {
+        if ($this->tokenActions->removeElement($tokenAction)) {
+            // set the owning side to null (unless already changed)
+            if ($tokenAction->getScene() === $this) {
+                $tokenAction->setScene(null);
             }
         }
 

@@ -16,6 +16,15 @@ class SceneLeaderVoteRepository extends ServiceEntityRepository
         parent::__construct($registry, SceneLeaderVote::class);
     }
 
+    public function save(SceneLeaderVote $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->persist($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
     //    /**
     //     * @return SceneLeaderVote[] Returns an array of SceneLeaderVote objects
     //     */

@@ -1,0 +1,36 @@
+<div {{ attributes }}>
+    {% set activeTokenCount = initialFormData.sender.givenInfluenceToken.count %}
+    {% block content %}
+        <span>
+            vous aver déjà envoyé(e) {{ activeTokenCount }} jeton d'influence sur le maximum de 3
+        </span>
+        <span>
+            vous les avez donnés à :
+        </span>
+        <ul>
+            {% for influenceToken in initialFormData.sender.givenInfluenceToken %}
+                <li>
+                    {{ influenceToken.receiver.linkedUser.username }} - {{ influenceToken.receiver.role.label }}
+                </li>
+            {% endfor %}
+        </ul>
+        {% if activeTokenCount < 3 %}
+            <div>
+                {{ form_start(form, {
+                    attr: {
+                        'data-action': 'live#action:prevent',
+                        'data-live-action-param': 'save'
+                    }
+                }) }}
+                    {{ form_errors(form) }}
+                    {{ form_rest(form) }}
+                    <button type="submit" class="button">Valider L'action</button>
+                {{ form_end(form) }}
+            </div>
+        {% else %}
+            <div>
+                <p>Vous avez déjà donné(e) tout vos jetons d'influence</p>
+            </div>        
+        {% endif %}
+    {% endblock %}
+</div>

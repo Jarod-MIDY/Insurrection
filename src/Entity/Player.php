@@ -5,14 +5,18 @@ namespace App\Entity;
 use App\Enum\GameRoles;
 use App\Interface\CharacterSheet;
 use App\Repository\PlayerRepository;
+use App\Traits\TraitTimestampable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PlayerRepository::class)]
 class Player
 {
+    use TraitTimestampable;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -47,19 +51,36 @@ class Player
     /**
      * @var Collection<int, InfluenceToken>
      */
-    #[ORM\OneToMany(targetEntity: InfluenceToken::class, mappedBy: 'player', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: InfluenceToken::class, mappedBy: 'receiver', orphanRemoval: true)]
     private Collection $influenceTokens;
+
+    /**
+     * @var Collection<int, InfluenceToken>
+     */
+    #[ORM\OneToMany(targetEntity: InfluenceToken::class, mappedBy: 'sender', orphanRemoval: true)]
+    #[Assert\Count(
+        min: 0,
+        max: 3,
+    )]
+    private Collection $givenInfluenceTokens;
 
     #[ORM\Column(type: Types::SIMPLE_ARRAY, nullable: true, enumType: GameRoles::class)]
     private ?array $preferedRoles = null;
 
     #[ORM\Column]
-    private ?bool $readyToPlay = null;
+    private bool $readyToPlay = false;
+
+    /**
+     * @var Collection<int, TokenAction>
+     */
+    #[ORM\OneToMany(targetEntity: TokenAction::class, mappedBy: 'player')]
+    private Collection $tokenActions;
 
     public function __construct()
     {
         $this->characters = new ArrayCollection();
         $this->influenceTokens = new ArrayCollection();
+        $this->tokenActions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -150,6 +171,36 @@ class Player
         return $this;
     }
 
+    /**
+     * @return Collection<int, InfluenceToken>
+     */
+    public function getGivenInfluenceToken(): Collection
+    {
+        return $this->givenInfluenceTokens->filter(fn (InfluenceToken $token): bool => !$token->isIsUsed());
+    }
+
+    public function addGivenInfluenceToken(InfluenceToken $token): static
+    {
+        if (!$this->givenInfluenceTokens->contains($token)) {
+            $this->givenInfluenceTokens->add($token);
+            $token->setSender($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGivenInfluenceToken(InfluenceToken $token): static
+    {
+        if ($this->givenInfluenceTokens->removeElement($token)) {
+            // set the owning side to null (unless already changed)
+            if ($token->getSender() === $this) {
+                $token->setSender(null);
+            }
+        }
+
+        return $this;
+    }
+
     public function getNotes(): ?string
     {
         return $this->notes;
@@ -174,34 +225,17 @@ class Player
         return $this;
     }
 
+    public function addRadianceToken(): void
+    {
+        ++$this->radianceToken;
+    }
+
     /**
      * @return Collection<int, InfluenceToken>
      */
     public function getInfluenceTokens(): Collection
     {
-        return $this->influenceTokens;
-    }
-
-    public function addInfluenceToken(InfluenceToken $influenceToken): static
-    {
-        if (!$this->influenceTokens->contains($influenceToken)) {
-            $this->influenceTokens->add($influenceToken);
-            $influenceToken->setPlayer($this);
-        }
-
-        return $this;
-    }
-
-    public function removeInfluenceToken(InfluenceToken $influenceToken): static
-    {
-        if ($this->influenceTokens->removeElement($influenceToken)) {
-            // set the owning side to null (unless already changed)
-            if ($influenceToken->getPlayer() === $this) {
-                $influenceToken->setPlayer(null);
-            }
-        }
-
-        return $this;
+        return $this->influenceTokens->filter(fn (InfluenceToken $token): bool => !$token->isIsUsed());
     }
 
     /**
@@ -219,7 +253,7 @@ class Player
         return $this;
     }
 
-    public function isReadyToPlay(): ?bool
+    public function isReadyToPlay(): bool
     {
         return $this->readyToPlay;
     }
@@ -227,6 +261,36 @@ class Player
     public function setReadyToPlay(bool $readyToPlay): static
     {
         $this->readyToPlay = $readyToPlay;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TokenAction>
+     */
+    public function getTokenActions(): Collection
+    {
+        return $this->tokenActions;
+    }
+
+    public function addTokenAction(TokenAction $tokenAction): static
+    {
+        if (!$this->tokenActions->contains($tokenAction)) {
+            $this->tokenActions->add($tokenAction);
+            $tokenAction->setPlayer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTokenAction(TokenAction $tokenAction): static
+    {
+        if ($this->tokenActions->removeElement($tokenAction)) {
+            // set the owning side to null (unless already changed)
+            if ($tokenAction->getPlayer() === $this) {
+                $tokenAction->setPlayer(null);
+            }
+        }
 
         return $this;
     }

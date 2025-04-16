@@ -1,0 +1,20 @@
+<div {{ attributes }}>
+    {% block content %}
+        <div>
+            <span>
+                nombre de jeton d'éclat :
+            </span>
+             {{ player.radianceToken }}
+        </div>
+        <div>
+            <span>
+                nombre de jeton d'influence :
+            </span>
+             {{ player.influenceTokens.count }}
+        </div>
+        <twig:ActionObtainForm player="{{ player }}"></twig:ActionObtainForm>
+        <twig:ActionSufferForm player="{{ player }}"></twig:ActionSufferForm>
+        <hr>
+        <twig:ActionSendInfluenceToken sender="{{ player }}"></twig:ActionSendInfluenceToken>
+    {% endblock %}
+</div>

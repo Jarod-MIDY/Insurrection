@@ -24,6 +24,12 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Entity'
                 prefix: 'App\Entity'
                 alias: App
+            gedmo_timestampable:
+                type: attribute
+                prefix: Gedmo\Timestampable\Entity
+                dir: '%kernel.project_dir%/vendor/gedmo/doctrine-extensions/src/Timestampable'
+                alias: GedmoTimestampable
+                is_bundle: false
         controller_resolver:
             auto_mapping: false
 

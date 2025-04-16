@@ -35,6 +35,11 @@
                 {% endif %}
                 {% if app.user %}
                     <li>
+                        <span>
+                            {{ app.user.username }}
+                        </span>
+                    </li>
+                    <li>
                         <a class="button" href="{{ path('app_logout') }}">Deconnexion</a>
                     </li>
                 {% endif %}

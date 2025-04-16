@@ -1,0 +1,22 @@
+<div {{ attributes }}>
+    {% block content %}
+        {% if actionTokens > 0 %}
+            <div>
+                {{ form_start(form, {
+                    attr: {
+                        'data-action': 'live#action:prevent',
+                        'data-live-action-param': 'save'
+                    }
+                }) }}
+                    {{ form_errors(form) }}
+                    {{ form_rest(form) }}
+                    <button type="submit" class="button">Valider L'action</button>
+                {{ form_end(form) }}
+            </div>
+        {% else %}
+            <div>
+                <p>Vous n'avez plus de jetons d'action</p>
+            </div>        
+        {% endif %}
+    {% endblock %}
+</div>

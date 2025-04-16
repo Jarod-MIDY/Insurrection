@@ -14,6 +14,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: GameRepository::class)]
 class Game
 {
+    private const RADIANCE_TOKENS_PER_PLAYER = 3;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -52,6 +54,7 @@ class Game
      * @var Collection<int, Scene>
      */
     #[ORM\OneToMany(targetEntity: Scene::class, mappedBy: 'game', orphanRemoval: true)]
+    #[ORM\OrderBy(['createdAt' => 'ASC'])]
     private Collection $scenes;
 
     #[ORM\ManyToOne(inversedBy: 'games')]
@@ -173,6 +176,11 @@ class Game
         return $this->scenes;
     }
 
+    public function getCurrentScene(): ?Scene
+    {
+        return $this->scenes->last();
+    }
+
     public function addScene(Scene $scene): static
     {
         if (!$this->scenes->contains($scene)) {
@@ -264,5 +272,22 @@ class Game
         return $this->players->filter(function (Player $player) use ($role) {
             return in_array($role, $player->getPreferedRoles());
         })->toArray();
+    }
+
+    public function getRadianceTokenLimit(): int
+    {
+        return $this->maxPlayers * self::RADIANCE_TOKENS_PER_PLAYER;
+    }
+
+    public function getCurrentTotalRadianceTokens(): int
+    {
+        return $this->getPlayers()->reduce(function (int $carry, Player $player) {
+            return $carry + $player->getRadianceToken();
+        }, 0);
+    }
+
+    public function radianceLimitReached(): bool
+    {
+        return $this->getCurrentTotalRadianceTokens() >= $this->getRadianceTokenLimit();
     }
 }
