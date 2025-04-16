@@ -369,7 +369,7 @@ input {
 
 .tabs-title li:hover, 
 .tabs-title li.active {
-    border-color: var(--yellow-1);
+    border-top: 5px solid var(--yellow-1);
 }
 
 .grid {
