@@ -1,19 +1,21 @@
 <div {{ attributes }}>
     {% set activeTokenCount = initialFormData.sender.givenInfluenceToken.count %}
     {% block content %}
-        <span>
+        <p>
             vous aver déjà envoyé(e) {{ activeTokenCount }} jeton d'influence sur le maximum de 3
-        </span>
-        <span>
-            vous les avez donnés à :
-        </span>
-        <ul>
-            {% for influenceToken in initialFormData.sender.givenInfluenceToken %}
-                <li>
-                    {{ influenceToken.receiver.linkedUser.username }} - {{ influenceToken.receiver.role.label }}
-                </li>
-            {% endfor %}
-        </ul>
+        </p>
+        {% if activeTokenCount > 0 %}
+            <p>
+                vous les avez donnés à :
+            </p>
+            <ul>
+                {% for influenceToken in initialFormData.sender.givenInfluenceToken %}
+                    <li>
+                        {{ influenceToken.receiver.linkedUser.username }} - {{ influenceToken.receiver.role.label }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
         {% if activeTokenCount < 3 %}
             <div>
                 {{ form_start(form, {
@@ -23,8 +25,12 @@
                     }
                 }) }}
                     {{ form_errors(form) }}
+                    {{ form_label(form.receiver) }}
+                    <div class="flex">
+                        {{ form_widget(form.receiver) }}
+                        <button type="submit" class="button">Valider</button>
+                    </div>
                     {{ form_rest(form) }}
-                    <button type="submit" class="button">Valider L'action</button>
                 {{ form_end(form) }}
             </div>
         {% else %}

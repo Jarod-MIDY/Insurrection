@@ -9,8 +9,12 @@
                     }
                 }) }}
                     {{ form_errors(form) }}
+                    {{ form_label(form.actionSuffer) }}
+                    <div class="flex">
+                        {{ form_widget(form.actionSuffer) }}
+                        <button type="submit" class="button">Valider</button>
+                    </div>
                     {{ form_rest(form) }}
-                    <button type="submit" class="button">Valider L'action</button>
                 {{ form_end(form) }}
             {% else %}
                 <span>

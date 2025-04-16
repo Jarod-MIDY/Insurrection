@@ -756,6 +756,10 @@ input {
     gap: 0.75rem;
 }
 
+.ts-wrapper {
+    flex-grow: 1;
+}
+
 .ts-dropdown, .ts-control, .ts-control input {
     line-height: unset !important;
 }
