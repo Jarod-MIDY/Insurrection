@@ -294,4 +294,9 @@ class Player
 
         return $this;
     }
+
+    public function isReadyToForSceneStart(): ?bool
+    {
+        return $this->game->getScenes()->last()->isPlayerReady($this);
+    }
 }

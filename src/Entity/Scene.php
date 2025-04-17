@@ -69,6 +69,9 @@ class Scene
     #[ORM\OneToMany(targetEntity: TokenAction::class, mappedBy: 'scene')]
     private Collection $tokenActions;
 
+    #[ORM\Column(nullable: false, type: Types::JSON)]
+    private array $readyLogs = [];
+
     public function __construct()
     {
         $this->characters = new ArrayCollection();
@@ -271,7 +274,7 @@ class Scene
 
     public function isStarted(): bool
     {
-        return null !== $this->startedAt;
+        return null !== $this->startedAt && $this->startedAt <= new \DateTimeImmutable();
     }
 
     /**
@@ -302,5 +305,40 @@ class Scene
         }
 
         return $this;
+    }
+
+    public function setReadyPlayer(Player $player): static
+    {
+        $ready = key_exists($player->getId(), $this->readyLogs) ?
+                    !$this->readyLogs[$player->getId()]['readyStatus']
+                    : true;
+        $this->readyLogs[$player->getId()] = ['readyStatus' => $ready, 'date' => new \DateTimeImmutable()];
+        $this->startScene();
+
+        return $this;
+    }
+
+    public function isPlayerReady(Player $player): bool
+    {
+        return key_exists($player->getId(), $this->readyLogs) && $this->readyLogs[$player->getId()]['readyStatus'];
+    }
+
+    private function startScene(): void
+    {
+        $nbReadyPlayer = 0;
+        foreach ($this->readyLogs as $key => $log) {
+            $foundPlayer = $this->getGame()->getPlayers()->findFirst(function (int $index, Player $player) use ($key): bool {
+                return $player->getId() === $key;
+            });
+            if (null === $foundPlayer) {
+                throw new \Exception('Invalid player id '.$key.' in ready logs of scene '.$this->getId());
+            }
+            if (key_exists('readyStatus', $log) && $log['readyStatus']) {
+                ++$nbReadyPlayer;
+            }
+        }
+        if ($nbReadyPlayer === $this->getGame()->getMaxPlayers()) {
+            $this->setStartedAt(new \DateTimeImmutable('+10 seconds'));
+        }
     }
 }

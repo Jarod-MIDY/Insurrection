@@ -24,9 +24,7 @@
                             Mon résumer de la scène
                         </a>
                     {% else %}
-                        <a class="button" href="">
-                            Prêt pour la scène
-                        </a>
+                        <twig:SceneReadyBtn player="{{ player }}"></twig:SceneReadyBtn>
                     {% endif %}
                 </div>
             {% endif %}
