@@ -134,6 +134,11 @@ class Scene
         return $this;
     }
 
+    public function getEstimatedDateEnd(): ?\DateTimeInterface
+    {
+        return $this->getStartedAt()->add(new \DateInterval('PT'.$this->getEstimatedDuration().'M'));
+    }
+
     public function getRealDuration(): ?int
     {
         return $this->realDuration;

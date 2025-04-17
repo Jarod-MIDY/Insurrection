@@ -31,6 +31,15 @@
         </div>
         <div class="flex flex-column gap-2 p-100 flex-justify-center flex-align-center">
             {% if currentScene.leader %}
+                {% if currentScene.isStarted %}
+                    <div {{ stimulus_controller('scene-countdown') }}>
+                        <p 
+                            {{ stimulus_target('scene-countdown', 'time') }} 
+                            data-date="{{ currentScene.estimatedDateEnd | date('Y-m-d H:i:s') }}">
+                            Temps restant: <span id="SceneTimer">0</span>
+                        </p>
+                    </div>
+                {% endif %}
                 <ul id="Board" class="board" {{ stimulus_target('sortable-gameboard', 'board') }}>
                     {% for character in currentScene.characters %}
                         {% set isNotOwner = character.owner.linkedUser != app.user %}
