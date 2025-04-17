@@ -15,12 +15,29 @@
             {% if currentScene.leader %}
                 <div class="flex gap-2">
                     {% if app.user == currentScene.leader.linkedUser and not currentScene.isStarted %}
-                        <a class="button" href="{{ path('app_scene', { scene: currentScene.id }) }}" {{ stimulus_action('modal', 'open') }}>
+                        <a 
+                            class="button" 
+                            href="{{ path('app_scene', { scene: currentScene.id }) }}" 
+                            {{ stimulus_action('modal', 'open') }}
+                        >
                             éditer la scène
                         </a>
                     {% endif %}
+                    {% if app.user == currentScene.leader.linkedUser and currentScene.isStarted %}
+                        <a 
+                            class="button" 
+                            href="{{ path('app_scene_close', { scene: currentScene.id }) }}" 
+                            {{ stimulus_action('modal', 'open') }}
+                        >
+                            Cloturer la scène
+                        </a>
+                    {% endif %}
                     {% if currentScene.isStarted %}
-                        <a class="button" href="">
+                        <a 
+                            class="button" 
+                            href="{{ path('app_scene_edit_my_scene_storie', { scene: currentScene.id, player: player.id }) }}"
+                            {{ stimulus_action('modal', 'open') }}
+                        >
                             Mon résumer de la scène
                         </a>
                     {% else %}

@@ -33,7 +33,7 @@ class Scene
     private ?int $estimatedDuration = 0;
 
     #[ORM\Column(nullable: true)]
-    private ?int $realDuration = 0;
+    private ?\DateTimeImmutable $finishedAt = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $goal = null;
@@ -137,18 +137,6 @@ class Scene
     public function getEstimatedDateEnd(): ?\DateTimeInterface
     {
         return $this->getStartedAt()->add(new \DateInterval('PT'.$this->getEstimatedDuration().'M'));
-    }
-
-    public function getRealDuration(): ?int
-    {
-        return $this->realDuration;
-    }
-
-    public function setRealDuration(?int $realDuration): static
-    {
-        $this->realDuration = $realDuration;
-
-        return $this;
     }
 
     public function getGoal(): ?string
@@ -345,5 +333,23 @@ class Scene
         if ($nbReadyPlayer === $this->getGame()->getMaxPlayers()) {
             $this->setStartedAt(new \DateTimeImmutable('+10 seconds'));
         }
+    }
+
+    /**
+     * Get the value of finishedAt.
+     */
+    public function getFinishedAt(): ?\DateTimeImmutable
+    {
+        return $this->finishedAt;
+    }
+
+    /**
+     * Set the value of finishedAt.
+     */
+    public function setFinishedAt(?\DateTimeImmutable $finishedAt): self
+    {
+        $this->finishedAt = $finishedAt;
+
+        return $this;
     }
 }
