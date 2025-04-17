@@ -672,10 +672,6 @@ input {
     background-size: 20px 30px;
 }
 
-.game-author {
-    color: #eaab23;
-}
-
 .player-role svg {
     height: 2rem;
     width: auto;
@@ -701,6 +697,7 @@ input {
 
 .player-me {
     order: 1;
+    color: var(--yellow-1);
 }
 
 .player-ready-wrapper {
