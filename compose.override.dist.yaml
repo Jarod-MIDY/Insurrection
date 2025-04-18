@@ -1,0 +1,20 @@
+services:
+    app:
+        ports:
+            - "7000:80"
+            - "7001:443"
+
+    database:
+        # Direct port binding with default network for remote access from local software (e.g. dbeaver)
+        ports:
+            - "7100:5432"
+        networks:
+            - default
+
+    mailcatcher:
+        ports:
+            - "7300:1080"
+            - "7301:1025"
+    mercure:
+        ports:
+        - "80"

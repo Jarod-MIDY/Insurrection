@@ -1,0 +1,15 @@
+parameters:
+    level: 9
+    paths:
+        - bin/
+        - config
+        - src
+        - public
+    excludePaths:
+        - var/*
+
+    treatPhpDocTypesAsCertain: false
+    ignoreErrors:
+        - '#Variable method call#'
+    parallel:
+        maximumNumberOfProcesses: 1
