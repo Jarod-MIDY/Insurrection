@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: GameRepository::class)]
@@ -208,8 +209,11 @@ class Game
         return $this->author;
     }
 
-    public function setAuthor(?User $author): static
+    public function setAuthor(UserInterface|User|null $author): static
     {
+        if (!($author instanceof User || null === $author)) {
+            throw new \InvalidArgumentException();
+        }
         $this->author = $author;
 
         return $this;

@@ -18,6 +18,7 @@ WORKDIR /app
 COPY --link --chmod=777 --from=composer:2.8.6 /usr/bin/composer /usr/bin/composer
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
+COPY --link ./docker/app/Caddyfile /etc/caddy/Caddyfile
 COPY --link ./docker/app/local.ini "$PHP_INI_DIR/conf.d/90-local.ini"
 
 FROM base AS dev

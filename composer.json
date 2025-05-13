@@ -90,7 +90,9 @@
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.75",
         "phpstan/phpstan": "^2.1",
+        "symfony/debug-bundle": "7.2.*",
         "symfony/maker-bundle": "^1.62",
+        "symfony/monolog-bundle": "^3.0",
         "symfony/stopwatch": "7.2.*",
         "symfony/var-dumper": "7.2.*",
         "symfony/web-profiler-bundle": "7.2.*"

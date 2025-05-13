@@ -14,6 +14,8 @@ use App\Repository\SceneRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mercure\HubInterface;
+use Symfony\Component\Mercure\Update;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\UX\Turbo\TurboBundle;
 
@@ -23,6 +25,7 @@ class GameController extends AbstractController
         private GameRepository $gameRepository,
         private PlayerRepository $playerRepository,
         private SceneRepository $sceneRepository,
+        private HubInterface $hub,
     ) {
     }
 
@@ -75,6 +78,10 @@ class GameController extends AbstractController
         $player->setGame($game);
         $player->setLinkedUser($this->getUser());
         $this->playerRepository->save($player, true);
+        $this->hub->publish(new Update(
+            'UpdateLoby',
+            '{}',
+        ));
 
         return $this->redirectToRoute('app_game_show', ['game' => $game->getId()]);
     }
@@ -175,6 +182,34 @@ class GameController extends AbstractController
             'player' => $player,
             'currentScene' => $lastScene,
             'unUsedCharacters' => $unUsedCharacters,
+        ]);
+    }
+
+    #[Route('/game/delete/{game}', name: 'app_game_delete')]
+    public function deleteGame(Request $request, Game $game): Response
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
+        if (
+            $game->getAuthor() !== $this->getUser()
+            || GameState::CLOSED === $game->getState()
+        ) {
+            throw $this->createAccessDeniedException();
+        }
+        if ($this->isCsrfTokenValid('delete'.$game->getId(), (string) $request->request->get('_token'))) {
+            $game->setState(GameState::CLOSED);
+            $this->gameRepository->save($game, true);
+            $this->hub->publish(new Update(
+                'UpdateLoby',
+                '{}',
+            ));
+
+            return $this->redirectToRoute('app_home');
+        }
+
+        $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
+
+        return $this->redirectToRoute('app_game_edit', [
+            'game' => $game->getId(),
         ]);
     }
 }

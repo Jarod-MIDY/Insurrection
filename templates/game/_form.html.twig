@@ -39,4 +39,12 @@
             Démarrer un lobby
         </a>
     {% endif %}
+    {% if game is defined and game.state.value == 'lobby' %}
+        <twig:DeleteForm 
+            path="{{ path('app_game_delete', { game: game.id }) }}"
+            entityId="{{ game.id }}"
+            text="archiver la partie"
+            warning="Cette action est irréversible"
+        ></twig:DeleteForm>
+    {% endif %}
 {{  form_end(form) }}

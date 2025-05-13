@@ -7,3 +7,7 @@
 import './bootstrap.js';
 import './styles/app.css';
 console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
+document.addEventListener('mercure-listen:UpdateLoby', event => {
+    console.log('event mercure-listen:UpdateLoby received');
+    console.log(event);
+});

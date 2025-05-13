@@ -10,7 +10,8 @@ services:
               condition: service_healthy
       environment:
           - SERVER_NAME
-          - ADMIN_IPS
+          - MERCURE_PUBLISHER_JWT_KEY
+          - MERCURE_SUBSCRIBER_JWT_KEY
       networks:
           - default
           - db-proxy
@@ -25,7 +26,7 @@ services:
       MERCURE_SUBSCRIBER_JWT_KEY: '${MERCURE_SUBSCRIBER_JWT_KEY:-ChangeThisMercureHubJWTSecretKey}'
       # Set the URL of your Symfony project (without trailing slash!) as value of the cors_origins directive
       MERCURE_EXTRA_DIRECTIVES: |
-        cors_origins http://127.0.0.1:8000
+        cors_origins http://127.0.0.1:7000
     # Comment the following line to disable the development mode
     command: /usr/bin/caddy run --config /etc/caddy/dev.Caddyfile
     healthcheck:
@@ -36,6 +37,9 @@ services:
     volumes:
       - mercure_data:/data
       - mercure_config:/config
+    networks:
+      - default
+      - db-proxy
 ###< symfony/mercure-bundle ###
 
 ###> doctrine/doctrine-bundle ###

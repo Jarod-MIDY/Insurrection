@@ -10,6 +10,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PlayerRepository::class)]
@@ -93,8 +94,11 @@ class Player
         return $this->linkedUser;
     }
 
-    public function setLinkedUser(?User $linkedUser): static
+    public function setLinkedUser(User|UserInterface|null $linkedUser): static
     {
+        if (!($linkedUser instanceof User || null === $linkedUser)) {
+            throw new \InvalidArgumentException();
+        }
         $this->linkedUser = $linkedUser;
 
         return $this;
