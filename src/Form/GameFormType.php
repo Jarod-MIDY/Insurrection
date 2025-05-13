@@ -26,6 +26,7 @@ class GameFormType extends AbstractType
             ])
             ->add('maxPlayers', ChoiceType::class, [
                 'label' => 'Nombre de Joueurs Maximum',
+                'autocomplete' => true,
                 'choices' => [
                     '5' => 5,
                     '6' => 6,

@@ -58,6 +58,10 @@ class GameController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->gameRepository->save($game, true);
+            $this->hub->publish(new Update(
+                'UpdateLoby',
+                '{}',
+            ));
         }
 
         $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
@@ -131,7 +135,10 @@ class GameController extends AbstractController
             $player->setGame($game);
             $player->setLinkedUser($this->getUser());
             $this->playerRepository->save($player, true);
-
+            $this->hub->publish(new Update(
+                'UpdateLoby',
+                '{}',
+            ));
             return $this->redirectToRoute('app_game_show', ['game' => $game->getId()]);
         }
 
