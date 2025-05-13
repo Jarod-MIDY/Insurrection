@@ -81,6 +81,10 @@ input {
     margin: 0;
 }
 
+.mt-auto {
+    margin-top: auto;
+}
+
 .p-050 {
     padding: 0.5rem;
 }
@@ -386,6 +390,10 @@ input {
 
 .flex-justify-center {
     justify-content: center;
+}
+
+.flex-justify-between {
+    justify-content: space-between;
 }
 
 .flex-align-center {

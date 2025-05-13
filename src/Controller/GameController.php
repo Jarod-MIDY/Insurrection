@@ -150,6 +150,24 @@ class GameController extends AbstractController
         ]);
     }
 
+    #[Route('/game/leave/{game}', name: 'app_game_leave')]
+    public function leaveGame(Game $game): Response
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
+        $player = $this->playerRepository->findOneBy(['game' => $game, 'linkedUser' => $this->getUser()]);
+        if (!$player instanceof Player || $player->getLinkedUser() === $game->getAuthor()) {
+            return $this->redirectToRoute('app_game_show', ['game' => $game->getId()]);
+        }
+        $this->playerRepository->remove($player, true);
+        $this->hub->publish(new Update(
+            'UpdateLoby',
+            '{}',
+        ));
+
+
+        return $this->redirectToRoute('app_home');
+    }
+
     #[Route('/game/list-players/{game}', name: 'app_game_list_players')]
     public function listPlayers(Game $game, Request $request): Response
     {
