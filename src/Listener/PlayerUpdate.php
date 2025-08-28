@@ -14,6 +14,8 @@ use App\Repository\SceneRepository;
 use App\Service\RolesSelector;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
 use Doctrine\ORM\Events;
+use Symfony\Component\Mercure\HubInterface;
+use Symfony\Component\Mercure\Update;
 
 #[AsEntityListener(event: Events::postUpdate, method: 'postUpdate', entity: Player::class)]
 class PlayerUpdate
@@ -24,12 +26,16 @@ class PlayerUpdate
         private CharacterRepository $characterRepository,
         private RolesSelector $rolesSelector,
         private SceneRepository $sceneRepository,
+        private HubInterface $hub,
     ) {
     }
 
     public function postUpdate(Player $savedPlayer): void
     {
         $game = $savedPlayer->getGame();
+        if (null === $game) {
+            return;
+        }
         $this->rolesSelection($game);
         $this->startGame($game);
     }
@@ -47,7 +53,7 @@ class PlayerUpdate
                 $startGame = false;
                 break;
             }
-            if ($player->getRole()->isTrajectory()) {
+            if ($player->getRole()?->isTrajectory()) {
                 $character = new Character();
                 $character->setOwner($player);
                 $character->setName($player->getInformations()['name']);
@@ -70,7 +76,11 @@ class PlayerUpdate
             foreach ($characters as $character) {
                 $this->characterRepository->save($character, false);
             }
-            $this->characterRepository->getEntityManager()->flush();
+            $this->characterRepository->flush();
+            $this->hub->publish(new Update(
+                'GameUpdated' . $game->getId(),
+                '{}',
+            ));
         }
     }
 
@@ -92,7 +102,7 @@ class PlayerUpdate
             foreach ($playersWithRoles as $player) {
                 $this->playerRepository->save($player);
             }
-            $this->playerRepository->getEntityManager()->flush();
+            $this->playerRepository->flush();
         }
     }
 }

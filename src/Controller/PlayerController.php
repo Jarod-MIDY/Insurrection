@@ -7,19 +7,20 @@ use App\Enum\GameRoles;
 use App\Form\PlayerInfoFormType;
 use App\Form\RolesSelectionFormType;
 use App\Records\RolesSelection;
-use App\Repository\GameRepository;
 use App\Repository\PlayerRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mercure\HubInterface;
+use Symfony\Component\Mercure\Update;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\UX\Turbo\TurboBundle;
 
 class PlayerController extends AbstractController
 {
     public function __construct(
-        private GameRepository $gameRepository,
         private PlayerRepository $playerRepository,
+        private HubInterface $hub,
     ) {
     }
 
@@ -75,6 +76,10 @@ class PlayerController extends AbstractController
             }
             $player->setPreferedRoles($selectedRoles->getRoles());
             $this->playerRepository->save($player, true);
+            $this->hub->publish(new Update(
+                'GameUpdated' . $player->getGame()?->getId(),
+                '{}',
+            ));
         }
 
         return $this->renderBlock('player/roles_selection.html.twig', 'waiting_for_other', [
@@ -89,24 +94,21 @@ class PlayerController extends AbstractController
         if ($this->getUser() !== $player->getLinkedUser()) {
             throw $this->createAccessDeniedException();
         }
+        if ($player->getPreferedRoles() === [] || null === $player->getPreferedRoles()) {
+            return $this->redirectToRoute('app_player_save_roles_preferences', [
+                'player' => $player->getId(),
+            ]);
+        }
         $player->setPreferedRoles([]);
         $this->playerRepository->save($player, true);
+        $this->hub->publish(new Update(
+            'GameUpdated' . $player->getGame()?->getId(),
+            '{}',
+        ));
 
         return $this->redirectToRoute('app_player_save_roles_preferences', [
             'player' => $player->getId(),
         ]);
-    }
-
-    #[Route('/player/{player}/leave', name: 'app_player_leave')]
-    public function leaveGame(Player $player): Response
-    {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
-        if ($this->getUser() !== $player->getLinkedUser()) {
-            throw $this->createAccessDeniedException();
-        }
-        $this->playerRepository->remove($player, true);
-
-        return $this->redirectToRoute('app_home');
     }
 
     #[Route('/player/{player}/edit', name: 'app_player_edit')]
@@ -136,7 +138,7 @@ class PlayerController extends AbstractController
             $this->playerRepository->save($player, true);
 
             return $this->redirectToRoute('app_game_show', [
-                'game' => $player->getGame()->getId(),
+                'game' => $player->getGame()?->getId(),
             ]);
         }
 

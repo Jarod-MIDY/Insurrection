@@ -30,7 +30,7 @@ class PlayerReadyComponent
 
     public function mount(Player $player): void
     {
-        $this->playerId = $player->getId();
+        $this->playerId = $player->getId() ?? 0;
         $this->readyToPlay = $player->isReadyToPlay();
     }
 
@@ -38,10 +38,12 @@ class PlayerReadyComponent
     public function changeReadyStatus(): void
     {
         $player = $this->playerRepository->find($this->playerId);
+        if (null === $player || null === $player->getRole()) {
+            return;
+        }
         $characterSheet = $player->getRole()->getCharacterSheet($player->getInformations());
         if (!$characterSheet->isReady()) {
             $this->dispatchBrowserEvent('characterSheetNotReady');
-
             return;
         }
         $this->readyToPlay = !$this->readyToPlay;

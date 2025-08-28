@@ -23,7 +23,7 @@ class LobbyListComponent
     public function __construct(
         private GameRepository $gameRepository,
     ) {
-        $this->games = $this->gameRepository->findBy(['state' => [GameState::LOBBY, GameState::PLAYING]]);
+        $this->refresh();
     }
 
     #[LiveAction]

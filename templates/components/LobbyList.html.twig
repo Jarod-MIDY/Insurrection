@@ -1,4 +1,4 @@
-<section id="lobbyList" class="flex flex-column flex-grow" {{ attributes }} >
+<section id="lobbyList" class="flex flex-column flex-grow" {{ attributes }}>
     <h2>Sessions Ouvertes</h2>
     <ul class="game-lobby-list">
         {% for game in games %}
@@ -12,7 +12,7 @@
                 <a {{ stimulus_action('modal', 'open') }} 
                 class="button" 
                 href="{{ path('app_game_join', { game: game.id}) }}">
-                    rejoindre
+                    Rejoindre
                 </a>
             </li>
         {% endfor %}

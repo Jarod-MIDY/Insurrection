@@ -16,10 +16,12 @@
                 {{ game.subject }}
             </p>
         </div>
-        <div id="GameLobyList" {{ stimulus_controller('mercure-listen',{
-            'mercureUrl':  mercure('UpdateLoby'),
-            'mercureEventFlag':  'UpdateLoby',
-        }) }} class="flex flex-column">
+        <div class="flex flex-column"
+            {{ stimulus_controller('mercure-listen',{
+                'mercureUrl':  mercure('UpdateLoby'),
+                'mercureEventFlag':  'UpdateLoby',
+            }) }} 
+        >
             <twig:lobbyPlayersList game="{{ game }}" player="{{ player }}">
             </twig:lobbyPlayersList>
         </div>
@@ -29,51 +31,11 @@
             </a>
         {% endif %}
     </aside>
-    {% if game.state.value == 'lobby' %}
-        <turbo-frame 
-            class="game-lobby-content" 
-            id="Lobby" 
-            src="{{ path('app_player_save_roles_preferences', { player: player.id }) }}"
-        >
-        </turbo-frame>
-    {% endif %}
-    {% if game.state.value == 'playing' %}
-        <twig:tabs>
-            <twig:block name="nav">
-                <twig:tabsNavElement label="Partie en cours">
-                </twig:tabsNavElement>
-                <twig:tabsNavElement label="Ma Fiche">
-                </twig:tabsNavElement>
-                <twig:tabsNavElement label="Tous les Joueurs">
-                </twig:tabsNavElement>
-            </twig:block>
-            <twig:block name="content">
-                <twig:tabsContentElement label="Partie en cours" index="1">
-                    <turbo-frame 
-                        class="game-board-content" 
-                        id="PlayingBoard" 
-                        src="{{ path('app_game_board', { game: game.id }) }}"
-                        {{ stimulus_controller('sortable-gameboard') }}
-                    >
-                    </turbo-frame>
-                </twig:tabsContentElement>
-                <twig:tabsContentElement label="Ma Fiche" index="0">
-                    <turbo-frame 
-                        class="game-lobby-content" 
-                        id="Lobby" 
-                        src="{{ path('app_player_save_roles_preferences', { player: player.id }) }}"
-                    >
-                    </turbo-frame>
-                </twig:tabsContentElement>
-                <twig:tabsContentElement label="Tous les Joueurs" index="0">
-                    <turbo-frame 
-                        class="game-lobby-content" 
-                        id="ListPlayers" 
-                        src="{{ path('app_game_list_players', { game: game.id }) }}"
-                    >
-                    </turbo-frame>
-                </twig:tabsContentElement>
-            </twig:block>
-        </twig:tabs>
-    {% endif %}
+    <section class="game-content" {{ stimulus_controller('mercure-listen',{
+                'mercureUrl':  mercure('GameUpdated' ~ game.id),
+                'mercureEventFlag':  'GameUpdated' ~ game.id,
+            }) }} >
+        <twig:GameContent game="{{ game }}" player="{{ player }}">
+        </twig:GameContent>
+    </section>
 {% endblock %}

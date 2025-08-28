@@ -430,6 +430,17 @@ input {
     overflow: scroll;
 }
 
+.game-content {
+    position: relative;
+}
+
+.game-content .refresh-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 10;
+}
+
 .game-lobby {
     display: grid;
     grid-template-areas: 'aside main';
@@ -558,6 +569,8 @@ input {
     align-items: center;
     gap: 0.25rem;
     margin-top: auto;
+    flex-direction: row;
+    justify-content: center;
 }
 .roles-wrapper .players-list li {
     padding-right: 0.25rem;

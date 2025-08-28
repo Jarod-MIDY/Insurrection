@@ -1,5 +1,5 @@
 import { Controller } from '@hotwired/stimulus';
-
+import * as Turbo from '@hotwired/turbo'
 /*
  * This is an example Stimulus controller!
  *
@@ -10,6 +10,7 @@ import { Controller } from '@hotwired/stimulus';
  * Delete this file or adapt it for your use!
  */
 export default class extends Controller {
+    static targets = ['frame']
     static values = {
         mercureUrl: String,
         mercureEventFlag: String
@@ -17,6 +18,12 @@ export default class extends Controller {
     connect() {
         this.eventSource = new EventSource(this.mercureUrlValue);
         this.eventSource.onmessage = event => {
+            console.log('event mercure-listen received');
+            if (this.hasFrameTarget) {
+                this.frameTargets.forEach(element => {
+                    Turbo.visit(element.src, { frame: element.id })
+                });
+            }
             this.dispatch(this.mercureEventFlagValue, {
                 bubbles: true,
                 detail: JSON.parse(event.data)

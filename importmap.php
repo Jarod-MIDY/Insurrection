@@ -48,4 +48,12 @@ return [
     'sortablejs' => [
         'version' => '1.15.6',
     ],
+    'tom-select/dist/css/tom-select.bootstrap4.css' => [
+        'version' => '2.4.3',
+        'type' => 'css',
+    ],
+    'tom-select/dist/css/tom-select.bootstrap5.css' => [
+        'version' => '2.4.3',
+        'type' => 'css',
+    ],
 ];

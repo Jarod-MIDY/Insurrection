@@ -21,7 +21,7 @@ class CharacterRepository extends ServiceEntityRepository
         $this->getEntityManager()->persist($entity);
 
         if ($flush) {
-            $this->getEntityManager()->flush();
+            $this->flush();
         }
     }
 
@@ -30,7 +30,11 @@ class CharacterRepository extends ServiceEntityRepository
         $this->getEntityManager()->remove($entity);
 
         if ($flush) {
-            $this->getEntityManager()->flush();
+            $this->flush();
         }
     }
+
+    public function flush() : void {
+        $this->getEntityManager()->flush();
+    } 
 }
