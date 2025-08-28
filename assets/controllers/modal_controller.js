@@ -66,13 +66,12 @@ export default class extends Controller {
 		this.frameTarget.src = target.dataset.route
 			? target.dataset.route
 			: target.href
-		console.log(this.frameTarget.src);
 		this.frameTarget.id = target.dataset.frameId
 			? target.dataset.frameId
 			: this.frameTarget.id
 		document.querySelector('body').classList.add('overflow-hidden')
 		this.dialogTarget.showModal()
-		Turbo.visit(this.frameTarget.src)
+		Turbo.visit(this.frameTarget.src, {frame: 'modal'})
 	}
 
 	close(event) {

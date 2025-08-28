@@ -27,7 +27,7 @@
             <ul class="menu">
                 {% if not app.user %}
                     <li>
-                        <a {{ stimulus_action('modal', 'open') }} class="button" href="{{ path('app_login') }}">Connexion</a>
+                        <button {{ stimulus_action('modal', 'open') }} class="button" data-route="{{ path('app_login') }}">Connexion</button>
                     </li>
                     <li>
                         <a {{ stimulus_action('modal', 'open') }} class="button" href="{{ path('app_register') }}">Inscription</a>

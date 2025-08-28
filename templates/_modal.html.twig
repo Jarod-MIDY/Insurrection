@@ -12,12 +12,12 @@
             </span>
         </button>
     </nav>
-    <div
+    <turbo-frame
         {{ stimulus_target('modal', 'frame') }}
         tabindex="-1"
         id="{{ modal.frameId|default('modal') }}"
         src="{{ modal.route|default('') }}"
         class="modal-content"
     >
-    </div>
+    </turbo-frame>
 </dialog>
