@@ -33,13 +33,16 @@ class ActionSufferFormComponent extends AbstractController
         $this->initialFormData = new TokenAction();
     }
 
-    public function mount(Player $player)
+    public function mount(Player $player): void
     {
         $this->player = $player;
     }
 
     protected function instantiateForm(): FormInterface
     {
+        if (null === $this->initialFormData) {
+            $this->initialFormData = new TokenAction();
+        }
         $this->initialFormData->setPlayer($this->player);
 
         return $this->createForm(ActionSufferFormType::class, $this->initialFormData);
@@ -55,7 +58,17 @@ class ActionSufferFormComponent extends AbstractController
         /** @var TokenAction $tokenAction */
         $tokenAction = $this->getForm()->getData();
         $player = $tokenAction->getPlayer();
+        if (null === $player) {
+            $this->addFlash('error', 'Le joueur est introuvable');
+
+            return $this->redirectToRoute('app_home', []);
+        }
         $game = $player->getGame();
+        if (null === $game) {
+            $this->addFlash('error', 'La partie actuelle ne semble pas exister');
+
+            return $this->redirectToRoute('app_home', []);
+        }
         $currentScene = $game->getCurrentScene();
         $tokenAction->setScene($currentScene);
         $player->addRadianceToken();

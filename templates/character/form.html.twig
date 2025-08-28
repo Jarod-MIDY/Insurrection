@@ -3,16 +3,16 @@
         {{ form_start(form) }}
             {{ form_errors(form) }}
             {{ form_row(form.name, {
-                    attr:{
-                        class:"form-row"
-                    }
-                }) 
+                    attr: {
+                        class: 'form-row',
+                    },
+                })
             }}
             {{ form_row(form.features, {
-                    attr:{
-                        class:"form-row"
-                    }
-                }) 
+                    attr: {
+                        class: 'form-row',
+                    },
+                })
             }}
             <button type="submit" class="button">Valider</button>
         {{ form_end(form) }}

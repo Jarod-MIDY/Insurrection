@@ -4,8 +4,8 @@
             <p>
                 Êtes-vous sur de vouloir cloturer le scénario ?
             </p>
-            <twig:DeleteForm 
-                path="{{ path('app_scene_close', { scene: scene.id }) }}"
+            <twig:DeleteForm
+                path="{{ path('app_scene_close', {scene: scene.id}) }}"
                 entityId="{{ scene.id }}"
                 text="Cloturer le scénario"
                 warning="Cette action est irréversible"

@@ -56,8 +56,8 @@ class PlayerUpdate
             if ($player->getRole()?->isTrajectory()) {
                 $character = new Character();
                 $character->setOwner($player);
-                $character->setName($player->getInformations()['name']);
-                $character->setFeatures($player->getInformations()['features']);
+                $character->setName($player->getInformations()->getValue('name'));
+                $character->setFeatures($player->getInformations()->getValue('features'));
                 $characters[] = $character;
             }
         }
@@ -78,7 +78,7 @@ class PlayerUpdate
             }
             $this->characterRepository->flush();
             $this->hub->publish(new Update(
-                'GameUpdated' . $game->getId(),
+                'GameUpdated'.$game->getId(),
                 '{}',
             ));
         }

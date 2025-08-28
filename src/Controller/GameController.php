@@ -139,6 +139,7 @@ class GameController extends AbstractController
                 'UpdateLoby',
                 '{}',
             ));
+
             return $this->redirectToRoute('app_game_show', ['game' => $game->getId()]);
         }
 
@@ -163,7 +164,6 @@ class GameController extends AbstractController
             'UpdateLoby',
             '{}',
         ));
-
 
         return $this->redirectToRoute('app_home');
     }

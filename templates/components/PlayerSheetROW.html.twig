@@ -3,7 +3,7 @@
     {% for item in data.listable %}
         <li>
             <h4>
-                {{item.label}}
+                {{ item.label }}
             </h4>
             <p>
                 <em>
@@ -17,7 +17,7 @@
             {{ data.question.question|default('<Question non renseigné>') }}
         </h4>
         <p>
-            {{ data.question.trajectorie|default('<trajectoire>') }} à répondu : 
+            {{ data.question.trajectorie|default('<trajectoire>') }} à répondu :
             <em>
                 {{ data.question.answer|default('<Non renseigné>') }}
             </em>
@@ -36,13 +36,13 @@
                 </span>
                 <span>{{ agent.features }}</span>
                 <div>
-                    <a {{ stimulus_action('modal', 'open') }} 
-                        href="{{ path('app_character_edit', {player: player.id, character: agent.id}) }}" 
+                    <a {{ stimulus_action('modal', 'open') }}
+                        href="{{ path('app_character_edit', {player: player.id, character: agent.id}) }}"
                         class="button">
                         Modifier
                     </a>
                     {% if player.game.state.value == 'lobby' %}
-                        <a  href="{{ path('app_character_delete', {player: player.id, character: agent.id}) }}" 
+                        <a  href="{{ path('app_character_delete', {player: player.id, character: agent.id}) }}"
                             class="button">
                             Supprimer
                         </a>
@@ -52,8 +52,8 @@
         {% endfor %}
     </ul>
     {% if player.game.state.value == 'lobby' %}
-        <a {{ stimulus_action('modal', 'open') }} 
-            href="{{ path('app_character_add', {player: player.id}) }}" 
+        <a {{ stimulus_action('modal', 'open') }}
+            href="{{ path('app_character_add', {player: player.id}) }}"
             class="button mt-auto">
             Ajouter un agent
         </a>

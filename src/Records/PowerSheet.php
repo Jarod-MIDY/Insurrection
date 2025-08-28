@@ -5,23 +5,34 @@ namespace App\Records;
 use App\Enum\GameRoles;
 use App\Interface\CharacterSheet;
 
+/**
+ * @phpstan-type PowerArray array{
+ *      legitimacy: string,
+ *      importantAgentType: string,
+ *      blamedFor: string,
+ *      notes: string,
+ *      chosenQuestion: string,
+ *      chosenTrajectorie: string|null,
+ *      answer: string
+ * }
+ */
 class PowerSheet implements CharacterSheet
 {
-    public const CHOICE_LEGITIMACY = [
+    public const CHOICES_LEGITIMACY = [
         'économique' => 'économique',
         'religieuse' => 'religieuse',
         'républicaine' => 'républicaine',
         'dynastique' => 'dynastique',
     ];
 
-    public const CHOICE_AGENT_TYPE = [
+    public const CHOICES_AGENT_TYPE = [
         'des élus' => 'des élus',
         'une caste' => 'une caste',
         'des fonctionnaires' => 'des fonctionnaires',
         'une famille' => 'une famille',
     ];
 
-    public const CHOICE_BLAMED = [
+    public const CHOICES_BLAMED_FOR = [
         'la peur' => 'la peur',
         'l\'omniprésence' => 'l\'omniprésence',
         'l\'esbroufe' => 'l\'esbroufe',
@@ -36,16 +47,22 @@ class PowerSheet implements CharacterSheet
     public ?GameRoles $chosenTrajectorie = null;
     public string $answer = '';
 
-    /**
-     * @param array<string, string>|null $data
-     */
-    public function __construct(?array $data = null)
+    public function __construct(?InformationCollection $data = null)
     {
-        if ((bool) $data) {
-            $this->__unserialize($data);
+        if (null !== $data) {
+            $this->legitimacy = $data->getValue('legitimacy');
+            $this->importantAgentType = $data->getValue('importantAgentType');
+            $this->blamedFor = $data->getValue('blamedFor');
+            $this->notes = $data->getValue('notes');
+            $this->chosenQuestion = $data->getValue('chosenQuestion');
+            $this->answer = $data->getValue('answer');
+            $this->chosenTrajectorie = GameRoles::from($data->getValue('chosenTrajectorie'));
         }
     }
 
+    /**
+     * @return PowerArray
+     */
     public function __serialize(): array
     {
         return [
@@ -59,6 +76,9 @@ class PowerSheet implements CharacterSheet
         ];
     }
 
+    /**
+     * @param PowerArray $data
+     */
     public function __unserialize(array $data): void
     {
         $this->legitimacy = $data['legitimacy'];
@@ -67,33 +87,19 @@ class PowerSheet implements CharacterSheet
         $this->notes = $data['notes'];
         $this->chosenQuestion = $data['chosenQuestion'];
         $this->answer = $data['answer'];
-        $this->chosenTrajectorie = GameRoles::from($data['chosenTrajectorie']);
+        $this->chosenTrajectorie = GameRoles::from($data['chosenTrajectorie'] ?? '');
     }
 
-    public function getRenderData(): array
+    public function getRenderData(): RoleRender
     {
-        return [
-            'listable' => [
-                [
-                    'label' => 'Votre légitimité est',
-                    'value' => $this->legitimacy,
-                ],
-                [
-                    'label' => 'Vos agents importants sont',
-                    'value' => $this->importantAgentType,
-                ],
-                [
-                    'label' => 'On vous reproche surtout de gouverner par',
-                    'value' => $this->blamedFor,
-                ],
-            ],
-            'question' => [
-                'question' => $this->chosenQuestion,
-                'answer' => $this->answer,
-                'trajectorie' => $this->chosenTrajectorie?->value,
-            ],
-            'notes' => $this->notes,
-        ];
+        $renderData = new RoleRender();
+        $renderData->addListable('Votre légitimity est', $this->legitimacy);
+        $renderData->addListable('Vos agents importants sont', $this->importantAgentType);
+        $renderData->addListable('On vous reproche surtout de gouverner par', $this->blamedFor);
+        $renderData->setQuestion($this->chosenQuestion, $this->answer, $this->chosenTrajectorie->value ?? '');
+        $renderData->notes = $this->notes;
+
+        return $renderData;
     }
 
     public function isReady(): bool

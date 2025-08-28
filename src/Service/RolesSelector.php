@@ -26,7 +26,7 @@ class RolesSelector
     /**
      * @param Collection<int,Player> $players
      *
-     * @return Collection<int,Player>
+     * @return Player[]
      */
     public function attributeRolesToPlayer(Collection $players): array
     {
@@ -35,7 +35,7 @@ class RolesSelector
         foreach ($sortedPlayers as $player) {
             $freeChoice = $this->missingRightsOfWay <= 0 && $this->missingTrajectories <= 0
                         && $playerMissingRoles > ($this->missingTrajectories + $this->missingRightsOfWay);
-            $role = $this->selectRole($player->getPreferedRoles(), $freeChoice);
+            $role = $this->selectRole($player->getPreferedRoles() ?? [], $freeChoice);
             if (in_array($role, $this->unAssignedroles)) {
                 $player->setRole($role);
                 --$playerMissingRoles;
@@ -59,8 +59,8 @@ class RolesSelector
         usort(
             $playerArray,
             function (Player $a, Player $b): int {
-                $nbPreferedA = [] === $a->getPreferedRoles() ? 8 : count($a->getPreferedRoles());
-                $nbPreferedB = [] === $b->getPreferedRoles() ? 8 : count($b->getPreferedRoles());
+                $nbPreferedA = [] === $a->getPreferedRoles() ? 8 : count($a->getPreferedRoles() ?? []);
+                $nbPreferedB = [] === $b->getPreferedRoles() ? 8 : count($b->getPreferedRoles() ?? []);
                 if ($nbPreferedA === $nbPreferedB) {
                     return 0;
                 }
@@ -102,6 +102,9 @@ class RolesSelector
         }
     }
 
+    /**
+     * @param GameRoles[] $intersection
+     */
     private function preferedOrRandom(array $intersection, string $roleType = 'trajectories'): GameRoles
     {
         $getRoleType = 'get'.ucfirst($roleType);

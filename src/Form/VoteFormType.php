@@ -15,9 +15,13 @@ class VoteFormType extends AbstractType
     {
         $vote = $options['data'];
         if (!$vote instanceof SceneLeaderVote) {
-            throw new \UnexpectedValueException('Unexpected data class'.$options['data_class']);
+            $class = is_object($vote) ? $vote::class : gettype($vote);
+            throw new \InvalidArgumentException('Unexpected data class '.$class);
         }
-        $game = $vote->getPlayer()->getGame();
+        $game = $vote->getPlayer()?->getGame();
+        if (null === $game) {
+            throw new \InvalidArgumentException('Missing game');
+        }
         $builder
             ->add('votedForPlayer', EntityType::class, [
                 'class' => Player::class,

@@ -18,9 +18,13 @@ class ActionSufferFormType extends AbstractType
         }
         $action = $options['data'];
         if (!$action instanceof TokenAction) {
-            throw new \InvalidArgumentException('Unexpected data class'.$options['data_class']);
+            $class = is_object($action) ? $action::class : gettype($action);
+            throw new \InvalidArgumentException('Unexpected data class '.$class);
         }
-        $playerRole = $action->getPlayer()->getRole();
+        $playerRole = $action->getPlayer()?->getRole();
+        if (null === $playerRole) {
+            throw new \InvalidArgumentException('Missing player role');
+        }
         $builder
             ->add('actionSuffer', EnumType::class, [
                 'label' => 'Tu peux SUBIR',

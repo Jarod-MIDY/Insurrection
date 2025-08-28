@@ -34,7 +34,8 @@ class CharacterRepository extends ServiceEntityRepository
         }
     }
 
-    public function flush() : void {
+    public function flush(): void
+    {
         $this->getEntityManager()->flush();
-    } 
+    }
 }

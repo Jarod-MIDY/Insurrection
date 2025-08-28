@@ -44,6 +44,9 @@ enum RolesActionsSuffer: string
     case STAR_DEFAMATION = 'une campagne de diffamation';
     case STAR_QUESTION = 'dévoiler la réponse à la question « Pourquoi est-ce que je me sens illégitime ? »';
 
+    /**
+     * @return RolesActionsSuffer[]
+     */
     public static function getActionsFromRole(GameRoles $role): array
     {
         return match ($role) {

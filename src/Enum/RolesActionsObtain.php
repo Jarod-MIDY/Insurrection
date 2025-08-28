@@ -44,6 +44,9 @@ enum RolesActionsObtain: string
     case STAR_PRIVILEGES = 'une position privilégiée';
     case STAR_QUESTION = "la réponse à la question « Qu'est-ce qui te donnerait envie de me suivre ? »";
 
+    /**
+     * @return RolesActionsObtain[]
+     */
     public static function getActionsFromRole(GameRoles $role): array
     {
         return match ($role) {

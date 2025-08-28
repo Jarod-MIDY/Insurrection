@@ -5,6 +5,21 @@ namespace App\Records;
 use App\Enum\GameRoles;
 use App\Interface\CharacterSheet;
 
+/**
+ * @phpstan-type MolotovArray array{
+ *      name: string,
+ *      features: string,
+ *      partOf: string,
+ *      dissentReason: string,
+ *      ROWQuestion: string,
+ *      ROWRole: string|null,
+ *      ROWAnswer: string,
+ *      trajQuestion: string,
+ *      trajRole: string|null,
+ *      trajAnswer: string,
+ *      notes: string,
+ * }
+ */
 class MolotovSheet implements CharacterSheet
 {
     public const CHOICES_PART_OF = [
@@ -43,16 +58,26 @@ class MolotovSheet implements CharacterSheet
 
     public string $notes = '';
 
-    /**
-     * @param array<string, string>|null $data
-     */
-    public function __construct(?array $data = null)
+    public function __construct(?InformationCollection $data = null)
     {
-        if ((bool) $data) {
-            $this->__unserialize($data);
+        if (null !== $data) {
+            $this->name = $data->getValue('name');
+            $this->features = $data->getValue('features');
+            $this->partOf = $data->getValue('partOf');
+            $this->dissentReason = $data->getValue('dissentReason');
+            $this->ROWQuestion = $data->getValue('ROWQuestion');
+            $this->ROWAnswer = $data->getValue('ROWAnswer');
+            $this->trajQuestion = $data->getValue('trajQuestion');
+            $this->trajAnswer = $data->getValue('trajAnswer');
+            $this->ROWRole = GameRoles::tryFrom($data->getValue('ROWRole'));
+            $this->trajRole = GameRoles::tryFrom($data->getValue('trajRole'));
+            $this->notes = $data->getValue('notes');
         }
     }
 
+    /**
+     * @return MolotovArray
+     */
     public function __serialize(): array
     {
         return [
@@ -71,7 +96,7 @@ class MolotovSheet implements CharacterSheet
     }
 
     /**
-     * @param array<string, string> $data
+     * @param MolotovArray $data
      */
     public function __unserialize(array $data): void
     {
@@ -83,44 +108,21 @@ class MolotovSheet implements CharacterSheet
         $this->ROWAnswer = $data['ROWAnswer'];
         $this->trajQuestion = $data['trajQuestion'];
         $this->trajAnswer = $data['trajAnswer'];
-        $this->ROWRole = GameRoles::tryFrom($data['ROWRole']);
-        $this->trajRole = GameRoles::tryFrom($data['trajRole']);
+        $this->ROWRole = GameRoles::tryFrom($data['ROWRole'] ?? '');
+        $this->trajRole = GameRoles::tryFrom($data['trajRole'] ?? '');
         $this->notes = $data['notes'];
     }
 
-    public function getRenderData(): array
+    public function getRenderData(): RoleRender
     {
-        return [
-            'listable' => [
-                [
-                    'label' => 'On t\'appelle',
-                    'value' => $this->name,
-                ],
-                [
-                    'label' => 'Ce qu\'on retient de toi',
-                    'value' => $this->features,
-                ],
-                [
-                    'label' => 'Tu fais partie',
-                    'value' => $this->partOf,
-                ],
-                [
-                    'label' => 'Tu es entré en dissidence',
-                    'value' => $this->dissentReason,
-                ],
-            ],
-            'row_question' => [
-                'question' => $this->ROWQuestion,
-                'answer' => $this->ROWAnswer,
-                'role' => $this->ROWRole?->value,
-            ],
-            'traj_question' => [
-                'question' => $this->trajQuestion,
-                'answer' => $this->trajAnswer,
-                'role' => $this->trajRole?->value,
-            ],
-            'notes' => $this->notes,
-        ];
+        $renderData = new RoleRender($this->name, $this->features);
+        $renderData->addListable('Tu fais partie', $this->partOf);
+        $renderData->addListable('Tu es entré en dissidence', $this->dissentReason);
+        $renderData->setRowQuestion($this->ROWQuestion, $this->ROWAnswer, $this->ROWRole->value ?? '');
+        $renderData->setTrajQuestion($this->trajQuestion, $this->trajAnswer, $this->trajRole->value ?? '');
+        $renderData->notes = $this->notes;
+
+        return $renderData;
     }
 
     public function isReady(): bool

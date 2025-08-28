@@ -5,6 +5,7 @@ namespace App\Enum;
 use App\Interface\CharacterSheet;
 use App\Records\BadgeSheet;
 use App\Records\EchoSheet;
+use App\Records\InformationCollection;
 use App\Records\MolotovSheet;
 use App\Records\OrderSheet;
 use App\Records\PamphletSheet;
@@ -112,7 +113,10 @@ enum GameRoles: string
         };
     }
 
-    public function getCharacterSheet(?array $data = null): CharacterSheet
+    /**
+     * @return BadgeSheet|EchoSheet|MolotovSheet|OrderSheet|PamphletSheet|PeopleSheet|PowerSheet|StarSheet
+     */
+    public function getCharacterSheet(?InformationCollection $data = null): CharacterSheet
     {
         return match ($this) {
             self::POWER => new PowerSheet($data),

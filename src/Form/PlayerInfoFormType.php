@@ -2,9 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\Game;
 use App\Enum\GameRoles;
-use App\Enum\GameState;
 use App\Records\BadgeSheet;
 use App\Records\EchoSheet;
 use App\Records\MolotovSheet;
@@ -25,18 +23,30 @@ class PlayerInfoFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        if ($options['game'] instanceof Game && GameState::LOBBY === $options['game']->getState()) {
-            match ($options['data_class']) {
-                PowerSheet::class => $this->buildPowerInfoForm($builder, $options),
-                OrderSheet::class => $this->buildOrderInfoForm($builder, $options),
-                EchoSheet::class => $this->buildEchoInfoForm($builder, $options),
-                PeopleSheet::class => $this->buildPeopleInfoForm($builder, $options),
-                PamphletSheet::class => $this->buildPamphletInfoForm($builder, $options),
-                MolotovSheet::class => $this->buildMolotovInfoForm($builder, $options),
-                BadgeSheet::class => $this->buildBadgeInfoForm($builder, $options),
-                StarSheet::class => $this->buildStarInfoForm($builder, $options),
-                default => throw new \UnexpectedValueException('Unexpected data class'.$options['data_class']),
-            };
+        $data = $options['data'];
+        if ($data instanceof PowerSheet) {
+            $this->buildPowerInfoForm($builder, $data);
+        }
+        if ($data instanceof OrderSheet) {
+            $this->buildOrderInfoForm($builder, $data);
+        }
+        if ($data instanceof EchoSheet) {
+            $this->buildEchoInfoForm($builder, $data);
+        }
+        if ($data instanceof PeopleSheet) {
+            $this->buildPeopleInfoForm($builder, $data);
+        }
+        if ($data instanceof PamphletSheet) {
+            $this->buildPamphletInfoForm($builder, $data);
+        }
+        if ($data instanceof MolotovSheet) {
+            $this->buildMolotovInfoForm($builder, $data);
+        }
+        if ($data instanceof BadgeSheet) {
+            $this->buildBadgeInfoForm($builder, $data);
+        }
+        if ($data instanceof StarSheet) {
+            $this->buildStarInfoForm($builder, $data);
         }
         $builder
             ->add('notes', TextareaType::class, [
@@ -52,7 +62,7 @@ class PlayerInfoFormType extends AbstractType
         ]);
     }
 
-    private function buildPowerInfoForm(FormBuilderInterface $builder, array $options)
+    private function buildPowerInfoForm(FormBuilderInterface $builder, PowerSheet $data): void
     {
         $builder
             ->add('legitimacy', ChoiceType::class, [
@@ -61,8 +71,8 @@ class PlayerInfoFormType extends AbstractType
                 'tom_select_options' => [
                     'create' => true,
                 ],
-                'choices' => $options['data']::CHOICE_LEGITIMACY + [
-                    $options['data']->legitimacy => $options['data']->legitimacy,
+                'choices' => $data::CHOICES_LEGITIMACY + [
+                    $data->legitimacy => $data->legitimacy,
                 ],
             ])
             ->add('importantAgentType', ChoiceType::class, [
@@ -71,8 +81,8 @@ class PlayerInfoFormType extends AbstractType
                 'tom_select_options' => [
                     'create' => true,
                 ],
-                'choices' => $options['data']::CHOICE_AGENT_TYPE + [
-                    $options['data']->importantAgentType => $options['data']->importantAgentType,
+                'choices' => $data::CHOICES_AGENT_TYPE + [
+                    $data->importantAgentType => $data->importantAgentType,
                 ],
             ])
             ->add('blamedFor', ChoiceType::class, [
@@ -81,8 +91,8 @@ class PlayerInfoFormType extends AbstractType
                 'tom_select_options' => [
                     'create' => true,
                 ],
-                'choices' => $options['data']::CHOICE_BLAME + [
-                    $options['data']->blamedFor => $options['data']->blamedFor,
+                'choices' => $data::CHOICES_BLAMED_FOR + [
+                    $data->blamedFor => $data->blamedFor,
                 ],
             ])
             ->add('chosenQuestion', ChoiceType::class, [
@@ -112,7 +122,7 @@ class PlayerInfoFormType extends AbstractType
         $builder->get('blamedFor')->resetViewTransformers();
     }
 
-    private function buildOrderInfoForm(FormBuilderInterface $builder, array $options)
+    private function buildOrderInfoForm(FormBuilderInterface $builder, OrderSheet $data): void
     {
         $builder
             ->add('fearedBecause', ChoiceType::class, [
@@ -121,8 +131,8 @@ class PlayerInfoFormType extends AbstractType
                 'tom_select_options' => [
                     'create' => true,
                 ],
-                'choices' => $options['data']::CHOICES_FEARED_BECAUSE + [
-                    $options['data']->fearedBecause => $options['data']->fearedBecause,
+                'choices' => $data::CHOICES_FEARED_BECAUSE + [
+                    $data->fearedBecause => $data->fearedBecause,
                 ],
             ])
             ->add('accountableTo', ChoiceType::class, [
@@ -131,8 +141,8 @@ class PlayerInfoFormType extends AbstractType
                 'tom_select_options' => [
                     'create' => true,
                 ],
-                'choices' => $options['data']::CHOICES_ACCOUNTABLE_TO + [
-                    $options['data']->accountableTo => $options['data']->accountableTo,
+                'choices' => $data::CHOICES_ACCOUNTABLE_TO + [
+                    $data->accountableTo => $data->accountableTo,
                 ],
             ])
             ->add('blamedFor', ChoiceType::class, [
@@ -141,8 +151,8 @@ class PlayerInfoFormType extends AbstractType
                 'tom_select_options' => [
                     'create' => true,
                 ],
-                'choices' => $options['data']::CHOICES_BLAMED_FOR + [
-                    $options['data']->blamedFor => $options['data']->blamedFor,
+                'choices' => $data::CHOICES_BLAMED_FOR + [
+                    $data->blamedFor => $data->blamedFor,
                 ],
             ])
             ->add('chosenQuestion', ChoiceType::class, [
@@ -173,7 +183,7 @@ class PlayerInfoFormType extends AbstractType
         $builder->get('blamedFor')->resetViewTransformers();
     }
 
-    public function buildEchoInfoForm(FormBuilderInterface $builder, array $options): void
+    public function buildEchoInfoForm(FormBuilderInterface $builder, EchoSheet $data): void
     {
         $builder
             ->add('financedBy', ChoiceType::class, [
@@ -182,8 +192,8 @@ class PlayerInfoFormType extends AbstractType
                 'tom_select_options' => [
                     'create' => true,
                 ],
-                'choices' => $options['data']::CHOICES_FINANCED_BY + [
-                    $options['data']->financedBy => $options['data']->financedBy,
+                'choices' => $data::CHOICES_FINANCED_BY + [
+                    $data->financedBy => $data->financedBy,
                 ],
             ])
             ->add('importantAgentType', ChoiceType::class, [
@@ -192,8 +202,8 @@ class PlayerInfoFormType extends AbstractType
                 'tom_select_options' => [
                     'create' => true,
                 ],
-                'choices' => $options['data']::CHOICES_IMPORTANT_AGENT_TYPE + [
-                    $options['data']->importantAgentType => $options['data']->importantAgentType,
+                'choices' => $data::CHOICES_IMPORTANT_AGENT_TYPE + [
+                    $data->importantAgentType => $data->importantAgentType,
                 ],
             ])
             ->add('blamedFor', ChoiceType::class, [
@@ -202,8 +212,8 @@ class PlayerInfoFormType extends AbstractType
                 'tom_select_options' => [
                     'create' => true,
                 ],
-                'choices' => $options['data']::CHOICES_BLAMED_FOR + [
-                    $options['data']->blamedFor => $options['data']->blamedFor,
+                'choices' => $data::CHOICES_BLAMED_FOR + [
+                    $data->blamedFor => $data->blamedFor,
                 ],
             ])
             ->add('chosenQuestion', ChoiceType::class, [
@@ -233,7 +243,7 @@ class PlayerInfoFormType extends AbstractType
         $builder->get('blamedFor')->resetViewTransformers();
     }
 
-    public function buildPeopleInfoForm(FormBuilderInterface $builder, array $options): void
+    public function buildPeopleInfoForm(FormBuilderInterface $builder, PeopleSheet $data): void
     {
         $builder
             ->add('trust', ChoiceType::class, [
@@ -242,8 +252,8 @@ class PlayerInfoFormType extends AbstractType
                 'tom_select_options' => [
                     'create' => true,
                 ],
-                'choices' => $options['data']::CHOICES_TRUST + [
-                    $options['data']->trust => $options['data']->trust,
+                'choices' => $data::CHOICES_TRUST + [
+                    $data->trust => $data->trust,
                 ],
             ])
             ->add('priority', ChoiceType::class, [
@@ -252,8 +262,8 @@ class PlayerInfoFormType extends AbstractType
                 'tom_select_options' => [
                     'create' => true,
                 ],
-                'choices' => $options['data']::CHOICES_PRIORITY + [
-                    $options['data']->priority => $options['data']->priority,
+                'choices' => $data::CHOICES_PRIORITY + [
+                    $data->priority => $data->priority,
                 ],
             ])
             ->add('blamedFor', ChoiceType::class, [
@@ -262,8 +272,8 @@ class PlayerInfoFormType extends AbstractType
                 'tom_select_options' => [
                     'create' => true,
                 ],
-                'choices' => $options['data']::CHOICES_BLAMED_FOR + [
-                    $options['data']->blamedFor => $options['data']->blamedFor,
+                'choices' => $data::CHOICES_BLAMED_FOR + [
+                    $data->blamedFor => $data->blamedFor,
                 ],
             ])
             ->add('chosenQuestion', ChoiceType::class, [
@@ -293,7 +303,7 @@ class PlayerInfoFormType extends AbstractType
         $builder->get('blamedFor')->resetViewTransformers();
     }
 
-    public function buildTrajectory(FormBuilderInterface $builder, array $options): void
+    public function buildTrajectory(FormBuilderInterface $builder): void
     {
         $builder
             ->add('name', TextType::class, [
@@ -304,9 +314,9 @@ class PlayerInfoFormType extends AbstractType
             ]);
     }
 
-    public function buildPamphletInfoForm(FormBuilderInterface $builder, array $options): void
+    public function buildPamphletInfoForm(FormBuilderInterface $builder, PamphletSheet $data): void
     {
-        $this->buildTrajectory($builder, $options);
+        $this->buildTrajectory($builder);
         $builder
             ->add('origins', ChoiceType::class, [
                 'label' => 'Tu es d\'origine',
@@ -314,8 +324,8 @@ class PlayerInfoFormType extends AbstractType
                 'tom_select_options' => [
                     'create' => true,
                 ],
-                'choices' => $options['data']::CHOICES_ORIGINS + [
-                    $options['data']->origins => $options['data']->origins,
+                'choices' => $data::CHOICES_ORIGINS + [
+                    $data->origins => $data->origins,
                 ],
             ])
             ->add('modusOperendi', ChoiceType::class, [
@@ -324,8 +334,8 @@ class PlayerInfoFormType extends AbstractType
                 'tom_select_options' => [
                     'create' => true,
                 ],
-                'choices' => $options['data']::CHOICES_MODUS_OPERENDI + [
-                    $options['data']->modusOperendi => $options['data']->modusOperendi,
+                'choices' => $data::CHOICES_MODUS_OPERENDI + [
+                    $data->modusOperendi => $data->modusOperendi,
                 ],
             ])
             ->add('ROWQuestion', ChoiceType::class, [
@@ -376,9 +386,9 @@ class PlayerInfoFormType extends AbstractType
         $builder->get('modusOperendi')->resetViewTransformers();
     }
 
-    public function buildMolotovInfoForm(FormBuilderInterface $builder, array $options): void
+    public function buildMolotovInfoForm(FormBuilderInterface $builder, MolotovSheet $data): void
     {
-        $this->buildTrajectory($builder, $options);
+        $this->buildTrajectory($builder);
         $builder
             ->add('partOf', ChoiceType::class, [
                 'label' => 'Tu fais partie',
@@ -386,8 +396,8 @@ class PlayerInfoFormType extends AbstractType
                 'tom_select_options' => [
                     'create' => true,
                 ],
-                'choices' => $options['data']::CHOICES_PART_OF + [
-                    $options['data']->partOf => $options['data']->partOf,
+                'choices' => $data::CHOICES_PART_OF + [
+                    $data->partOf => $data->partOf,
                 ],
             ])
             ->add('dissentReason', ChoiceType::class, [
@@ -396,8 +406,8 @@ class PlayerInfoFormType extends AbstractType
                 'tom_select_options' => [
                     'create' => true,
                 ],
-                'choices' => $options['data']::CHOICES_DISSENT_REASON + [
-                    $options['data']->dissentReason => $options['data']->dissentReason,
+                'choices' => $data::CHOICES_DISSENT_REASON + [
+                    $data->dissentReason => $data->dissentReason,
                 ],
             ])
             ->add('ROWQuestion', ChoiceType::class, [
@@ -448,9 +458,9 @@ class PlayerInfoFormType extends AbstractType
         $builder->get('dissentReason')->resetViewTransformers();
     }
 
-    public function buildBadgeInfoForm(FormBuilderInterface $builder, array $options): void
+    public function buildBadgeInfoForm(FormBuilderInterface $builder, BadgeSheet $data): void
     {
-        $this->buildTrajectory($builder, $options);
+        $this->buildTrajectory($builder);
         $builder
             ->add('firstRedTapeRisk', ChoiceType::class, [
                 'label' => 'Tu as déjà franchi la ligne rouge',
@@ -458,8 +468,8 @@ class PlayerInfoFormType extends AbstractType
                 'tom_select_options' => [
                     'create' => true,
                 ],
-                'choices' => $options['data']::CHOICES_RED_TAPE + [
-                    $options['data']->firstRedTapeRisk => $options['data']->firstRedTapeRisk,
+                'choices' => $data::CHOICES_RED_TAPE + [
+                    $data->firstRedTapeRisk => $data->firstRedTapeRisk,
                 ],
             ])
             ->add('dissentGoal', ChoiceType::class, [
@@ -468,8 +478,8 @@ class PlayerInfoFormType extends AbstractType
                 'tom_select_options' => [
                     'create' => true,
                 ],
-                'choices' => $options['data']::CHOICES_DISSENT_GOAL + [
-                    $options['data']->dissentGoal => $options['data']->dissentGoal,
+                'choices' => $data::CHOICES_DISSENT_GOAL + [
+                    $data->dissentGoal => $data->dissentGoal,
                 ],
             ])
             ->add('ROWQuestion', ChoiceType::class, [
@@ -520,9 +530,9 @@ class PlayerInfoFormType extends AbstractType
         $builder->get('dissentGoal')->resetViewTransformers();
     }
 
-    public function buildStarInfoForm(FormBuilderInterface $builder, array $options): void
+    public function buildStarInfoForm(FormBuilderInterface $builder, StarSheet $data): void
     {
-        $this->buildTrajectory($builder, $options);
+        $this->buildTrajectory($builder);
         $builder
             ->add('bestQuality', ChoiceType::class, [
                 'label' => 'Ta plus grande qualité, c\'est',
@@ -530,8 +540,8 @@ class PlayerInfoFormType extends AbstractType
                 'tom_select_options' => [
                     'create' => true,
                 ],
-                'choices' => $options['data']::CHOICES_QUALITY + [
-                    $options['data']->bestQuality => $options['data']->bestQuality,
+                'choices' => $data::CHOICES_QUALITY + [
+                    $data->bestQuality => $data->bestQuality,
                 ],
             ])
             ->add('shineIn', ChoiceType::class, [
@@ -540,8 +550,8 @@ class PlayerInfoFormType extends AbstractType
                 'tom_select_options' => [
                     'create' => true,
                 ],
-                'choices' => $options['data']::CHOICES_SHINE + [
-                    $options['data']->shineIn => $options['data']->shineIn,
+                'choices' => $data::CHOICES_SHINE + [
+                    $data->shineIn => $data->shineIn,
                 ],
             ])
             ->add('ROWQuestion', ChoiceType::class, [

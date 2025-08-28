@@ -24,10 +24,11 @@ class PlayerRepository extends ServiceEntityRepository
             $this->flush();
         }
     }
+
     public function remove(Player $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
-        
+
         if ($flush) {
             $this->flush();
         }

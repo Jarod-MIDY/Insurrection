@@ -28,7 +28,10 @@ class SceneReadyBtnComponent
     #[LiveAction]
     public function changeReadyStatus(EntityManagerInterface $entityManager): void
     {
-        $currentScene = $this->player->getGame()->getScenes()->last();
+        $currentScene = $this->player->getGame()?->getScenes()->last();
+        if (false === $currentScene || null === $currentScene) {
+            return;
+        }
         $currentScene->setReadyPlayer($this->player);
         $entityManager->persist($currentScene);
         $entityManager->flush();

@@ -5,6 +5,17 @@ namespace App\Records;
 use App\Enum\GameRoles;
 use App\Interface\CharacterSheet;
 
+/**
+ * @phpstan-type PeopleArray array{
+ *      trust: string,
+ *      priority: string,
+ *      blamedFor: string,
+ *      notes: string,
+ *      chosenQuestion: string,
+ *      chosenTrajectorie: string|null,
+ *      answer: string
+ * }
+ */
 class PeopleSheet implements CharacterSheet
 {
     public const CHOICES_TRUST = [
@@ -36,16 +47,22 @@ class PeopleSheet implements CharacterSheet
     public ?GameRoles $chosenTrajectorie = null;
     public string $answer = '';
 
-    /**
-     * @param array<string, string>|null $data
-     */
-    public function __construct(?array $data = null)
+    public function __construct(?InformationCollection $data = null)
     {
-        if ((bool) $data) {
-            $this->__unserialize($data);
+        if (null !== $data) {
+            $this->trust = $data->getValue('trust');
+            $this->priority = $data->getValue('priority');
+            $this->blamedFor = $data->getValue('blamedFor');
+            $this->notes = $data->getValue('notes');
+            $this->chosenQuestion = $data->getValue('chosenQuestion');
+            $this->answer = $data->getValue('answer');
+            $this->chosenTrajectorie = GameRoles::from($data->getValue('chosenTrajectorie'));
         }
     }
 
+    /**
+     * @return PeopleArray
+     */
     public function __serialize(): array
     {
         return [
@@ -59,6 +76,9 @@ class PeopleSheet implements CharacterSheet
         ];
     }
 
+    /**
+     * @param PeopleArray $data
+     */
     public function __unserialize(array $data): void
     {
         $this->trust = $data['trust'];
@@ -67,33 +87,19 @@ class PeopleSheet implements CharacterSheet
         $this->notes = $data['notes'];
         $this->chosenQuestion = $data['chosenQuestion'];
         $this->answer = $data['answer'];
-        $this->chosenTrajectorie = GameRoles::from($data['chosenTrajectorie']);
+        $this->chosenTrajectorie = GameRoles::from($data['chosenTrajectorie'] ?? '');
     }
 
-    public function getRenderData(): array
+    public function getRenderData(): RoleRender
     {
-        return [
-            'listable' => [
-                [
-                    'label' => 'Vous placeriez plutôt votre confiance dans',
-                    'value' => $this->trust,
-                ],
-                [
-                    'label' => 'Ce qui vous importe le plus, c\'est',
-                    'value' => $this->priority,
-                ],
-                [
-                    'label' => 'On vous reproche avant tout de',
-                    'value' => $this->blamedFor,
-                ],
-            ],
-            'question' => [
-                'question' => $this->chosenQuestion,
-                'answer' => $this->answer,
-                'trajectorie' => $this->chosenTrajectorie?->value,
-            ],
-            'notes' => $this->notes,
-        ];
+        $renderData = new RoleRender();
+        $renderData->addListable('Vous placeriez mieux votre confiance dans', $this->trust);
+        $renderData->addListable('Ce qui vous importe le plus, c\'est', $this->priority);
+        $renderData->addListable('On vous reproche avant tout de', $this->blamedFor);
+        $renderData->setQuestion($this->chosenQuestion, $this->answer, $this->chosenTrajectorie->value ?? '');
+        $renderData->notes = $this->notes;
+
+        return $renderData;
     }
 
     public function isReady(): bool

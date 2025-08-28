@@ -18,7 +18,7 @@ class GameRepository extends ServiceEntityRepository
         parent::__construct($registry, Game::class);
     }
 
-    public function save(Game $game, bool $flush = false)
+    public function save(Game $game, bool $flush = false): void
     {
         $this->getEntityManager()->persist($game);
         if ($flush) {
@@ -26,7 +26,7 @@ class GameRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(Game $game, bool $flush)
+    public function remove(Game $game, bool $flush): void
     {
         $this->getEntityManager()->remove($game);
         if ($flush) {
@@ -36,7 +36,7 @@ class GameRepository extends ServiceEntityRepository
 
     public function findUnfinishedOrNull(?User $author = null): ?Game
     {
-        return $this->createQueryBuilder('game')
+        $result = $this->createQueryBuilder('game')
             ->andWhere('game.author = :author')
             ->andWhere('game.state != :state')
             ->setParameter('state', GameState::CLOSED)
@@ -44,5 +44,7 @@ class GameRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult()
         ;
+
+        return $result instanceof Game ? $result : null;
     }
 }

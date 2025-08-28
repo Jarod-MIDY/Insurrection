@@ -17,7 +17,7 @@ class Scene
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    public ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'scenes')]
     #[ORM\JoinColumn(nullable: false)]
@@ -69,6 +69,12 @@ class Scene
     #[ORM\OneToMany(targetEntity: TokenAction::class, mappedBy: 'scene')]
     private Collection $tokenActions;
 
+    /**
+     * @var array<int, array{
+     *     'readyStatus': bool,
+     *     'date': ?\DateTimeImmutable,
+     * }>
+     */
     #[ORM\Column(nullable: false, type: Types::JSON)]
     private array $readyLogs = [];
 
@@ -136,7 +142,9 @@ class Scene
 
     public function getEstimatedDateEnd(): ?\DateTimeInterface
     {
-        return $this->getStartedAt()->add(new \DateInterval('PT'.$this->getEstimatedDuration().'M'));
+        return null !== $this->startedAt ?
+            $this->startedAt->add(new \DateInterval('PT'.$this->getEstimatedDuration().'M'))
+            : null;
     }
 
     public function getGoal(): ?string
@@ -302,6 +310,9 @@ class Scene
 
     public function setReadyPlayer(Player $player): static
     {
+        if (null === $player->getId()) {
+            throw new \Exception('Invalid player id in ready logs of scene '.$this->getId());
+        }
         $ready = key_exists($player->getId(), $this->readyLogs) ?
                     !$this->readyLogs[$player->getId()]['readyStatus']
                     : true;
@@ -313,11 +324,18 @@ class Scene
 
     public function isPlayerReady(Player $player): bool
     {
+        if (null === $player->getId()) {
+            throw new \Exception('Invalid player id in ready logs of scene '.$this->getId());
+        }
+
         return key_exists($player->getId(), $this->readyLogs) && $this->readyLogs[$player->getId()]['readyStatus'];
     }
 
     private function startScene(): void
     {
+        if (null === $this->getGame()) {
+            throw new \Exception('Invalid game, cannot start scene ');
+        }
         $nbReadyPlayer = 0;
         foreach ($this->readyLogs as $key => $log) {
             $foundPlayer = $this->getGame()->getPlayers()->findFirst(function (int $index, Player $player) use ($key): bool {

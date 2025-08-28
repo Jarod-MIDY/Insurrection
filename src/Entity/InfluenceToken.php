@@ -15,7 +15,7 @@ class InfluenceToken
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    public ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'influenceTokens')]
     #[ORM\JoinColumn(nullable: false)]
@@ -35,7 +35,7 @@ class InfluenceToken
 
     public function getLinkedRole(): ?GameRoles
     {
-        return $this->sender->getRole();
+        return $this->sender?->getRole();
     }
 
     public function getReceiver(): ?Player

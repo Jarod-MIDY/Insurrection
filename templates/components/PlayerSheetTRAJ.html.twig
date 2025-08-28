@@ -3,7 +3,7 @@
     {% for item in data.listable %}
         <li>
             <h4>
-                {{item.label}}
+                {{ item.label }}
             </h4>
             <p>
                 <em>
@@ -17,7 +17,7 @@
             {{ data.row_question.question|default('<Question non renseigné>') }}
         </h4>
         <p>
-            {{ data.row_question.role|default('<trajectoire>') }} à répondu : 
+            {{ data.row_question.role|default('<trajectoire>') }} à répondu :
             <em>
                 {{ data.row_question.answer|default('<Non renseigné>') }}
             </em>
@@ -28,7 +28,7 @@
             {{ data.traj_question.question|default('<Question non renseigné>') }}
         </h4>
         <p>
-            {{ data.traj_question.role|default('<trajectoire>') }} à répondu : 
+            {{ data.traj_question.role|default('<trajectoire>') }} à répondu :
             <em>
                 {{ data.traj_question.answer|default('<Non renseigné>') }}
             </em>

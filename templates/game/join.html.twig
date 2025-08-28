@@ -3,12 +3,12 @@
         <template>
             {{ form_start(form, {
                 attr: {
-                    action: path('app_game_join', { game: game.id })
-                }
+                    action: path('app_game_join', {game: game.id}),
+                },
             }) }}
-                {{  form_row(form.password, {
-                        attr:{class:"form-row"}
-                    }) 
+                {{ form_row(form.password, {
+                        attr: {class: 'form-row'},
+                    })
                 }}
                 <button type="submit" class="button">Rejoindre</button>
             {{ form_end(form) }}

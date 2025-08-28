@@ -18,9 +18,9 @@
         </p>
         <a href="https://electric-goat.net/products/4">En savoir plus et soutenir</a>
     </article>
-    <div id="GameLobyList" {{ stimulus_controller('mercure-listen',{
-        'mercureUrl':  mercure('UpdateLoby'),
-        'mercureEventFlag':  'UpdateLoby',
+    <div id="GameLobyList" {{ stimulus_controller('mercure-listen', {
+        mercureUrl: mercure('UpdateLoby'),
+        mercureEventFlag: 'UpdateLoby',
     }) }} class="flex flex-column">
         <twig:LobbyList>
         </twig:LobbyList>

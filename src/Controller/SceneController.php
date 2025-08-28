@@ -27,7 +27,7 @@ class SceneController extends AbstractController
     public function edit(Request $request, Scene $scene): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
-        if ($scene->getLeader()->getLinkedUser() !== $this->getUser()) {
+        if ($scene->getLeader()?->getLinkedUser() !== $this->getUser()) {
             throw $this->createAccessDeniedException();
         }
         $form = $this->createForm(NewSceneFormType::class, $scene, [
@@ -38,7 +38,7 @@ class SceneController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->sceneRepository->save($scene, true);
 
-            return $this->redirectToRoute('app_game_show', ['game' => $scene->getGame()->getId()]);
+            return $this->redirectToRoute('app_game_show', ['game' => $scene->getGame()?->getId()]);
         }
 
         $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
@@ -52,8 +52,7 @@ class SceneController extends AbstractController
     public function closeScene(Request $request, Scene $scene): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
-        if (
-            $scene->getLeader()->getLinkedUser() !== $this->getUser()
+        if ($scene->getLeader()?->getLinkedUser() !== $this->getUser()
             || !$scene->isStarted()
         ) {
             throw $this->createAccessDeniedException();
@@ -66,7 +65,7 @@ class SceneController extends AbstractController
             $newScene->setGame($scene->getGame());
             $this->sceneRepository->save($newScene, true);
 
-            return $this->redirectToRoute('app_game_show', ['game' => $scene->getGame()->getId()]);
+            return $this->redirectToRoute('app_game_show', ['game' => $scene->getGame()?->getId()]);
         }
 
         $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
@@ -80,10 +79,14 @@ class SceneController extends AbstractController
     public function updateCharacterPresence(Scene $scene, Character $character, bool $isPresent = true): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
+        $player = $character->getOwner();
+        if (null === $player) {
+            throw $this->createAccessDeniedException();
+        }
         if (
             null === $scene->getLeader()
-            || ($scene->getGame() !== $character->getOwner()->getGame())
-            || ($this->getUser() !== $character->getOwner()->getLinkedUser())
+            || ($scene->getGame() !== $player->getGame())
+            || ($this->getUser() !== $player->getLinkedUser())
         ) {
             throw $this->createAccessDeniedException();
         }
@@ -94,7 +97,7 @@ class SceneController extends AbstractController
         }
         $this->sceneRepository->save($scene, true);
 
-        return $this->redirectToRoute('app_game_show', ['game' => $scene->getGame()->getId()]);
+        return $this->redirectToRoute('app_game_show', ['game' => $scene->getGame()?->getId()]);
     }
 
     #[Route('/player/{player}/scene/{scene}/story/edit', name: 'app_scene_edit_my_scene_storie')]
@@ -116,7 +119,7 @@ class SceneController extends AbstractController
         }
 
         $sceneStory = $sceneStoryRepository->findOneBy(['scene' => $scene, 'player' => $player]);
-        if (null !== $sceneStory) {
+        if (null === $sceneStory) {
             $sceneStory = new SceneStory();
             $sceneStory->setScene($scene);
             $sceneStory->setPlayer($player);
@@ -132,7 +135,7 @@ class SceneController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $sceneStoryRepository->save($sceneStory, true);
 
-            return $this->redirectToRoute('app_game_show', ['game' => $scene->getGame()->getId()]);
+            return $this->redirectToRoute('app_game_show', ['game' => $scene->getGame()?->getId()]);
         }
 
         $request->setRequestFormat(TurboBundle::STREAM_FORMAT);

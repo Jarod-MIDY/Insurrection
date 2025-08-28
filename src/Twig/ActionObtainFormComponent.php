@@ -37,7 +37,7 @@ class ActionObtainFormComponent extends AbstractController
         $this->initialFormData = new TokenAction();
     }
 
-    public function mount(Player $player)
+    public function mount(Player $player): void
     {
         $this->player = $player;
         $this->actionTokens = $player->getRadianceToken() + $player->getInfluenceTokens()->count();
@@ -45,6 +45,9 @@ class ActionObtainFormComponent extends AbstractController
 
     protected function instantiateForm(): FormInterface
     {
+        if (null === $this->initialFormData) {
+            $this->initialFormData = new TokenAction();
+        }
         $this->initialFormData->setPlayer($this->player);
 
         return $this->createForm(ActionObtainFormType::class, $this->initialFormData, [
@@ -64,17 +67,32 @@ class ActionObtainFormComponent extends AbstractController
         /** @var TokenAction $tokenAction */
         $tokenAction = $this->getForm()->getData();
         $player = $tokenAction->getPlayer();
-        $game = $player->getGame();
-        $currentScene = $game->getCurrentScene();
+        if (null === $player) {
+            $this->addFlash('error', 'Le joueur est introuvable');
 
+            return $this->redirectToRoute('app_home', []);
+        }
+        $game = $player->getGame();
+        if (null === $game) {
+            $this->addFlash('error', 'La partie actuelle ne semble pas exister');
+
+            return $this->redirectToRoute('app_home', []);
+        }
+        $currentScene = $game->getCurrentScene();
+        $actionRole = $tokenAction->getActionObtain()?->getRoleFromAction();
+        if (null === $actionRole) {
+            $this->addFlash('error', 'Le role de l\'action est introuvable');
+
+            return $this->redirectToRoute('app_game_show', ['game' => $game->getId()]);
+        }
         // check if using influence token
-        if ($tokenAction->getActionObtain()->getRoleFromAction() !== $player->getRole()) {
+        if ($actionRole !== $player->getRole()) {
             $influenceToken = $influenceTokenRepository->findUsableToken(
                 $player,
-                $tokenAction->getActionObtain()->getRoleFromAction(),
+                $actionRole,
             );
             if (null === $influenceToken) {
-                $this->addFlash('error', 'Influence token not found');
+                $this->addFlash('error', 'Le jeton d\'influence utiliser ne semble pas exister');
 
                 return $this->redirectToRoute('app_game_show', ['game' => $game->getId()]);
             }

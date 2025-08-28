@@ -5,8 +5,8 @@
                 {{ form_start(form, {
                     attr: {
                         'data-action': 'live#action:prevent',
-                        'data-live-action-param': 'save'
-                    }
+                        'data-live-action-param': 'save',
+                    },
                 }) }}
                     {{ form_errors(form) }}
                     {{ form_label(form.actionSuffer) }}
@@ -21,6 +21,6 @@
                     Tout les jetons d'éclat on été distribués
                 </span>
             {% endif %}
-        </div>        
+        </div>
     {% endblock %}
 </div>

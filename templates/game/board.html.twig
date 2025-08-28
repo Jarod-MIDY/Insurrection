@@ -15,27 +15,27 @@
             {% if currentScene.leader %}
                 <div class="flex gap-2">
                     {% if app.user == currentScene.leader.linkedUser and not currentScene.isStarted %}
-                        <a 
-                            class="button" 
-                            href="{{ path('app_scene', { scene: currentScene.id }) }}" 
+                        <a
+                            class="button"
+                            href="{{ path('app_scene', {scene: currentScene.id}) }}"
                             {{ stimulus_action('modal', 'open') }}
                         >
                             éditer la scène
                         </a>
                     {% endif %}
                     {% if app.user == currentScene.leader.linkedUser and currentScene.isStarted %}
-                        <a 
-                            class="button" 
-                            href="{{ path('app_scene_close', { scene: currentScene.id }) }}" 
+                        <a
+                            class="button"
+                            href="{{ path('app_scene_close', {scene: currentScene.id}) }}"
                             {{ stimulus_action('modal', 'open') }}
                         >
                             Cloturer la scène
                         </a>
                     {% endif %}
                     {% if currentScene.isStarted %}
-                        <a 
-                            class="button" 
-                            href="{{ path('app_scene_edit_my_scene_storie', { scene: currentScene.id, player: player.id }) }}"
+                        <a
+                            class="button"
+                            href="{{ path('app_scene_edit_my_scene_storie', {scene: currentScene.id, player: player.id}) }}"
                             {{ stimulus_action('modal', 'open') }}
                         >
                             Mon résumer de la scène
@@ -50,9 +50,9 @@
             {% if currentScene.leader %}
                 {% if currentScene.isStarted %}
                     <div {{ stimulus_controller('scene-countdown') }}>
-                        <p 
-                            {{ stimulus_target('scene-countdown', 'time') }} 
-                            data-date="{{ currentScene.estimatedDateEnd | date('Y-m-d H:i:s') }}">
+                        <p
+                            {{ stimulus_target('scene-countdown', 'time') }}
+                            data-date="{{ currentScene.estimatedDateEnd|date('Y-m-d H:i:s') }}">
                             Temps restant: <span id="SceneTimer">0</span>
                         </p>
                     </div>
@@ -60,13 +60,13 @@
                 <ul id="Board" class="board" {{ stimulus_target('sortable-gameboard', 'board') }}>
                     {% for character in currentScene.characters %}
                         {% set isNotOwner = character.owner.linkedUser != app.user %}
-                        <li class="{{ isNotOwner ? 'static' : '' }}" 
-                            data-route="{{ path('app_scene_update_character_presence', { 
+                        <li class="{{ isNotOwner ? 'static' : '' }}"
+                            data-route="{{ path('app_scene_update_character_presence', {
                             character: character.id,
                             scene: currentScene.id,
-                            isPresent: 1
+                            isPresent: 1,
                             }) }}"
-                            
+
                         >
                             <div class="character-wrapper">
                                 <span class="character-token">
@@ -91,7 +91,7 @@
                 <p class="info-text">
                     Vous êtes actuelement dans l'entre scène. Vous êtes invité(e) à discuter entre vous de scènes possible avant de voter pour la scène que vous préférez en choisisant son joueur ou sa joueuse corespondante. Vous pouvez voter pour vous même.
                 </p>
-                <a class="button" href="{{ path('app_scene_leader_vote', { scene: currentScene.id }) }}" 
+                <a class="button" href="{{ path('app_scene_leader_vote', {scene: currentScene.id}) }}"
                 {{ stimulus_action('modal', 'open') }}>
                     Voter pour la prochaine scène
                 </a>
@@ -110,10 +110,10 @@
     </section>
     <ul class="game-board-character-list" {{ stimulus_target('sortable-gameboard', 'characterList') }}>
         {% for character in unUsedCharacters %}
-            <li data-route="{{ path('app_scene_update_character_presence', { 
-                character: character.id, 
-                scene: currentScene.id, 
-                isPresent: 0
+            <li data-route="{{ path('app_scene_update_character_presence', {
+                character: character.id,
+                scene: currentScene.id,
+                isPresent: 0,
                 }) }}">
                 <div class="character-wrapper">
                     <span class="character-token">

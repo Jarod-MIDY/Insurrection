@@ -17,7 +17,7 @@ class NewGameButtonComponent
     ) {
     }
 
-    public function mount(?User $author = null)
+    public function mount(?User $author = null): void
     {
         $this->unfinishedGame = $this->gameRepository->findUnfinishedOrNull($author);
     }

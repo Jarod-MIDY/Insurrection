@@ -32,7 +32,7 @@
         <p class="h2">
             Votre selection à été effectuée, en attente des autres joueurs
         </p>
-        <a href="{{ path('app_player_clear_roles_preferences', { player: player.id }) }}">
+        <a href="{{ path('app_player_clear_roles_preferences', {player: player.id}) }}">
             Reinitialiser ma selection
         </a>
         <section>
@@ -46,7 +46,7 @@
             {% for role in player.preferedRoles %}
                 <article>
                     <h3>
-                        <twig:RoleIcon roleValue="{{ role.value }}"></twig:RoleIcon> 
+                        <twig:RoleIcon roleValue="{{ role.value }}"></twig:RoleIcon>
                     </h3>
                     {{ role.description }}
                 </article>
@@ -59,7 +59,7 @@
     <article>
         {{ form_widget(role) }}
         <h3>
-            <twig:RoleIcon roleValue="{{ role.vars.value }}"></twig:RoleIcon> 
+            <twig:RoleIcon roleValue="{{ role.vars.value }}"></twig:RoleIcon>
         </h3>
         {{ form_label(role) }}
         <ul class="players-list">

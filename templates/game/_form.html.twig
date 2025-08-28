@@ -1,50 +1,50 @@
 {{ form_start(form, {attr:
     {
     action: path,
-    class: 'form grid gap-2'
-    }
+    class: 'form grid gap-2',
+    },
 }) }}
-    <h1 class="text-center">{{title}}</h1>
-    {{  form_row(form.name, {
-            attr:{class:"form-row"}
-        }) 
+    <h1 class="text-center">{{ title }}</h1>
+    {{ form_row(form.name, {
+            attr: {class: 'form-row'},
+        })
     }}
     {{ form_row(form.maxPlayers, {
-            attr:{class:"form-row"}
-        }) 
+            attr: {class: 'form-row'},
+        })
     }}
-    {{  form_row(form.password, {
-            attr:{class:"form-row"}
-        }) 
+    {{ form_row(form.password, {
+            attr: {class: 'form-row'},
+        })
     }}
-    {{  form_row(form.subject, {
-            attr:{class:"form-row"}
-        }) 
+    {{ form_row(form.subject, {
+            attr: {class: 'form-row'},
+        })
     }}
-    {{  form_row(form.thingsToTalkAbout, {
-            attr:{class:"form-row"}
-        }) 
+    {{ form_row(form.thingsToTalkAbout, {
+            attr: {class: 'form-row'},
+        })
     }}
-    {{  form_row(form.thingsToHalfTalk, {
-            attr:{class:"form-row"}
-        }) 
+    {{ form_row(form.thingsToHalfTalk, {
+            attr: {class: 'form-row'},
+        })
     }}
-    {{  form_row(form.banedTopics, {
-            attr:{class:"form-row"}
-        }) 
+    {{ form_row(form.banedTopics, {
+            attr: {class: 'form-row'},
+        })
     }}
     <button type="submit" class="button">Sauvegarder</button>
     {% if game is defined and game.state.value != 'lobby' %}
-        <a class="button accent" href="{{ path('app_game_lobby', { game: game.id }) }}">
+        <a class="button accent" href="{{ path('app_game_lobby', {game: game.id}) }}">
             Démarrer un lobby
         </a>
     {% endif %}
     {% if game is defined and game.state.value == 'lobby' %}
-        <twig:DeleteForm 
-            path="{{ path('app_game_delete', { game: game.id }) }}"
+        <twig:DeleteForm
+            path="{{ path('app_game_delete', {game: game.id}) }}"
             entityId="{{ game.id }}"
             text="archiver la partie"
             warning="Cette action est irréversible"
         ></twig:DeleteForm>
     {% endif %}
-{{  form_end(form) }}
+{{ form_end(form) }}

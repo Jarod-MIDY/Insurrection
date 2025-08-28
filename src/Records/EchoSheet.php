@@ -5,6 +5,17 @@ namespace App\Records;
 use App\Enum\GameRoles;
 use App\Interface\CharacterSheet;
 
+/**
+ * @phpstan-type EchoArray array{
+ *      answer: string,
+ *      blamedFor: string,
+ *      chosenQuestion: string,
+ *      chosenTrajectorie: string|null,
+ *      financedBy: string,
+ *      importantAgentType: string,
+ *      notes: string
+ * }
+ */
 class EchoSheet implements CharacterSheet
 {
     public const CHOICES_FINANCED_BY = [
@@ -36,16 +47,22 @@ class EchoSheet implements CharacterSheet
     public ?GameRoles $chosenTrajectorie = null;
     public string $answer = '';
 
-    /**
-     * @param array<string, string>|null $data
-     */
-    public function __construct(?array $data = null)
+    public function __construct(?InformationCollection $data = null)
     {
-        if ((bool) $data) {
-            $this->__unserialize($data);
+        if (null !== $data) {
+            $this->financedBy = $data->getValue('financedBy');
+            $this->importantAgentType = $data->getValue('importantAgentType');
+            $this->blamedFor = $data->getValue('blamedFor');
+            $this->notes = $data->getValue('notes');
+            $this->chosenQuestion = $data->getValue('chosenQuestion');
+            $this->answer = $data->getValue('answer');
+            $this->chosenTrajectorie = GameRoles::from($data->getValue('chosenTrajectorie'));
         }
     }
 
+    /**
+     * @return EchoArray
+     */
     public function __serialize(): array
     {
         return [
@@ -60,7 +77,7 @@ class EchoSheet implements CharacterSheet
     }
 
     /**
-     * @param array<string, string> $data
+     * @param EchoArray $data
      */
     public function __unserialize(array $data): void
     {
@@ -70,33 +87,19 @@ class EchoSheet implements CharacterSheet
         $this->notes = $data['notes'];
         $this->chosenQuestion = $data['chosenQuestion'];
         $this->answer = $data['answer'];
-        $this->chosenTrajectorie = GameRoles::from($data['chosenTrajectorie']);
+        $this->chosenTrajectorie = GameRoles::from($data['chosenTrajectorie'] ?? '');
     }
 
-    public function getRenderData(): array
+    public function getRenderData(): RoleRender
     {
-        return [
-            'listable' => [
-                [
-                    'label' => 'Vous êtes principalement financés par',
-                    'value' => $this->financedBy,
-                ],
-                [
-                    'label' => 'Vos représentants les plus influents sont',
-                    'value' => $this->importantAgentType,
-                ],
-                [
-                    'label' => 'On vous reproche principalement d\'abord d\'être',
-                    'value' => $this->blamedFor,
-                ],
-            ],
-            'question' => [
-                'question' => $this->chosenQuestion,
-                'answer' => $this->answer,
-                'trajectorie' => $this->chosenTrajectorie?->value,
-            ],
-            'notes' => $this->notes,
-        ];
+        $renderData = new RoleRender();
+        $renderData->addListable('Vous êtes principalement financés par', $this->financedBy);
+        $renderData->addListable('Vos représentants les plus influents sont', $this->importantAgentType);
+        $renderData->addListable('On vous reproche principalement d\'abord d\'être', $this->blamedFor);
+        $renderData->setQuestion($this->chosenQuestion, $this->answer, $this->chosenTrajectorie->value ?? '');
+        $renderData->notes = $this->notes;
+
+        return $renderData;
     }
 
     public function isReady(): bool

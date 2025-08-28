@@ -50,8 +50,9 @@ class RegistrationController extends AbstractController
             );
 
             // do anything else you need here, like send an email
+            $response = $security->login($user, 'form_login', 'main');
 
-            return $security->login($user, 'form_login', 'main');
+            return null !== $response ? $response : $this->redirectToRoute('app_home');
         }
 
         $request->setRequestFormat(TurboBundle::STREAM_FORMAT);

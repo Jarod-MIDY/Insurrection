@@ -25,7 +25,7 @@ class InfluenceTokenRepository extends ServiceEntityRepository
 
     public function findUsableToken(Player $receiver, GameRoles $senderRole): ?InfluenceToken
     {
-        return $this->createQueryBuilder('influenceToken')
+        $result = $this->createQueryBuilder('influenceToken')
             ->join('influenceToken.sender', 'sender')
             ->where('influenceToken.receiver = :receiver')
             ->andWhere('sender.role = :role ')
@@ -35,5 +35,7 @@ class InfluenceTokenRepository extends ServiceEntityRepository
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();
+
+        return $result instanceof InfluenceToken ? $result : null;
     }
 }

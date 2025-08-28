@@ -24,13 +24,13 @@ class SendInfluenceTokenFormType extends AbstractType
         if (null === $sender) {
             throw new \InvalidArgumentException('influence token sender can\'t be null');
         }
-        $choices = $sender->getGame()->getPlayers()->filter(function (Player $player) use ($sender): bool {
+        $choices = $sender->getGame()?->getPlayers()->filter(function (Player $player) use ($sender): bool {
             return $player !== $sender;
         });
         $builder
             ->add('receiver', EntityType::class, [
                 'class' => Player::class,
-                'choices' => $choices,
+                'choices' => $choices ?? [],
                 'autocomplete' => true,
                 'choice_label' => 'linkedUser.username',
             ])

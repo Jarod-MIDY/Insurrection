@@ -11,6 +11,7 @@ use App\Repository\SceneLeaderVoteRepository;
 use App\Repository\SceneRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\UX\Turbo\TurboBundle;
 
@@ -24,10 +25,13 @@ class SceneLeaderVoteController extends AbstractController
     }
 
     #[Route('/scene/{scene}/vote', name: 'app_scene_leader_vote')]
-    public function vote(Request $request, Scene $scene)
+    public function vote(Request $request, Scene $scene): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
         $game = $scene->getGame();
+        if (null === $game) {
+            throw $this->createAccessDeniedException();
+        }
         $player = $this->playerRepository->findOneBy([
             'linkedUser' => $this->getUser(),
             'game' => $game,
@@ -51,21 +55,28 @@ class SceneLeaderVoteController extends AbstractController
         ]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $response = $this->redirectToRoute('app_game_show', ['game' => $scene->getGame()?->getId()]);
             $this->sceneLeaderVoteRepository->save($vote, true);
             if ($scene->getSceneLeaderVotes()->count() === $game->getMaxPlayers()) {
                 $votes = $scene->getSceneLeaderVotes();
                 $votesAsNumber = [];
                 foreach ($votes as $vote) {
-                    $key = $vote->getVotedForPlayer()->getId();
+                    $key = $vote->getVotedForPlayer()?->getId();
+                    if (null === $key) {
+                        continue;
+                    }
                     if (!isset($votesAsNumber[$key])) {
                         $votesAsNumber[$key] = 0;
                     }
                     ++$votesAsNumber[$key];
                 }
+                if ([] === $votesAsNumber) {
+                    return $response;
+                }
                 $max = max($votesAsNumber);
                 $maxVotes = array_filter($votesAsNumber, fn ($value) => $value === $max);
                 if ([] === $maxVotes) {
-                    return;
+                    return $response;
                 }
                 $randLeader = array_rand($maxVotes);
                 $leader = $game->getPlayers()->filter(fn (Player $player) => $player->getId() === $randLeader)->first();
@@ -75,7 +86,7 @@ class SceneLeaderVoteController extends AbstractController
                 }
             }
 
-            return $this->redirectToRoute('app_game_show', ['game' => $scene->getGame()->getId()]);
+            return $response;
         }
         $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
 

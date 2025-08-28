@@ -5,6 +5,17 @@ namespace App\Records;
 use App\Enum\GameRoles;
 use App\Interface\CharacterSheet;
 
+/**
+ * @phpstan-type OrderArray array{
+ *      fearedBecause: string,
+ *      accountableTo: string,
+ *      blamedFor: string,
+ *      notes: string,
+ *      chosenQuestion: string,
+ *      chosenTrajectorie: string|null,
+ *      answer: string
+ * }
+ */
 class OrderSheet implements CharacterSheet
 {
     public const CHOICES_FEARED_BECAUSE = [
@@ -36,16 +47,22 @@ class OrderSheet implements CharacterSheet
     public ?GameRoles $chosenTrajectorie = null;
     public string $answer = '';
 
-    /**
-     * @param array<string, string>|null $data
-     */
-    public function __construct(?array $data = null)
+    public function __construct(?InformationCollection $data = null)
     {
-        if ((bool) $data) {
-            $this->__unserialize($data);
+        if (null !== $data) {
+            $this->fearedBecause = $data->getValue('fearedBecause');
+            $this->accountableTo = $data->getValue('accountableTo');
+            $this->blamedFor = $data->getValue('blamedFor');
+            $this->notes = $data->getValue('notes');
+            $this->chosenQuestion = $data->getValue('chosenQuestion');
+            $this->answer = $data->getValue('answer');
+            $this->chosenTrajectorie = GameRoles::from($data->getValue('chosenTrajectorie'));
         }
     }
 
+    /**
+     * @param OrderArray $data
+     */
     public function __unserialize(array $data): void
     {
         $this->fearedBecause = $data['fearedBecause'];
@@ -54,9 +71,12 @@ class OrderSheet implements CharacterSheet
         $this->notes = $data['notes'];
         $this->chosenQuestion = $data['chosenQuestion'];
         $this->answer = $data['answer'];
-        $this->chosenTrajectorie = GameRoles::from($data['chosenTrajectorie']);
+        $this->chosenTrajectorie = GameRoles::from($data['chosenTrajectorie'] ?? '');
     }
 
+    /**
+     * @return OrderArray
+     */
     public function __serialize(): array
     {
         return [
@@ -70,30 +90,16 @@ class OrderSheet implements CharacterSheet
         ];
     }
 
-    public function getRenderData(): array
+    public function getRenderData(): RoleRender
     {
-        return [
-            'listable' => [
-                [
-                    'label' => 'On vous craint',
-                    'value' => $this->fearedBecause,
-                ],
-                [
-                    'label' => 'On vous accuse',
-                    'value' => $this->accountableTo,
-                ],
-                [
-                    'label' => 'On vous reproche surtout de gouverner par',
-                    'value' => $this->blamedFor,
-                ],
-            ],
-            'question' => [
-                'question' => $this->chosenQuestion,
-                'answer' => $this->answer,
-                'trajectorie' => $this->chosenTrajectorie?->value,
-            ],
-            'notes' => $this->notes,
-        ];
+        $renderData = new RoleRender();
+        $renderData->addListable('On vous craint', $this->fearedBecause);
+        $renderData->addListable('On vous accuse', $this->accountableTo);
+        $renderData->addListable('On vous reproche surtout de gouverner par', $this->blamedFor);
+        $renderData->setQuestion($this->chosenQuestion, $this->answer, $this->chosenTrajectorie->value ?? '');
+        $renderData->notes = $this->notes;
+
+        return $renderData;
     }
 
     public function isReady(): bool

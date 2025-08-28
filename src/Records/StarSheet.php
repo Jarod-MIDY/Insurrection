@@ -5,6 +5,21 @@ namespace App\Records;
 use App\Enum\GameRoles;
 use App\Interface\CharacterSheet;
 
+/**
+ * @phpstan-type StarArray array{
+ *      name: string,
+ *      features: string,
+ *      bestQuality: string,
+ *      shineIn: string,
+ *      ROWQuestion: string,
+ *      ROWRole: string|null,
+ *      ROWAnswer: string,
+ *      trajQuestion: string,
+ *      trajRole: string|null,
+ *      trajAnswer: string,
+ *      notes: string,
+ * }
+ */
 class StarSheet implements CharacterSheet
 {
     public const CHOICES_QUALITY = [
@@ -43,16 +58,26 @@ class StarSheet implements CharacterSheet
 
     public string $notes = '';
 
-    /**
-     * @param array<string, string>|null $data
-     */
-    public function __construct(?array $data = null)
+    public function __construct(?InformationCollection $data = null)
     {
-        if ((bool) $data) {
-            $this->__unserialize($data);
+        if (null !== $data) {
+            $this->name = $data->getValue('name');
+            $this->features = $data->getValue('features');
+            $this->bestQuality = $data->getValue('bestQuality');
+            $this->shineIn = $data->getValue('shineIn');
+            $this->ROWQuestion = $data->getValue('ROWQuestion');
+            $this->ROWAnswer = $data->getValue('ROWAnswer');
+            $this->trajQuestion = $data->getValue('trajQuestion');
+            $this->trajAnswer = $data->getValue('trajAnswer');
+            $this->ROWRole = GameRoles::tryFrom($data->getValue('ROWRole'));
+            $this->trajRole = GameRoles::tryFrom($data->getValue('trajRole'));
+            $this->notes = $data->getValue('notes');
         }
     }
 
+    /**
+     * @return StarArray
+     */
     public function __serialize(): array
     {
         return [
@@ -70,6 +95,9 @@ class StarSheet implements CharacterSheet
         ];
     }
 
+    /**
+     * @param StarArray $data
+     */
     public function __unserialize(array $data): void
     {
         $this->name = $data['name'];
@@ -80,44 +108,21 @@ class StarSheet implements CharacterSheet
         $this->ROWAnswer = $data['ROWAnswer'];
         $this->trajQuestion = $data['trajQuestion'];
         $this->trajAnswer = $data['trajAnswer'];
-        $this->ROWRole = GameRoles::tryFrom($data['ROWRole']);
-        $this->trajRole = GameRoles::tryFrom($data['trajRole']);
+        $this->ROWRole = GameRoles::tryFrom($data['ROWRole'] ?? '');
+        $this->trajRole = GameRoles::tryFrom($data['trajRole'] ?? '');
         $this->notes = $data['notes'];
     }
 
-    public function getRenderData(): array
+    public function getRenderData(): RoleRender
     {
-        return [
-            'listable' => [
-                [
-                    'label' => 'On t\'appelle',
-                    'value' => $this->name,
-                ],
-                [
-                    'label' => 'Ce qu\'on retient de toi',
-                    'value' => $this->features,
-                ],
-                [
-                    'label' => 'Ta plus grande qualité, c\'est',
-                    'value' => $this->bestQuality,
-                ],
-                [
-                    'label' => 'Tu brilles',
-                    'value' => $this->shineIn,
-                ],
-            ],
-            'row_question' => [
-                'question' => $this->ROWQuestion,
-                'answer' => $this->ROWAnswer,
-                'role' => $this->ROWRole?->value,
-            ],
-            'traj_question' => [
-                'question' => $this->trajQuestion,
-                'answer' => $this->trajAnswer,
-                'role' => $this->trajRole?->value,
-            ],
-            'notes' => $this->notes,
-        ];
+        $renderData = new RoleRender($this->name, $this->features);
+        $renderData->addListable('Ta plus grande qualidade, c\'est', $this->bestQuality);
+        $renderData->addListable('Tu brilles', $this->shineIn);
+        $renderData->setRowQuestion($this->ROWQuestion, $this->ROWAnswer, $this->ROWRole->value ?? '');
+        $renderData->setTrajQuestion($this->trajQuestion, $this->trajAnswer, $this->trajRole->value ?? '');
+        $renderData->notes = $this->notes;
+
+        return $renderData;
     }
 
     public function isReady(): bool

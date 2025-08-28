@@ -31,7 +31,7 @@ class ActionSendInfluenceTokenComponent extends AbstractController
     ) {
     }
 
-    public function mount(Player $sender)
+    public function mount(Player $sender): void
     {
         $this->sender = $sender;
     }
@@ -53,10 +53,21 @@ class ActionSendInfluenceTokenComponent extends AbstractController
 
         $entityManager->persist($token);
         $player = $token->getSender();
+        if (null === $player) {
+            $this->addFlash('error', 'Le joueur est introuvable');
+
+            return $this->redirectToRoute('app_home', []);
+        }
+        $game = $player->getGame();
+        if (null === $game) {
+            $this->addFlash('error', 'La partie actuelle ne semble pas exister');
+
+            return $this->redirectToRoute('app_home', []);
+        }
         $player->addGivenInfluenceToken($token);
         $entityManager->persist($player);
         $entityManager->flush();
 
-        return $this->redirectToRoute('app_game_show', ['game' => $player->getGame()->getId()]);
+        return $this->redirectToRoute('app_game_show', ['game' => $game->getId()]);
     }
 }

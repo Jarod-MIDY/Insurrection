@@ -20,7 +20,7 @@ class Game
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    public ?int $id = null;
 
     #[ORM\Column(length: 255)]
     private ?string $name = null;
@@ -179,7 +179,7 @@ class Game
 
     public function getCurrentScene(): ?Scene
     {
-        return $this->scenes->last();
+        return false === $this->scenes->last() ? null : $this->scenes->last();
     }
 
     public function addScene(Scene $scene): static
@@ -243,6 +243,9 @@ class Game
         return $this;
     }
 
+    /**
+     * @return GameRoles[]
+     */
     public function getRoles(?string $type = null): array
     {
         if ('trajectories' === $type) {
@@ -267,6 +270,9 @@ class Game
         return $this;
     }
 
+    /**
+     * @return Player[]
+     */
     public function getPlayersWithPreferedRole(string|GameRoles $role): array
     {
         if (!$role instanceof GameRoles) {
@@ -274,7 +280,7 @@ class Game
         }
 
         return $this->players->filter(function (Player $player) use ($role) {
-            return in_array($role, $player->getPreferedRoles());
+            return in_array($role, $player->getPreferedRoles() ?? []);
         })->toArray();
     }
 

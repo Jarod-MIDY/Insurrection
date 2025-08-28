@@ -9,21 +9,20 @@
                 <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
             {% endfor %}
 
-            
             {{ form_errors(registrationForm) }}
             {{ form_start(registrationForm, {attr:
                 {
                     class: 'form grid gap-2',
-                    action: path('app_register')
-                }
+                    action: path('app_register'),
+                },
             }) }}
                 <h1>Inscription</h1>
-                {{ form_row(registrationForm.username, {attr:{class:"form-row"}}) }}
+                {{ form_row(registrationForm.username, {attr: {class: 'form-row'}}) }}
                 {{ form_row(registrationForm.email, {
-                    attr:{class:"form-row"}
+                    attr: {class: 'form-row'},
                 }) }}
                 {{ form_row(registrationForm.plainPassword, {
-                    attr:{class:"form-row"}
+                    attr: {class: 'form-row'},
                 }) }}
                 {{ form_row(registrationForm.agreeTerms) }}
 

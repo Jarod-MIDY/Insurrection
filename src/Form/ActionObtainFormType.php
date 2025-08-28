@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\InfluenceToken;
 use App\Entity\TokenAction;
+use App\Enum\GameRoles;
 use App\Enum\RolesActionsObtain;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
@@ -19,19 +20,28 @@ class ActionObtainFormType extends AbstractType
         }
         $action = $options['data'];
         if (!$action instanceof TokenAction) {
-            throw new \InvalidArgumentException('Unexpected data class'.$options['data_class']);
+            $class = is_object($action) ? $action::class : gettype($action);
+            throw new \InvalidArgumentException('Unexpected data class '.$class);
         }
         $player = $action->getPlayer();
+        if (null === $player) {
+            throw new \InvalidArgumentException('Missing player entity');
+        }
         $playerRole = $player->getRole();
+        if (null === $playerRole) {
+            throw new \InvalidArgumentException('Missing player role');
+        }
         $choices = $player->getRadianceToken() > 0 ? RolesActionsObtain::getActionsFromRole($playerRole) : [];
-        if ([] !== $options['influence_tokens']) {
+        if (is_array($options['influence_tokens']) && [] !== $options['influence_tokens']) {
             foreach ($options['influence_tokens'] as $token) {
                 if (!$token instanceof InfluenceToken) {
                     throw new \InvalidArgumentException('Try to add non InfluenceToken entity');
                 }
                 $tokenRole = $token->getLinkedRole();
-                $tokenActions = RolesActionsObtain::getActionsFromRole($tokenRole);
-                $choices = array_merge($choices, $tokenActions);
+                if ($tokenRole instanceof GameRoles) {
+                    $tokenActions = RolesActionsObtain::getActionsFromRole($tokenRole);
+                    $choices = array_merge($choices, $tokenActions);
+                }
             }
         }
         $builder

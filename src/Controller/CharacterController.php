@@ -46,7 +46,7 @@ final class CharacterController extends AbstractController
             $this->characterRepository->save($character, true);
 
             return $this->redirectToRoute('app_game_show', [
-                'game' => $player->getGame()->getId(),
+                'game' => $player->getGame()?->getId(),
             ]);
         }
 
@@ -61,13 +61,17 @@ final class CharacterController extends AbstractController
     public function edit(Character $character, Request $request): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
-        if ($this->getUser() !== $character->getOwner()->getLinkedUser()) {
+        $player = $character->getOwner();
+        if (null === $player) {
+            throw $this->createAccessDeniedException();
+        }
+        if ($this->getUser() !== $player->getLinkedUser()) {
             throw $this->createAccessDeniedException();
         }
 
         $form = $this->createForm(CharacterFormType::class, $character, [
             'action' => $this->generateUrl('app_character_edit', [
-                'player' => $character->getOwner()->getId(),
+                'player' => $player->getId(),
                 'character' => $character->getId(),
             ]),
         ]);
@@ -77,7 +81,7 @@ final class CharacterController extends AbstractController
             $this->characterRepository->save($character, true);
 
             return $this->redirectToRoute('app_game_show', [
-                'game' => $character->getOwner()->getGame()->getId(),
+                'game' => $player->getGame()?->getId(),
             ]);
         }
 
@@ -92,13 +96,17 @@ final class CharacterController extends AbstractController
     public function delete(Character $character, Request $request): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
-        if ($this->getUser() !== $character->getOwner()->getLinkedUser()) {
+        $player = $character->getOwner();
+        if (null === $player) {
+            throw $this->createAccessDeniedException();
+        }
+        if ($this->getUser() !== $player->getLinkedUser()) {
             throw $this->createAccessDeniedException();
         }
         $this->characterRepository->remove($character, true);
 
         return $this->redirectToRoute('app_player_role_edit', [
-            'player' => $character->getOwner()->getId(),
+            'player' => $player->getId(),
         ]);
     }
 }

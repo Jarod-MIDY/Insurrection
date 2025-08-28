@@ -44,6 +44,7 @@ class PlayerReadyComponent
         $characterSheet = $player->getRole()->getCharacterSheet($player->getInformations());
         if (!$characterSheet->isReady()) {
             $this->dispatchBrowserEvent('characterSheetNotReady');
+
             return;
         }
         $this->readyToPlay = !$this->readyToPlay;

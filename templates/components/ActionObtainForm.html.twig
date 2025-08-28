@@ -5,8 +5,8 @@
                 {{ form_start(form, {
                     attr: {
                         'data-action': 'live#action:prevent',
-                        'data-live-action-param': 'save'
-                    }
+                        'data-live-action-param': 'save',
+                    },
                 }) }}
                     {{ form_errors(form) }}
                     {{ form_label(form.actionObtain) }}
@@ -20,7 +20,7 @@
         {% else %}
             <div>
                 <p>Vous n'avez plus de jetons d'action</p>
-            </div>        
+            </div>
         {% endif %}
     {% endblock %}
 </div>

@@ -9,7 +9,7 @@ use Symfony\UX\LiveComponent\Attribute\LiveAction;
 use Symfony\UX\LiveComponent\Attribute\LiveProp;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
 
-#[AsLiveComponent('GameContent', template:'components/GameContent.html.twig')]
+#[AsLiveComponent('GameContent', template: 'components/GameContent.html.twig')]
 class GameContent
 {
     use DefaultActionTrait;

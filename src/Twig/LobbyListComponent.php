@@ -7,7 +7,6 @@ use App\Enum\GameState;
 use App\Repository\GameRepository;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveAction;
-use Symfony\UX\LiveComponent\Attribute\LiveListener;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
 
 #[AsLiveComponent('LobbyList')]

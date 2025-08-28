@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Enum\GameRoles;
 use App\Interface\CharacterSheet;
+use App\Records\InformationCollection;
 use App\Repository\PlayerRepository;
 use App\Traits\TraitTimestampable;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -21,7 +22,7 @@ class Player
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    public ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'players')]
     #[ORM\JoinColumn(nullable: false)]
@@ -34,6 +35,7 @@ class Player
     #[ORM\Column(enumType: GameRoles::class, nullable: true)]
     private ?GameRoles $role = null;
 
+    /** @var array<string, string|null> */
     #[ORM\Column]
     private array $informations = [];
 
@@ -65,6 +67,9 @@ class Player
     )]
     private Collection $givenInfluenceTokens;
 
+    /**
+     * @var GameRoles[]|null
+     */
     #[ORM\Column(type: Types::SIMPLE_ARRAY, nullable: true, enumType: GameRoles::class)]
     private ?array $preferedRoles = null;
 
@@ -82,6 +87,7 @@ class Player
         $this->characters = new ArrayCollection();
         $this->influenceTokens = new ArrayCollection();
         $this->tokenActions = new ArrayCollection();
+        $this->givenInfluenceTokens = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -128,11 +134,14 @@ class Player
         return $this;
     }
 
-    public function getInformations(): array
+    public function getInformations(): InformationCollection
     {
-        return $this->informations;
+        return new InformationCollection($this->informations);
     }
 
+    /**
+     * @param array<string, string|null> $informations
+     */
     public function setInformations(array $informations): static
     {
         $this->informations = $informations;
@@ -142,7 +151,11 @@ class Player
 
     public function getFormatedInformations(): CharacterSheet
     {
-        return $this->getRole()->getCharacterSheet($this->getInformations());
+        if (null === $this->role) {
+            throw new \LogicException('Missing role');
+        }
+
+        return $this->role->getCharacterSheet($this->getInformations());
     }
 
     /**
@@ -250,6 +263,9 @@ class Player
         return $this->preferedRoles;
     }
 
+    /**
+     * @param GameRoles[]|null $preferedRoles
+     */
     public function setPreferedRoles(?array $preferedRoles): static
     {
         $this->preferedRoles = $preferedRoles;
@@ -299,8 +315,10 @@ class Player
         return $this;
     }
 
-    public function isReadyToForSceneStart(): ?bool
+    public function isReadyForSceneStart(): ?bool
     {
-        return $this->game->getScenes()->last()->isPlayerReady($this);
+        $lastScene = $this->game?->getScenes()->last();
+
+        return (false === $lastScene) || (null === $lastScene) ? false : $lastScene->isPlayerReady($this);
     }
 }

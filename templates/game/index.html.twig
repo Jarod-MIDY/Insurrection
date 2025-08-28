@@ -17,23 +17,23 @@
             </p>
         </div>
         <div class="flex flex-column"
-            {{ stimulus_controller('mercure-listen',{
-                'mercureUrl':  mercure('UpdateLoby'),
-                'mercureEventFlag':  'UpdateLoby',
-            }) }} 
+            {{ stimulus_controller('mercure-listen', {
+                mercureUrl: mercure('UpdateLoby'),
+                mercureEventFlag: 'UpdateLoby',
+            }) }}
         >
             <twig:lobbyPlayersList game="{{ game }}" player="{{ player }}">
             </twig:lobbyPlayersList>
         </div>
         {% if game.state.value == 'lobby' and player.linkedUser != game.author %}
-            <a href="{{ path('app_game_leave', { game: game.id } ) }}" class="button mt-auto">
+            <a href="{{ path('app_game_leave', {game: game.id}) }}" class="button mt-auto">
                 Quitter la partie
             </a>
         {% endif %}
     </aside>
-    <section class="game-content" {{ stimulus_controller('mercure-listen',{
-                'mercureUrl':  mercure('GameUpdated' ~ game.id),
-                'mercureEventFlag':  'GameUpdated' ~ game.id,
+    <section class="game-content" {{ stimulus_controller('mercure-listen', {
+                mercureUrl: mercure('GameUpdated' ~ game.id),
+                mercureEventFlag: 'GameUpdated' ~ game.id,
             }) }} >
         <twig:GameContent game="{{ game }}" player="{{ player }}">
         </twig:GameContent>

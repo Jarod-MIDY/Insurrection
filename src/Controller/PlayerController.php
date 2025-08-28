@@ -77,7 +77,7 @@ class PlayerController extends AbstractController
             $player->setPreferedRoles($selectedRoles->getRoles());
             $this->playerRepository->save($player, true);
             $this->hub->publish(new Update(
-                'GameUpdated' . $player->getGame()?->getId(),
+                'GameUpdated'.$player->getGame()?->getId(),
                 '{}',
             ));
         }
@@ -94,7 +94,7 @@ class PlayerController extends AbstractController
         if ($this->getUser() !== $player->getLinkedUser()) {
             throw $this->createAccessDeniedException();
         }
-        if ($player->getPreferedRoles() === [] || null === $player->getPreferedRoles()) {
+        if ([] === $player->getPreferedRoles() || null === $player->getPreferedRoles()) {
             return $this->redirectToRoute('app_player_save_roles_preferences', [
                 'player' => $player->getId(),
             ]);
@@ -102,7 +102,7 @@ class PlayerController extends AbstractController
         $player->setPreferedRoles([]);
         $this->playerRepository->save($player, true);
         $this->hub->publish(new Update(
-            'GameUpdated' . $player->getGame()?->getId(),
+            'GameUpdated'.$player->getGame()?->getId(),
             '{}',
         ));
 
