@@ -5,21 +5,20 @@ namespace App\Controller\Player;
 use App\Entity\Player;
 use App\Enum\GameRoles;
 use App\Form\RolesSelectionFormType;
+use App\MercureEvent\Game\UpdateGame;
 use App\Records\RolesSelection;
 use App\Repository\PlayerRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mercure\HubInterface;
-use Symfony\Component\Mercure\Update;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/player/{player}/save-roles-preferences', name: 'app_player_save_roles_preferences')]
 class ChoosePreferedRolesController extends AbstractController
 {
         public function __invoke(
-            Player $player, 
-            HubInterface $hub,
+            Player $player,
+            UpdateGame $updateGameSSE,
             PlayerRepository $playerRepository,
             Request $request
         ): Response
@@ -54,10 +53,8 @@ class ChoosePreferedRolesController extends AbstractController
             }
             $player->setPreferedRoles($selectedRoles->getRoles());
             $playerRepository->save($player, true);
-            $hub->publish(new Update(
-                'GameUpdated' . $player->getGame()?->getId(),
-                '{}',
-            ));
+
+            $updateGameSSE((string) $player->getGame()?->getId());
         }
 
         return $this->renderBlock('player/roles_selection.html.twig', 'waiting_for_other', [

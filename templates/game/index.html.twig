@@ -22,8 +22,8 @@
                 mercureEventFlag: 'UpdateLoby',
             }) }}
         >
-            <twig:lobbyPlayersList game="{{ game }}" player="{{ player }}">
-            </twig:lobbyPlayersList>
+            <turbo-frame id="PlayerList" src="{{ path('app_game_list_players', {game: game.id}) }}">
+            </turbo-frame>
         </div>
         {% if game.state.value == 'lobby' and player.linkedUser != game.author %}
             <a href="{{ path('app_game_leave', {game: game.id}) }}" class="button mt-auto">
@@ -35,7 +35,7 @@
                 mercureUrl: mercure('GameUpdated' ~ game.id),
                 mercureEventFlag: 'GameUpdated' ~ game.id,
             }) }} >
-        <twig:GameContent game="{{ game }}" player="{{ player }}">
-        </twig:GameContent>
+        <turbo-frame id="GameContent" src="{{ path('app_game_show', {game: game.id}) }}">
+        </turbo-frame>
     </section>
 {% endblock %}

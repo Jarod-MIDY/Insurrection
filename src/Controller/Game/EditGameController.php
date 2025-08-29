@@ -4,12 +4,11 @@ namespace App\Controller\Game;
 
 use App\Entity\Game;
 use App\Form\GameFormType;
+use App\MercureEvent\Game\UpdateLoby;
 use App\Repository\GameRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mercure\HubInterface;
-use Symfony\Component\Mercure\Update;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\UX\Turbo\TurboBundle;
 
@@ -20,7 +19,7 @@ class EditGameController extends AbstractController
         Game $game, 
         Request $request, 
         GameRepository $gameRepository,
-        HubInterface $hub
+        UpdateLoby $updateLobySSE
     ): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
@@ -28,10 +27,7 @@ class EditGameController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $gameRepository->save($game, true);
-            $hub->publish(new Update(
-                'UpdateLoby',
-                '{}',
-            ));
+            $updateLobySSE();
         }
 
         $request->setRequestFormat(TurboBundle::STREAM_FORMAT);

@@ -1,0 +1,22 @@
+<turbo-frame id="LobbyList" class="flex flex-column flex-grow">
+    <h2>Sessions Ouvertes</h2>
+    <ul class="game-lobby-list">
+        {% for game in games %}
+            <li class="game-lobby-item">
+                <span>
+                    {{ game.name }}
+                </span>
+                <span>
+                    {{ game.players|length }} / {{ game.maxPlayers }}
+                </span>
+                <a {{ stimulus_action('modal', 'open') }}
+                class="button"
+                href="{{ path('app_game_join', {game: game.id}) }}">
+                    Rejoindre
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+    <twig:frameRefresh withText="true">
+    </twig:frameRefresh>
+</turbo-frame>

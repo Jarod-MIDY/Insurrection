@@ -7,6 +7,7 @@ use App\Entity\Game;
 use App\Entity\Player;
 use App\Entity\Scene;
 use App\Enum\GameState;
+use App\MercureEvent\Game\UpdateGame;
 use App\Repository\CharacterRepository;
 use App\Repository\GameRepository;
 use App\Repository\PlayerRepository;
@@ -26,7 +27,7 @@ class PlayerUpdate
         private CharacterRepository $characterRepository,
         private RolesSelector $rolesSelector,
         private SceneRepository $sceneRepository,
-        private HubInterface $hub,
+        private UpdateGame $updateGameSSE,
     ) {
     }
 
@@ -77,10 +78,7 @@ class PlayerUpdate
                 $this->characterRepository->save($character, false);
             }
             $this->characterRepository->flush();
-            $this->hub->publish(new Update(
-                'GameUpdated'.$game->getId(),
-                '{}',
-            ));
+            ($this->updateGameSSE)((string) $game->getId());
         }
     }
 

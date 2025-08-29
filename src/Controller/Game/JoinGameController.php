@@ -5,12 +5,11 @@ namespace App\Controller\Game;
 use App\Entity\Game;
 use App\Entity\Player;
 use App\Form\JoinFormType;
+use App\MercureEvent\Game\UpdateLoby;
 use App\Repository\PlayerRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mercure\HubInterface;
-use Symfony\Component\Mercure\Update;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\UX\Turbo\TurboBundle;
 
@@ -21,7 +20,7 @@ class JoinGameController extends AbstractController
         Game $game, 
         Request $request,
         PlayerRepository $playerRepository,
-        HubInterface $hub,
+        UpdateLoby $updateLobySSE,
     ): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
@@ -42,10 +41,7 @@ class JoinGameController extends AbstractController
             $player->setGame($game);
             $player->setLinkedUser($this->getUser());
             $playerRepository->save($player, true);
-            $hub->publish(new Update(
-                'UpdateLoby',
-                '{}',
-            ));
+            $updateLobySSE();
 
             return $this->redirectToRoute('app_game_show', ['game' => $game->getId()]);
         }

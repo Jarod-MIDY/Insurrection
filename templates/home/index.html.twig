@@ -18,12 +18,12 @@
         </p>
         <a href="https://electric-goat.net/products/4">En savoir plus et soutenir</a>
     </article>
-    <div id="GameLobyList" {{ stimulus_controller('mercure-listen', {
+    <section id="GameLobyList" {{ stimulus_controller('mercure-listen', {
         mercureUrl: mercure('UpdateLoby'),
         mercureEventFlag: 'UpdateLoby',
     }) }} class="flex flex-column">
-        <twig:LobbyList>
-        </twig:LobbyList>
-    </div>
+        <turbo-frame id="LobbyList" src="{{ path('app_game_list_lobby') }}" class="flex flex-column flex-grow">
+        </turbo-frame>
+    </section>
 </section>
 {% endblock %}

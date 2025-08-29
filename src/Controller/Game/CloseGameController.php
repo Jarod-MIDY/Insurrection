@@ -4,6 +4,7 @@ namespace App\Controller\Game;
 
 use App\Entity\Game;
 use App\Enum\GameState;
+use App\MercureEvent\Game\UpdateLoby;
 use App\Repository\GameRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,7 +21,7 @@ class CloseGameController extends AbstractController
         Game $game,
         GameRepository $gameRepository,
         Request $request,
-        HubInterface $hub
+        UpdateLoby $updateLobySSE
     ): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
@@ -33,10 +34,7 @@ class CloseGameController extends AbstractController
         if ($this->isCsrfTokenValid('delete' . $game->getId(), (string) $request->request->get('_token'))) {
             $game->setState(GameState::CLOSED);
             $gameRepository->save($game, true);
-            $hub->publish(new Update(
-                'UpdateLoby',
-                '{}',
-            ));
+            $updateLobySSE();
 
             return $this->redirectToRoute('app_home');
         }

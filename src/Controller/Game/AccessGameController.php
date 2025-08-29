@@ -5,6 +5,7 @@ namespace App\Controller\Game;
 use App\Entity\Game;
 use App\Repository\PlayerRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -13,6 +14,7 @@ class AccessGameController extends AbstractController
 {
     public function __invoke(
         Game $game,
+        Request $request,
         PlayerRepository $playerRepository
     ): Response
     {
@@ -21,8 +23,8 @@ class AccessGameController extends AbstractController
         if (!$player) {
             throw $this->createAccessDeniedException();
         }
-
-        return $this->render('game/index.html.twig', [
+        $view = $request->headers->get('Turbo-Frame') === 'GameContent' ? 'game/_game_content.html.twig' : 'game/index.html.twig';
+        return $this->render($view, [
             'game' => $game,
             'player' => $player,
         ]);
