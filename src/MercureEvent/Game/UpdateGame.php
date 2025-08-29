@@ -7,13 +7,14 @@ use App\MercureEvent\AbstractHubEventHandler;
 class UpdateGame extends AbstractHubEventHandler
 {
     public const DATA = [
-            'frames' => [
-                'GameContent',
-                'PlayerList',
-            ],
-        ];
+        'frames' => [
+            'GameContent',
+            'PlayerList',
+        ],
+    ];
 
-    public function __invoke(string $id = ''): void {
-        $this->publish('GameUpdated' . $id, $this->toJson(self::DATA));
+    public function __invoke(string $id = ''): void
+    {
+        $this->publish('GameUpdated'.$id, $this->toJson(self::DATA));
     }
 }

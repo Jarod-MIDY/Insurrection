@@ -13,12 +13,11 @@ use Symfony\Component\Routing\Attribute\Route;
 class EditCharacterInSceneController extends AbstractController
 {
     public function __invoke(
-        Scene $scene, 
-        Character $character, 
+        Scene $scene,
+        Character $character,
         SceneRepository $sceneRepository,
         bool $isPresent = true,
-    ): Response
-    {
+    ): Response {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
         $player = $character->getOwner();
         if (null === $player) {

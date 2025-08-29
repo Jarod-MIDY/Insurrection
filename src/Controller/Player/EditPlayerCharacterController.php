@@ -15,11 +15,10 @@ use Symfony\UX\Turbo\TurboBundle;
 class EditPlayerCharacterController extends AbstractController
 {
     public function __invoke(
-        Character $character, 
+        Character $character,
         Request $request,
-        CharacterRepository $characterRepository
-    ): Response
-    {
+        CharacterRepository $characterRepository,
+    ): Response {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
         $player = $character->getOwner();
         if (null === $player) {

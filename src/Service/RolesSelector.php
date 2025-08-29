@@ -108,11 +108,20 @@ class RolesSelector
     private function preferedOrRandom(array $intersection, string $roleType = 'trajectories'): GameRoles
     {
         $getRoleType = 'get'.ucfirst($roleType);
-        $prefered = $this->rolesIntersect($intersection, GameRoles::{$getRoleType}());
+        $roles = GameRoles::{$getRoleType}();
+        /**
+         * @var GameRoles[]
+         */
+        $roles = is_array($roles) ? $roles : [];
+        $prefered = $this->rolesIntersect($intersection, $roles);
         if ([] === $prefered) {
-            $prefered = $this->rolesIntersect($this->unAssignedroles, GameRoles::{$getRoleType}());
+            $prefered = $this->rolesIntersect($this->unAssignedroles, $roles);
         }
-        --$this->{'missing'.ucfirst($roleType)};
+        if ('rightsOfWay' === $roleType) {
+            --$this->missingRightsOfWay;
+        } else {
+            --$this->missingTrajectories;
+        }
 
         return $prefered[array_rand($prefered)];
     }

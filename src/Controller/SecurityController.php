@@ -19,6 +19,7 @@ class SecurityController extends AbstractController
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
         $view = null !== $request->headers->get('Turbo-Frame') ? 'security/_modal_login.html.twig' : 'security/login.html.twig';
+
         return $this->render($view, [
             'last_username' => $lastUsername,
             'error' => $error,

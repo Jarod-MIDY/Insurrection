@@ -22,14 +22,20 @@ use App\Interface\CharacterSheet;
  */
 class PamphletSheet implements CharacterSheet
 {
-    public const CHOICES_ORIGINS = [
+    /**
+     * @var array<string, string>
+     */
+    public const array CHOICES_ORIGINS = [
         'modeste' => 'modeste',
         'lettrée' => 'lettrée',
         'aristocratique' => 'aristocratique',
         'étrangère' => 'étrangère',
     ];
 
-    public const CHOICES_MODUS_OPERENDI = [
+    /**
+     * @var array<string, string>
+     */
+    public const array CHOICES_MODUS_OPERENDI = [
         'les happenings' => 'les happenings',
         'la désobéissance civile' => 'la désobéissance civile',
         'la publication de textes' => 'la publication de textes',

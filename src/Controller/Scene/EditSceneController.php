@@ -15,11 +15,10 @@ use Symfony\UX\Turbo\TurboBundle;
 class EditSceneController extends AbstractController
 {
     public function __invoke(
-        Request $request, 
+        Request $request,
         Scene $scene,
-        SceneRepository $sceneRepository
-    ): Response
-    {
+        SceneRepository $sceneRepository,
+    ): Response {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
         if ($scene->getLeader()?->getLinkedUser() !== $this->getUser()) {
             throw $this->createAccessDeniedException();

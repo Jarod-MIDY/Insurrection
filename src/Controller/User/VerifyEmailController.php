@@ -14,11 +14,10 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 class VerifyEmailController extends AbstractController
 {
     public function __invoke(
-        Request $request, 
+        Request $request,
         UserRepository $userRepository,
-        EmailVerifier $emailVerifier
-    ): Response
-    {
+        EmailVerifier $emailVerifier,
+    ): Response {
         $id = $request->query->get('id');
 
         if (null === $id) {

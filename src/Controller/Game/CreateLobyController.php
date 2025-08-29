@@ -19,9 +19,8 @@ class CreateLobyController extends AbstractController
         Game $game,
         GameRepository $gameRepository,
         PlayerRepository $playerRepository,
-        UpdateLoby $updateLobySSE
-    ): Response
-    {
+        UpdateLoby $updateLobySSE,
+    ): Response {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
         $game->setState(GameState::LOBBY);
         $gameRepository->save($game, true);

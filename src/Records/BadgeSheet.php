@@ -22,14 +22,20 @@ use App\Interface\CharacterSheet;
  */
 class BadgeSheet implements CharacterSheet
 {
-    public const CHOICES_RED_TAPE = [
+    /**
+     * @var array<string, string>
+     */
+    public const array CHOICES_RED_TAPE = [
         'en fuitant des informations' => 'en fuitant des informations',
         'en ignorant un ordre direct' => 'en ignorant un ordre direct',
         'en désertant' => 'en désertant',
         'à ton insu' => 'à ton insu',
     ];
-
-    public const CHOICES_DISSENT_GOAL = [
+    
+    /**
+     * @var array<string, string>
+     */
+    public const array CHOICES_DISSENT_GOAL = [
         'faire un maximum de dégâts' => 'faire un maximum de dégâts',
         'disparaître' => 'disparaître',
         'dévoiler la vérité' => 'dévoiler la vérité',

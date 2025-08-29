@@ -16,12 +16,11 @@ use Symfony\UX\Turbo\TurboBundle;
 class EditGameController extends AbstractController
 {
     public function __invoke(
-        Game $game, 
-        Request $request, 
+        Game $game,
+        Request $request,
         GameRepository $gameRepository,
-        UpdateLoby $updateLobySSE
-    ): Response
-    {
+        UpdateLoby $updateLobySSE,
+    ): Response {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
         $form = $this->createForm(GameFormType::class, $game);
         $form->handleRequest($request);

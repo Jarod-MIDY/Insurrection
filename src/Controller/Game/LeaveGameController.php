@@ -16,9 +16,8 @@ class LeaveGameController extends AbstractController
     public function __invoke(
         Game $game,
         UpdateLoby $updateLobySSE,
-        PlayerRepository $playerRepository
-    ): Response
-    {
+        PlayerRepository $playerRepository,
+    ): Response {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
         $player = $playerRepository->findOneBy(['game' => $game, 'linkedUser' => $this->getUser()]);
         if (!$player instanceof Player || $player->getLinkedUser() === $game->getAuthor()) {

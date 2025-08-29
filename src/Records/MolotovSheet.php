@@ -22,14 +22,20 @@ use App\Interface\CharacterSheet;
  */
 class MolotovSheet implements CharacterSheet
 {
-    public const CHOICES_PART_OF = [
+    /**
+     * @var array<string, string>
+     */
+    public const array CHOICES_PART_OF = [
         'd\'un gang' => 'd\'un gang',
         'd\'un partie illégal' => 'd\'un partie illégal',
         'd\'une société secrète' => 'd\'une société secrète',
         'd\'une mouvance diffuse' => 'd\'une mouvance diffuse',
     ];
 
-    public const CHOICES_DISSENT_REASON = [
+    /**
+     * @var array<string, string>
+     */
+    public const array CHOICES_DISSENT_REASON = [
         'suite à un abus' => 'suite à un abus',
         'pour venger un proche' => 'pour venger un proche',
         'pour te défouler' => 'pour te défouler',

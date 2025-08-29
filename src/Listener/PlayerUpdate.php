@@ -15,8 +15,6 @@ use App\Repository\SceneRepository;
 use App\Service\RolesSelector;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
 use Doctrine\ORM\Events;
-use Symfony\Component\Mercure\HubInterface;
-use Symfony\Component\Mercure\Update;
 
 #[AsEntityListener(event: Events::postUpdate, method: 'postUpdate', entity: Player::class)]
 class PlayerUpdate

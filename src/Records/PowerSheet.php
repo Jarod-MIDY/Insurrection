@@ -18,21 +18,30 @@ use App\Interface\CharacterSheet;
  */
 class PowerSheet implements CharacterSheet
 {
-    public const CHOICES_LEGITIMACY = [
+    /**
+     * @var array<string, string>
+     */
+    public const array CHOICES_LEGITIMACY = [
         'économique' => 'économique',
         'religieuse' => 'religieuse',
         'républicaine' => 'républicaine',
         'dynastique' => 'dynastique',
     ];
 
-    public const CHOICES_AGENT_TYPE = [
+    /**
+     * @var array<string, string>
+     */
+    public const array CHOICES_AGENT_TYPE = [
         'des élus' => 'des élus',
         'une caste' => 'une caste',
         'des fonctionnaires' => 'des fonctionnaires',
         'une famille' => 'une famille',
     ];
 
-    public const CHOICES_BLAMED_FOR = [
+    /**
+     * @var array<string, string>
+     */
+    public const array CHOICES_BLAMED_FOR = [
         'la peur' => 'la peur',
         'l\'omniprésence' => 'l\'omniprésence',
         'l\'esbroufe' => 'l\'esbroufe',

@@ -16,13 +16,12 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/player/{player}/save-roles-preferences', name: 'app_player_save_roles_preferences')]
 class ChoosePreferedRolesController extends AbstractController
 {
-        public function __invoke(
-            Player $player,
-            UpdateGame $updateGameSSE,
-            PlayerRepository $playerRepository,
-            Request $request
-        ): Response
-    {
+    public function __invoke(
+        Player $player,
+        UpdateGame $updateGameSSE,
+        PlayerRepository $playerRepository,
+        Request $request,
+    ): Response {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
         if ($this->getUser() !== $player->getLinkedUser()) {
             throw $this->createAccessDeniedException();

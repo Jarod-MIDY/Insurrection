@@ -15,15 +15,15 @@ class AccessGameController extends AbstractController
     public function __invoke(
         Game $game,
         Request $request,
-        PlayerRepository $playerRepository
-    ): Response
-    {
+        PlayerRepository $playerRepository,
+    ): Response {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
         $player = $playerRepository->findOneBy(['game' => $game, 'linkedUser' => $this->getUser()]);
         if (!$player) {
             throw $this->createAccessDeniedException();
         }
-        $view = $request->headers->get('Turbo-Frame') === 'GameContent' ? 'game/_game_content.html.twig' : 'game/index.html.twig';
+        $view = 'GameContent' === $request->headers->get('Turbo-Frame') ? 'game/_game_content.html.twig' : 'game/index.html.twig';
+
         return $this->render($view, [
             'game' => $game,
             'player' => $player,

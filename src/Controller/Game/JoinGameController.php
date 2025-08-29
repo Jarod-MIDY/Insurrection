@@ -17,12 +17,11 @@ use Symfony\UX\Turbo\TurboBundle;
 class JoinGameController extends AbstractController
 {
     public function __invoke(
-        Game $game, 
+        Game $game,
         Request $request,
         PlayerRepository $playerRepository,
         UpdateLoby $updateLobySSE,
-    ): Response
-    {
+    ): Response {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
         if ($playerRepository->findOneBy(['game' => $game, 'linkedUser' => $this->getUser()])) {
             return $this->redirectToRoute('app_game_show', ['game' => $game->getId()]);

@@ -9,8 +9,6 @@ use App\Repository\GameRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mercure\HubInterface;
-use Symfony\Component\Mercure\Update;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\UX\Turbo\TurboBundle;
 
@@ -21,9 +19,8 @@ class CloseGameController extends AbstractController
         Game $game,
         GameRepository $gameRepository,
         Request $request,
-        UpdateLoby $updateLobySSE
-    ): Response
-    {
+        UpdateLoby $updateLobySSE,
+    ): Response {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
         if (
             $game->getAuthor() !== $this->getUser()
@@ -31,7 +28,7 @@ class CloseGameController extends AbstractController
         ) {
             throw $this->createAccessDeniedException();
         }
-        if ($this->isCsrfTokenValid('delete' . $game->getId(), (string) $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$game->getId(), (string) $request->request->get('_token'))) {
             $game->setState(GameState::CLOSED);
             $gameRepository->save($game, true);
             $updateLobySSE();

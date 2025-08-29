@@ -17,9 +17,8 @@ class EditPlayerController extends AbstractController
     public function __invoke(
         Player $player,
         PlayerRepository $playerRepository,
-        Request $request
-    ): Response
-    {
+        Request $request,
+    ): Response {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
         if ($this->getUser() !== $player->getLinkedUser()) {
             throw $this->createAccessDeniedException();

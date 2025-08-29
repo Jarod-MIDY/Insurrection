@@ -22,14 +22,20 @@ use App\Interface\CharacterSheet;
  */
 class StarSheet implements CharacterSheet
 {
-    public const CHOICES_QUALITY = [
+    /**
+     * @var array<string, string>
+     */
+    public const array CHOICES_QUALITY = [
         'ton acuité' => 'ton acuité',
         'ton optimisme' => 'ton optimisme',
         'ton imagination' => 'ton imagination',
         'à quel point on te sous-estime' => 'à quel point on te sous-estime',
     ];
 
-    public const CHOICES_SHINE = [
+    /**
+     * @var array<string, string>
+     */
+    public const array CHOICES_SHINE = [
         'en politique' => 'en politique',
         'dans les arts' => 'dans les arts',
         'chez une minorité' => 'chez une minorité',

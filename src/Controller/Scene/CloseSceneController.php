@@ -14,11 +14,10 @@ use Symfony\UX\Turbo\TurboBundle;
 class CloseSceneController extends AbstractController
 {
     public function __invoke(
-        Request $request, 
+        Request $request,
         Scene $scene,
-        SceneRepository $sceneRepository    
-    ): Response
-    {
+        SceneRepository $sceneRepository,
+    ): Response {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
         if (
             $scene->getLeader()?->getLinkedUser() !== $this->getUser()
@@ -27,7 +26,7 @@ class CloseSceneController extends AbstractController
             throw $this->createAccessDeniedException();
         }
 
-        if ($this->isCsrfTokenValid('delete' . $scene->getId(), (string) $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$scene->getId(), (string) $request->request->get('_token'))) {
             $scene->setFinishedAt(new \DateTimeImmutable());
             $sceneRepository->save($scene);
             $newScene = new Scene();

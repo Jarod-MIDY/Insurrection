@@ -14,9 +14,10 @@ class ListLobbyController extends AbstractController
 {
     public function __invoke(Request $request, GameRepository $gameRepository): Response
     {
-        if ($request->headers->get('Turbo-Frame') === null) {
+        if (null === $request->headers->get('Turbo-Frame')) {
             return $this->redirectToRoute('app_home');
         }
+
         return $this->render('game/_lobby_list.html.twig', [
             'games' => $gameRepository->findBy(['state' => [GameState::LOBBY, GameState::PLAYING]]),
         ]);

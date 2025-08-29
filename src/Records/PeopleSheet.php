@@ -18,21 +18,30 @@ use App\Interface\CharacterSheet;
  */
 class PeopleSheet implements CharacterSheet
 {
-    public const CHOICES_TRUST = [
+    /**
+     * @var array<string, string>
+     */
+    public const array CHOICES_TRUST = [
         'le Pouvoir' => 'le Pouvoir',
         'l\'Ordre' => 'l\'Ordre',
         'l\'Écho' => 'l\'Écho',
         'vous-même uniquement' => 'vous-même uniquement',
     ];
 
-    public const CHOICES_PRIORITY = [
+    /**
+     * @var array<string, string>
+     */
+    public const array CHOICES_PRIORITY = [
         'la liberté' => 'la liberté',
         'la sécurité' => 'la sécurité',
         'l\'égalité' => 'l\'égalité',
         'la propriété' => 'la propriété',
     ];
 
-    public const CHOICES_BLAMED_FOR = [
+    /**
+     * @var array<string, string>
+     */
+    public const array CHOICES_BLAMED_FOR = [
         'trop vous plaindre' => 'trop vous plaindre',
         'de penser qu\'à court terme' => 'de penser qu\'à court terme',
         'manquer d\'éducation' => 'manquer d\'éducation',

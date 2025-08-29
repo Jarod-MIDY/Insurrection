@@ -18,21 +18,30 @@ use App\Interface\CharacterSheet;
  */
 class OrderSheet implements CharacterSheet
 {
-    public const CHOICES_FEARED_BECAUSE = [
+    /**
+     * @var array<string, string>
+     */
+    public const array CHOICES_FEARED_BECAUSE = [
         'l\'armée' => 'l\'armée',
         'la milice' => 'la milice',
         'l\'ordre mystique' => 'l\'ordre mystique',
         'la police secrète' => 'la police secrète',
     ];
 
-    public const CHOICES_ACCOUNTABLE_TO = [
+    /**
+     * @var array<string, string>
+     */
+    public const array CHOICES_ACCOUNTABLE_TO = [
         'au Pouvoir' => 'au Pouvoir',
         'au Peuple' => 'au Peuple',
         'à personne' => 'à personne',
         'à un dogme' => 'à un dogme',
     ];
 
-    public const CHOICES_BLAMED_FOR = [
+    /**
+     * @var array<string, string>
+     */
+    public const array CHOICES_BLAMED_FOR = [
         'violents' => 'violents',
         'intrusifs' => 'intrusifs',
         'corrompus' => 'corrompus',

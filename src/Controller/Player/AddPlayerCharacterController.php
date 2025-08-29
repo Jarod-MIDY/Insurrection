@@ -16,11 +16,10 @@ use Symfony\UX\Turbo\TurboBundle;
 class AddPlayerCharacterController extends AbstractController
 {
     public function __invoke(
-        Player $player, 
+        Player $player,
         Request $request,
-        CharacterRepository $characterRepository
-    ): Response
-    {
+        CharacterRepository $characterRepository,
+    ): Response {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
         if ($this->getUser() !== $player->getLinkedUser()) {
             throw $this->createAccessDeniedException();

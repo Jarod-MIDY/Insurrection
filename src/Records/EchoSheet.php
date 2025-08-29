@@ -18,21 +18,30 @@ use App\Interface\CharacterSheet;
  */
 class EchoSheet implements CharacterSheet
 {
-    public const CHOICES_FINANCED_BY = [
+    /**
+     * @var array<string, string>
+     */
+    public const array CHOICES_FINANCED_BY = [
         'le Pouvoir' => 'le Pouvoir',
         'le Peuple' => 'le Peuple',
         'une puissance étrangère' => 'une puissance étrangère',
         'personne, et c’est bien le problème' => 'personne, et c’est bien le problème',
     ];
 
-    public const CHOICES_IMPORTANT_AGENT_TYPE = [
+    /**
+     * @var array<string, string>
+     */
+    public const array CHOICES_IMPORTANT_AGENT_TYPE = [
         'des investigateurs' => 'des investigateurs',
         'des animateurs' => 'des animateurs',
         'des éditorialistes' => 'des éditorialistes',
         'des experts' => 'des experts',
     ];
 
-    public const CHOICES_BLAMED_FOR = [
+    /**
+     * @var array<string, string>
+     */
+    public const array CHOICES_BLAMED_FOR = [
         'aux ordres' => 'aux ordres',
         'déconnectés' => 'déconnectés',
         'populistes' => 'populistes',

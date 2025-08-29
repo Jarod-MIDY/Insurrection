@@ -19,13 +19,12 @@ use Symfony\UX\Turbo\TurboBundle;
 class LeaderVoteController extends AbstractController
 {
     public function __invoke(
-        Request $request, 
+        Request $request,
         PlayerRepository $playerRepository,
         SceneRepository $sceneRepository,
         SceneLeaderVoteRepository $sceneLeaderVoteRepository,
-        Scene $scene
-    ): Response
-    {
+        Scene $scene,
+    ): Response {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
         $game = $scene->getGame();
         if (null === $game) {

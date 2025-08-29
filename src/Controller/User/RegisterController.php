@@ -20,13 +20,12 @@ use Symfony\UX\Turbo\TurboBundle;
 class RegisterController extends AbstractController
 {
     public function __invoke(
-        Request $request, 
-        UserPasswordHasherInterface $userPasswordHasher, 
-        Security $security, 
+        Request $request,
+        UserPasswordHasherInterface $userPasswordHasher,
+        Security $security,
         EntityManagerInterface $entityManager,
-        EmailVerifier $emailVerifier
-    ): Response
-    {
+        EmailVerifier $emailVerifier,
+    ): Response {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);

@@ -15,11 +15,10 @@ class ShowGameBoardController extends AbstractController
 {
     public function __invoke(
         Game $game,
-        SceneRepository $sceneRepository
-    ): Response
-    {
+        SceneRepository $sceneRepository,
+    ): Response {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
-        $player = $game->getPlayers()->findFirst(fn(int $index, Player $player): bool => $player->getLinkedUser() === $this->getUser());
+        $player = $game->getPlayers()->findFirst(fn (int $index, Player $player): bool => $player->getLinkedUser() === $this->getUser());
         if (!$player) {
             throw $this->createAccessDeniedException();
         }
