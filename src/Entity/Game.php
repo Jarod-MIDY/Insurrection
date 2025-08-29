@@ -300,4 +300,15 @@ class Game
     {
         return $this->getCurrentTotalRadianceTokens() >= $this->getRadianceTokenLimit();
     }
+
+    public function userIsPlayer(?User $user): bool
+    {
+        if (null === $user) {
+            return false;
+        }
+        $player = $this->players->findFirst(function (int $index, Player $player) use ($user): bool {
+            return $player->getLinkedUser() === $user;
+        });
+        return $player ? true : false;
+    }
 }

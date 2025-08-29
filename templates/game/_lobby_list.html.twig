@@ -9,11 +9,19 @@
                 <span>
                     {{ game.players|length }} / {{ game.maxPlayers }}
                 </span>
-                <a {{ stimulus_action('modal', 'open') }}
-                class="button"
-                href="{{ path('app_game_join', {game: game.id}) }}">
-                    Rejoindre
-                </a>
+                {% if game.userIsPlayer(app.user) %}
+                    <a class="button"
+                        data-turbo="false"
+                        href="{{ path('app_game_join', {game: game.id}) }}">
+                            Rejoindre
+                    </a>
+                {% else %}
+                    <button {{ stimulus_action('modal', 'open') }}
+                        class="button"
+                        data-route="{{ path('app_game_join', {game: game.id}) }}">
+                            Rejoindre
+                    </button>
+                {% endif %}
             </li>
         {% endfor %}
     </ul>
