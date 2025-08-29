@@ -17,7 +17,7 @@
                     {% if app.user == currentScene.leader.linkedUser and not currentScene.isStarted %}
                         <a
                             class="button"
-                            href="{{ path('app_scene', {scene: currentScene.id}) }}"
+                            href="{{ path('app_scene_edit', {scene: currentScene.id}) }}"
                             {{ stimulus_action('modal', 'open') }}
                         >
                             éditer la scène
