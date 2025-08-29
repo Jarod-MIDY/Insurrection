@@ -3,6 +3,8 @@
 namespace App\Twig;
 
 use App\Entity\Player;
+use App\MercureEvent\Game\UpdateGame;
+use App\MercureEvent\Game\UpdatePlayerList;
 use App\Repository\PlayerRepository;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveAction;
@@ -25,6 +27,7 @@ class PlayerReadyComponent
 
     public function __construct(
         private PlayerRepository $playerRepository,
+        private UpdatePlayerList $updateGameSSE,
     ) {
     }
 
@@ -50,5 +53,6 @@ class PlayerReadyComponent
         $this->readyToPlay = !$this->readyToPlay;
         $player->setReadyToPlay($this->readyToPlay);
         $this->playerRepository->save($player, true);
+        ($this->updateGameSSE)((string) $player->getGame()?->getId());
     }
 }
