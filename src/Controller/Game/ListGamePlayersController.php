@@ -20,7 +20,7 @@ class ListGamePlayersController extends AbstractController
         if (GameState::PLAYING !== $game->getState()) {
             $this->redirectToRoute('app_game_show', ['game' => $game->getId()]);
         }
-        $view = 'PlayerList' === $request->headers->get('Turbo-Frame') ? 'player/_player_list.html.twig' : 'player/list_players.html.twig';
+        $view = 'PlayerList' === $request->headers->get('Turbo-Frame') ? 'player/_player_list.html.twig' : 'player/player_list.html.twig';
 
         return $this->render($view, [
             'game' => $game,
