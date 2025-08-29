@@ -16,7 +16,7 @@ use App\Interface\CharacterSheet;
  *      answer: string
  * }
  */
-class OrderSheet implements CharacterSheet
+class OrderSheet extends AbstractRowSheet implements CharacterSheet
 {
     /**
      * @var array<string, string>
@@ -50,22 +50,13 @@ class OrderSheet implements CharacterSheet
 
     public string $fearedBecause = '';
     public string $accountableTo = '';
-    public string $blamedFor = '';
-    public string $notes = '';
-    public string $chosenQuestion = '';
-    public ?GameRoles $chosenTrajectorie = null;
-    public string $answer = '';
 
     public function __construct(?InformationCollection $data = null)
     {
         if (null !== $data) {
+            parent::__construct($data);
             $this->fearedBecause = $data->getValue('fearedBecause');
             $this->accountableTo = $data->getValue('accountableTo');
-            $this->blamedFor = $data->getValue('blamedFor');
-            $this->notes = $data->getValue('notes');
-            $this->chosenQuestion = $data->getValue('chosenQuestion');
-            $this->answer = $data->getValue('answer');
-            $this->chosenTrajectorie = GameRoles::from($data->getValue('chosenTrajectorie'));
         }
     }
 
@@ -113,6 +104,6 @@ class OrderSheet implements CharacterSheet
 
     public function isReady(): bool
     {
-        return '' !== $this->fearedBecause && '' !== $this->accountableTo && '' !== $this->blamedFor && '' !== $this->chosenQuestion && null !== $this->chosenTrajectorie;
+        return '' !== $this->fearedBecause && '' !== $this->accountableTo && $this->partialReady();
     }
 }

@@ -16,7 +16,7 @@ use App\Interface\CharacterSheet;
  *      notes: string
  * }
  */
-class EchoSheet implements CharacterSheet
+class EchoSheet extends AbstractRowSheet implements CharacterSheet
 {
     /**
      * @var array<string, string>
@@ -50,22 +50,13 @@ class EchoSheet implements CharacterSheet
 
     public string $financedBy = '';
     public string $importantAgentType = '';
-    public string $blamedFor = '';
-    public string $notes = '';
-    public string $chosenQuestion = '';
-    public ?GameRoles $chosenTrajectorie = null;
-    public string $answer = '';
 
     public function __construct(?InformationCollection $data = null)
     {
         if (null !== $data) {
+            parent::__construct($data);
             $this->financedBy = $data->getValue('financedBy');
             $this->importantAgentType = $data->getValue('importantAgentType');
-            $this->blamedFor = $data->getValue('blamedFor');
-            $this->notes = $data->getValue('notes');
-            $this->chosenQuestion = $data->getValue('chosenQuestion');
-            $this->answer = $data->getValue('answer');
-            $this->chosenTrajectorie = GameRoles::from($data->getValue('chosenTrajectorie'));
         }
     }
 
@@ -113,6 +104,6 @@ class EchoSheet implements CharacterSheet
 
     public function isReady(): bool
     {
-        return '' !== $this->financedBy && '' !== $this->importantAgentType && '' !== $this->blamedFor && '' !== $this->chosenQuestion && null !== $this->chosenTrajectorie;
+        return '' !== $this->financedBy && '' !== $this->importantAgentType && $this->partialReady();
     }
 }

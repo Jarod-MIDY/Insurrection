@@ -309,6 +309,7 @@ class Game
         $player = $this->players->findFirst(function (int $index, Player $player) use ($user): bool {
             return $player->getLinkedUser() === $user;
         });
+
         return $player ? true : false;
     }
 }

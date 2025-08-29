@@ -20,7 +20,7 @@ use App\Interface\CharacterSheet;
  *      notes: string,
  * }
  */
-class BadgeSheet implements CharacterSheet
+class BadgeSheet extends AbstractTrajSheet implements CharacterSheet
 {
     /**
      * @var array<string, string>
@@ -31,7 +31,7 @@ class BadgeSheet implements CharacterSheet
         'en désertant' => 'en désertant',
         'à ton insu' => 'à ton insu',
     ];
-    
+
     /**
      * @var array<string, string>
      */
@@ -42,42 +42,16 @@ class BadgeSheet implements CharacterSheet
         'retrouver ta place' => 'retrouver ta place',
     ];
 
-    public string $name = '';
-
-    public string $features = '';
-
     public string $firstRedTapeRisk = '';
 
     public string $dissentGoal = '';
 
-    public string $ROWQuestion = '';
-
-    public ?GameRoles $ROWRole = null;
-
-    public string $ROWAnswer = '';
-
-    public string $trajQuestion = '';
-
-    public ?GameRoles $trajRole = null;
-
-    public string $trajAnswer = '';
-
-    public string $notes = '';
-
     public function __construct(?InformationCollection $data = null)
     {
         if (null !== $data) {
-            $this->name = $data->getValue('name');
-            $this->features = $data->getValue('features');
+            parent::__construct($data);
             $this->firstRedTapeRisk = $data->getValue('firstRedTapeRisk');
             $this->dissentGoal = $data->getValue('dissentGoal');
-            $this->ROWQuestion = $data->getValue('ROWQuestion');
-            $this->ROWAnswer = $data->getValue('ROWAnswer');
-            $this->trajQuestion = $data->getValue('trajQuestion');
-            $this->trajAnswer = $data->getValue('trajAnswer');
-            $this->ROWRole = GameRoles::tryFrom($data->getValue('ROWRole'));
-            $this->trajRole = GameRoles::tryFrom($data->getValue('trajRole'));
-            $this->notes = $data->getValue('notes');
         }
     }
 
@@ -114,8 +88,8 @@ class BadgeSheet implements CharacterSheet
         $this->ROWAnswer = $data['ROWAnswer'];
         $this->trajQuestion = $data['trajQuestion'];
         $this->trajAnswer = $data['trajAnswer'];
-        $this->ROWRole = GameRoles::tryFrom($data['ROWRole'] ?? '');
-        $this->trajRole = GameRoles::tryFrom($data['trajRole'] ?? '');
+        $this->ROWRole = (bool) $data['ROWRole'] ? GameRoles::tryFrom($data['ROWRole']) : null;
+        $this->trajRole = (bool) $data['trajRole'] ? GameRoles::tryFrom($data['trajRole']) : null;
         $this->notes = $data['notes'];
     }
 
@@ -133,7 +107,6 @@ class BadgeSheet implements CharacterSheet
 
     public function isReady(): bool
     {
-        return '' !== $this->name && '' !== $this->features && '' !== $this->firstRedTapeRisk && '' !== $this->dissentGoal && '' !== $this->ROWQuestion && '' !== $this->ROWAnswer && '' !== $this->trajQuestion && '' !== $this->trajAnswer
-        && null !== $this->ROWRole && null !== $this->trajRole;
+        return '' !== $this->firstRedTapeRisk && '' !== $this->dissentGoal && $this->partialReady();
     }
 }

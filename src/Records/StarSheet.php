@@ -20,7 +20,7 @@ use App\Interface\CharacterSheet;
  *      notes: string,
  * }
  */
-class StarSheet implements CharacterSheet
+class StarSheet extends AbstractTrajSheet implements CharacterSheet
 {
     /**
      * @var array<string, string>
@@ -42,42 +42,16 @@ class StarSheet implements CharacterSheet
         'dans une activité physique' => 'dans une activité physique',
     ];
 
-    public string $name = '';
-
-    public string $features = '';
-
     public string $bestQuality = '';
 
     public string $shineIn = '';
 
-    public string $ROWQuestion = '';
-
-    public ?GameRoles $ROWRole = null;
-
-    public string $ROWAnswer = '';
-
-    public string $trajQuestion = '';
-
-    public ?GameRoles $trajRole = null;
-
-    public string $trajAnswer = '';
-
-    public string $notes = '';
-
     public function __construct(?InformationCollection $data = null)
     {
         if (null !== $data) {
-            $this->name = $data->getValue('name');
-            $this->features = $data->getValue('features');
+            parent::__construct($data);
             $this->bestQuality = $data->getValue('bestQuality');
             $this->shineIn = $data->getValue('shineIn');
-            $this->ROWQuestion = $data->getValue('ROWQuestion');
-            $this->ROWAnswer = $data->getValue('ROWAnswer');
-            $this->trajQuestion = $data->getValue('trajQuestion');
-            $this->trajAnswer = $data->getValue('trajAnswer');
-            $this->ROWRole = GameRoles::tryFrom($data->getValue('ROWRole'));
-            $this->trajRole = GameRoles::tryFrom($data->getValue('trajRole'));
-            $this->notes = $data->getValue('notes');
         }
     }
 
@@ -114,8 +88,8 @@ class StarSheet implements CharacterSheet
         $this->ROWAnswer = $data['ROWAnswer'];
         $this->trajQuestion = $data['trajQuestion'];
         $this->trajAnswer = $data['trajAnswer'];
-        $this->ROWRole = GameRoles::tryFrom($data['ROWRole'] ?? '');
-        $this->trajRole = GameRoles::tryFrom($data['trajRole'] ?? '');
+        $this->ROWRole = (bool) $data['ROWRole'] ? GameRoles::tryFrom($data['ROWRole']) : null;
+        $this->trajRole = (bool) $data['trajRole'] ? GameRoles::tryFrom($data['trajRole']) : null;
         $this->notes = $data['notes'];
     }
 
@@ -133,7 +107,6 @@ class StarSheet implements CharacterSheet
 
     public function isReady(): bool
     {
-        return '' !== $this->name && '' !== $this->features && '' !== $this->bestQuality && '' !== $this->shineIn && '' !== $this->ROWQuestion && '' !== $this->ROWAnswer && '' !== $this->trajQuestion && '' !== $this->trajAnswer
-        && null !== $this->ROWRole && null !== $this->trajRole;
+        return '' !== $this->bestQuality && '' !== $this->shineIn && $this->partialReady();
     }
 }

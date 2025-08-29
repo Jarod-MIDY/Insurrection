@@ -16,7 +16,7 @@ use App\Interface\CharacterSheet;
  *      answer: string
  * }
  */
-class PeopleSheet implements CharacterSheet
+class PeopleSheet extends AbstractRowSheet implements CharacterSheet
 {
     /**
      * @var array<string, string>
@@ -50,22 +50,13 @@ class PeopleSheet implements CharacterSheet
 
     public string $trust = '';
     public string $priority = '';
-    public string $blamedFor = '';
-    public string $notes = '';
-    public string $chosenQuestion = '';
-    public ?GameRoles $chosenTrajectorie = null;
-    public string $answer = '';
 
     public function __construct(?InformationCollection $data = null)
     {
         if (null !== $data) {
+            parent::__construct($data);
             $this->trust = $data->getValue('trust');
             $this->priority = $data->getValue('priority');
-            $this->blamedFor = $data->getValue('blamedFor');
-            $this->notes = $data->getValue('notes');
-            $this->chosenQuestion = $data->getValue('chosenQuestion');
-            $this->answer = $data->getValue('answer');
-            $this->chosenTrajectorie = GameRoles::from($data->getValue('chosenTrajectorie'));
         }
     }
 
@@ -113,6 +104,6 @@ class PeopleSheet implements CharacterSheet
 
     public function isReady(): bool
     {
-        return '' !== $this->trust && '' !== $this->priority && '' !== $this->blamedFor && '' !== $this->chosenQuestion && null !== $this->chosenTrajectorie;
+        return '' !== $this->trust && '' !== $this->priority && $this->partialReady();
     }
 }
