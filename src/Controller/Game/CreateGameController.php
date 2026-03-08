@@ -15,10 +15,17 @@ use Symfony\UX\Turbo\TurboBundle;
 #[Route('/game/new', name: 'app_game_new')]
 class CreateGameController extends AbstractController
 {
-    public function __invoke(
-        Request $request,
-        GameRepository $gameRepository,
-    ): Response {
+    /**
+     * Summary of __invoke
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \App\Repository\GameRepository $gameRepository
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     * @return Response|\Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function __invoke(Request $request, GameRepository $gameRepository): Response
+    {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
         $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
         $game = new Game();

@@ -13,6 +13,14 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ActionObtainFormType extends AbstractType
 {
+    /**
+     * Summary of buildForm
+     * @param \Symfony\Component\Form\FormBuilderInterface $builder
+     * @throws \InvalidArgumentException
+     * @throws \Symfony\Component\OptionsResolver\Exception\AccessException
+     * @return void
+     */
+    #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         if (!key_exists('data', $options)) {
@@ -21,7 +29,7 @@ class ActionObtainFormType extends AbstractType
         $action = $options['data'];
         if (!$action instanceof TokenAction) {
             $class = is_object($action) ? $action::class : gettype($action);
-            throw new \InvalidArgumentException('Unexpected data class '.$class);
+            throw new \InvalidArgumentException('Unexpected data class ' . $class);
         }
         $player = $action->getPlayer();
         if (null === $player) {
@@ -31,7 +39,7 @@ class ActionObtainFormType extends AbstractType
         if (null === $playerRole) {
             throw new \InvalidArgumentException('Missing player role');
         }
-        $choices = $player->getRadianceToken() > 0 ? RolesActionsObtain::getActionsFromRole($playerRole) : [];
+        $choices = (int) $player->getRadianceToken() > 0 ? RolesActionsObtain::getActionsFromRole($playerRole) : [];
         if (is_array($options['influence_tokens']) && [] !== $options['influence_tokens']) {
             foreach ($options['influence_tokens'] as $token) {
                 if (!$token instanceof InfluenceToken) {
@@ -44,19 +52,29 @@ class ActionObtainFormType extends AbstractType
                 }
             }
         }
-        $builder
-            ->add('actionObtain', EnumType::class, [
-                'label' => 'Tu peux OBTENIR',
-                'class' => RolesActionsObtain::class,
-                'autocomplete' => true,
-                'options_as_html' => true,
-                'choice_label' => fn (RolesActionsObtain $choice): string => '<span class="'.$choice->getRoleFromAction()->value.' game-action">'.$choice->value.'</span>',
-                'group_by' => fn (RolesActionsObtain $choice): string => $choice->getRoleFromAction()->label(),
-                'choices' => $choices,
-            ])
-        ;
+        $builder->add('actionObtain', EnumType::class, [
+            'label' => 'Tu peux OBTENIR',
+            'class' => RolesActionsObtain::class,
+            'autocomplete' => true,
+            'options_as_html' => true,
+            'choice_label' => fn(RolesActionsObtain $choice): string => (
+                '<span class="'
+                . $choice->getRoleFromAction()->value
+                . ' game-action">'
+                . $choice->value
+                . '</span>'
+            ),
+            'group_by' => fn(RolesActionsObtain $choice): string => $choice->getRoleFromAction()->label(),
+            'choices' => $choices,
+        ]);
     }
 
+    /**
+     * @param OptionsResolver $resolver
+     * @throws \Symfony\Component\OptionsResolver\Exception\AccessException
+     * @return void
+     */
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

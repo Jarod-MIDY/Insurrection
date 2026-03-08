@@ -15,6 +15,6 @@ class UpdateGame extends AbstractHubEventHandler
 
     public function __invoke(string $id = ''): void
     {
-        $this->publish('GameUpdated'.$id, $this->toJson(self::DATA));
+        $this->publish('GameUpdated' . $id, $this->toJson(self::DATA));
     }
 }

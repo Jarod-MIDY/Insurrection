@@ -16,16 +16,24 @@ class EmailVerifier
         private VerifyEmailHelperInterface $verifyEmailHelper,
         private MailerInterface $mailer,
         private EntityManagerInterface $entityManager,
-    ) {
-    }
+    ) {}
 
+    /**
+     * Summary of sendEmailConfirmation
+     * @param string $verifyEmailRouteName
+     * @param \App\Entity\User $user
+     * @param \Symfony\Bridge\Twig\Mime\TemplatedEmail $email
+     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     * @throws \LogicException
+     * @return void
+     */
     public function sendEmailConfirmation(string $verifyEmailRouteName, User $user, TemplatedEmail $email): void
     {
         $signatureComponents = $this->verifyEmailHelper->generateSignature(
             $verifyEmailRouteName,
             (string) $user->getId(),
             (string) $user->getEmail(),
-            ['id' => $user->getId()]
+            ['id' => $user->getId()],
         );
 
         $context = $email->getContext();
@@ -43,7 +51,11 @@ class EmailVerifier
      */
     public function handleEmailConfirmation(Request $request, User $user): void
     {
-        $this->verifyEmailHelper->validateEmailConfirmationFromRequest($request, (string) $user->getId(), (string) $user->getEmail());
+        $this->verifyEmailHelper->validateEmailConfirmationFromRequest(
+            $request,
+            (string) $user->getId(),
+            (string) $user->getEmail(),
+        );
 
         $user->setIsVerified(true);
 

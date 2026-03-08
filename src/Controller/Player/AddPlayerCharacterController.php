@@ -15,11 +15,17 @@ use Symfony\UX\Turbo\TurboBundle;
 #[Route('/player/{player}/character/add', name: 'app_character_add')]
 class AddPlayerCharacterController extends AbstractController
 {
-    public function __invoke(
-        Player $player,
-        Request $request,
-        CharacterRepository $characterRepository,
-    ): Response {
+    /**
+     * Summary of __invoke
+     * @param \App\Entity\Player $player
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \App\Repository\CharacterRepository $characterRepository
+     * @throws \LogicException
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     * @return Response|\Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function __invoke(Player $player, Request $request, CharacterRepository $characterRepository): Response
+    {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
         if ($this->getUser() !== $player->getLinkedUser()) {
             throw $this->createAccessDeniedException();

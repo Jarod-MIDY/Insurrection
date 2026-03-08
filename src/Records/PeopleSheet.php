@@ -5,17 +5,6 @@ namespace App\Records;
 use App\Enum\GameRoles;
 use App\Interface\CharacterSheet;
 
-/**
- * @phpstan-type PeopleArray array{
- *      trust: string,
- *      priority: string,
- *      blamedFor: string,
- *      notes: string,
- *      chosenQuestion: string,
- *      chosenTrajectorie: string|null,
- *      answer: string
- * }
- */
 class PeopleSheet extends AbstractRowSheet implements CharacterSheet
 {
     /**
@@ -51,7 +40,13 @@ class PeopleSheet extends AbstractRowSheet implements CharacterSheet
     public string $trust = '';
     public string $priority = '';
 
-    public function __construct(?InformationCollection $data = null)
+    /**
+     * Summary of __construct
+     * @throws \TypeError
+     * @throws \ValueError
+     * @param null|\App\Records\InformationCollection $data
+     */
+    public function __construct(null|InformationCollection $data = null)
     {
         if (null !== $data) {
             parent::__construct($data);
@@ -61,8 +56,19 @@ class PeopleSheet extends AbstractRowSheet implements CharacterSheet
     }
 
     /**
-     * @return PeopleArray
+     * @return array{
+     *      trust: string,
+     *      priority: string,
+     *      blamedFor: string,
+     *      notes: string,
+     *      chosenQuestion: string,
+     *      chosenTrajectorie: string|null,
+     *      answer: string
+     * }
+     * @throws \TypeError
+     * @throws \ValueError
      */
+    #[\Override]
     public function __serialize(): array
     {
         return [
@@ -77,8 +83,19 @@ class PeopleSheet extends AbstractRowSheet implements CharacterSheet
     }
 
     /**
-     * @param PeopleArray $data
+     * @param array{
+     *      trust: string,
+     *      priority: string,
+     *      blamedFor: string,
+     *      notes: string,
+     *      chosenQuestion: string,
+     *      chosenTrajectorie: string|null,
+     *      answer: string
+     * } $data
+     * @throws \TypeError
+     * @throws \ValueError
      */
+    #[\Override]
     public function __unserialize(array $data): void
     {
         $this->trust = $data['trust'];
@@ -87,7 +104,7 @@ class PeopleSheet extends AbstractRowSheet implements CharacterSheet
         $this->notes = $data['notes'];
         $this->chosenQuestion = $data['chosenQuestion'];
         $this->answer = $data['answer'];
-        $this->chosenTrajectorie = GameRoles::from($data['chosenTrajectorie'] ?? '');
+        $this->chosenTrajectorie = GameRoles::from($data['chosenTrajectorie'] ?? 'null');
     }
 
     public function getRenderData(): RoleRender
@@ -102,6 +119,7 @@ class PeopleSheet extends AbstractRowSheet implements CharacterSheet
         return $renderData;
     }
 
+    #[\Override]
     public function isReady(): bool
     {
         return '' !== $this->trust && '' !== $this->priority && $this->partialReady();

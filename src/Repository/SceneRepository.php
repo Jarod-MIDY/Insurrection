@@ -39,7 +39,6 @@ class SceneRepository extends ServiceEntityRepository
     //            ->getResult()
     //        ;
     //    }
-
     //    public function findOneBySomeField($value): ?Scene
     //    {
     //        return $this->createQueryBuilder('s')

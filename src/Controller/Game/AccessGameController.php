@@ -12,17 +12,25 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/game/show/{game}', name: 'app_game_show')]
 class AccessGameController extends AbstractController
 {
-    public function __invoke(
-        Game $game,
-        Request $request,
-        PlayerRepository $playerRepository,
-    ): Response {
+    /**
+     * Summary of __invoke
+     * @param \App\Entity\Game $game
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \App\Repository\PlayerRepository $playerRepository
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     * @throws \LogicException
+     * @return Response
+     */
+    public function __invoke(Game $game, Request $request, PlayerRepository $playerRepository): Response
+    {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
         $player = $playerRepository->findOneBy(['game' => $game, 'linkedUser' => $this->getUser()]);
         if (!$player) {
             throw $this->createAccessDeniedException();
         }
-        $view = 'GameContent' === $request->headers->get('Turbo-Frame') ? 'game/_game_content.html.twig' : 'game/index.html.twig';
+        $view = 'GameContent' === $request->headers->get('Turbo-Frame')
+            ? 'game/_game_content.html.twig'
+            : 'game/index.html.twig';
 
         return $this->render($view, [
             'game' => $game,

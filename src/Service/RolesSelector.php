@@ -16,8 +16,8 @@ class RolesSelector
     private int $missingTrajectories;
     private int $missingRightsOfWay;
 
-    public function __construct(
-    ) {
+    public function __construct()
+    {
         $this->missingRightsOfWay = self::MIN_RIGHTS_OF_WAY;
         $this->missingTrajectories = self::MIN_TRAJECTORIES;
         $this->unAssignedroles = array_merge(GameRoles::getTrajectories(), GameRoles::getRightsOfWay());
@@ -25,7 +25,7 @@ class RolesSelector
 
     /**
      * @param Collection<int,Player> $players
-     *
+     * @throws \LogicException
      * @return Player[]
      */
     public function attributeRolesToPlayer(Collection $players): array
@@ -33,13 +33,23 @@ class RolesSelector
         $playerMissingRoles = $players->count();
         $sortedPlayers = $this->sortPlayersByChoiceWeight($players);
         foreach ($sortedPlayers as $player) {
-            $freeChoice = $this->missingRightsOfWay <= 0 && $this->missingTrajectories <= 0
-                        && $playerMissingRoles > ($this->missingTrajectories + $this->missingRightsOfWay);
+            $freeChoice =
+                $this->missingRightsOfWay <= 0
+                && $this->missingTrajectories <= 0
+                && $playerMissingRoles > ($this->missingTrajectories + $this->missingRightsOfWay);
             $role = $this->selectRole($player->getPreferedRoles() ?? [], $freeChoice);
             if (in_array($role, $this->unAssignedroles)) {
                 $player->setRole($role);
                 --$playerMissingRoles;
-                $this->unAssignedroles = array_udiff($this->unAssignedroles, [$role], fn (GameRoles $a, GameRoles $b): int => strcmp($a->value, $b->value));
+                /**
+                 * @var GameRoles[] $unAssignedroles
+                 */
+                $unAssignedroles = array_udiff(
+                    $this->unAssignedroles,
+                    [$role],
+                    fn(GameRoles $a, GameRoles $b): int => strcmp($a->value, $b->value),
+                );
+                $this->unAssignedroles = $unAssignedroles;
             } else {
                 throw new \LogicException(sprintf('Role %s is not available', $role->value));
             }
@@ -56,21 +66,18 @@ class RolesSelector
     private function sortPlayersByChoiceWeight(Collection $players): array
     {
         $playerArray = $players->toArray();
-        usort(
-            $playerArray,
-            function (Player $a, Player $b): int {
-                $nbPreferedA = [] === $a->getPreferedRoles() ? 8 : count($a->getPreferedRoles() ?? []);
-                $nbPreferedB = [] === $b->getPreferedRoles() ? 8 : count($b->getPreferedRoles() ?? []);
-                if ($nbPreferedA === $nbPreferedB) {
-                    return 0;
-                }
-                if ($nbPreferedA > $nbPreferedB) {
-                    return 1;
-                }
-
-                return -1;
+        usort($playerArray, function (Player $a, Player $b): int {
+            $nbPreferedA = (bool) $a->getPreferedRoles() ? count($a->getPreferedRoles()) : 8;
+            $nbPreferedB = (bool) $b->getPreferedRoles() ? count($b->getPreferedRoles()) : 8;
+            if ($nbPreferedA === $nbPreferedB) {
+                return 0;
             }
-        );
+            if ($nbPreferedA > $nbPreferedB) {
+                return 1;
+            }
+
+            return -1;
+        });
 
         return $playerArray;
     }
@@ -107,7 +114,7 @@ class RolesSelector
      */
     private function preferedOrRandom(array $intersection, string $roleType = 'trajectories'): GameRoles
     {
-        $getRoleType = 'get'.ucfirst($roleType);
+        $getRoleType = 'get' . ucfirst($roleType);
         $roles = GameRoles::{$getRoleType}();
         /**
          * @var GameRoles[]
@@ -136,8 +143,6 @@ class RolesSelector
      */
     private function rolesIntersect(array $array1, array $array2): array
     {
-        return array_uintersect($array1, $array2,
-            fn (GameRoles $a, GameRoles $b): int => strcmp($a->value, $b->value)
-        );
+        return array_uintersect($array1, $array2, fn(GameRoles $a, GameRoles $b): int => strcmp($a->value, $b->value));
     }
 }

@@ -436,6 +436,7 @@ input {
 
 .game-content {
     position: relative;
+    display: grid;
 }
 
 .game-content .refresh-button {

@@ -1,0 +1,8 @@
+<?php
+
+return [
+    'ux_autocomplete' => [
+        'resource' => '@AutocompleteBundle/config/routes.php',
+        'prefix' => '/autocomplete',
+    ],
+];

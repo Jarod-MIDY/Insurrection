@@ -16,6 +16,16 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/player/{player}/save-roles-preferences', name: 'app_player_save_roles_preferences')]
 class ChoosePreferedRolesController extends AbstractController
 {
+    /**
+     * Summary of __invoke
+     * @param \App\Entity\Player $player
+     * @param \App\MercureEvent\Game\UpdateGame $updateGameSSE
+     * @param \App\Repository\PlayerRepository $playerRepository
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     * @throws \LogicException
+     * @return Response|\Symfony\Component\HttpFoundation\RedirectResponse
+     */
     public function __invoke(
         Player $player,
         UpdateGame $updateGameSSE,
@@ -39,7 +49,7 @@ class ChoosePreferedRolesController extends AbstractController
         ]);
 
         $form->handleRequest($request);
-        if (!$form->isSubmitted() && [] === $player->getPreferedRoles()) {
+        if (!$form->isSubmitted() && (bool) $player->getPreferedRoles()) {
             return $this->renderBlock('player/roles_selection.html.twig', 'roles_form', [
                 'form' => $form,
                 'player' => $player,

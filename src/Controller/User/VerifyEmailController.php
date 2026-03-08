@@ -13,11 +13,17 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 #[Route('/verify/email', name: 'app_verify_email')]
 class VerifyEmailController extends AbstractController
 {
-    public function __invoke(
-        Request $request,
-        UserRepository $userRepository,
-        EmailVerifier $emailVerifier,
-    ): Response {
+    /**
+     * Summary of __invoke
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \App\Repository\UserRepository $userRepository
+     * @param \App\Security\EmailVerifier $emailVerifier
+     * @throws \LogicException
+     * @throws \Symfony\Component\HttpFoundation\Exception\BadRequestException
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function __invoke(Request $request, UserRepository $userRepository, EmailVerifier $emailVerifier): Response
+    {
         $id = $request->query->get('id');
 
         if (null === $id) {

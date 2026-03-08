@@ -19,12 +19,20 @@ class LobbyListComponent
      */
     public array $games = [];
 
+    /**
+     * @throws \UnexpectedValueException
+     * @return void
+     */
     public function __construct(
         private GameRepository $gameRepository,
     ) {
         $this->refresh();
     }
 
+    /**
+     * @throws \UnexpectedValueException
+     * @return void
+     */
     #[LiveAction]
     public function refresh(): void
     {

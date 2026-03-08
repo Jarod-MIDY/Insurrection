@@ -15,47 +15,47 @@ class InfluenceToken
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    public ?int $id = null;
+    public null|int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'influenceTokens')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Player $receiver = null;
+    private null|Player $receiver = null;
 
     #[ORM\ManyToOne(inversedBy: 'givenInfluenceTokens')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Player $sender = null;
+    private null|Player $sender = null;
 
     #[ORM\Column]
     private bool $isUsed = false;
 
-    public function getId(): ?int
+    public function getId(): null|int
     {
         return $this->id;
     }
 
-    public function getLinkedRole(): ?GameRoles
+    public function getLinkedRole(): null|GameRoles
     {
         return $this->sender?->getRole();
     }
 
-    public function getReceiver(): ?Player
+    public function getReceiver(): null|Player
     {
         return $this->receiver;
     }
 
-    public function setReceiver(?Player $receiver): self
+    public function setReceiver(null|Player $receiver): self
     {
         $this->receiver = $receiver;
 
         return $this;
     }
 
-    public function getSender(): ?Player
+    public function getSender(): null|Player
     {
         return $this->sender;
     }
 
-    public function setSender(?Player $sender): self
+    public function setSender(null|Player $sender): self
     {
         $this->sender = $sender;
 

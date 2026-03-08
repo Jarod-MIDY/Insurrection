@@ -1,0 +1,10 @@
+<?php
+
+return [
+    'when@dev' => [
+        '_errors' => [
+            'resource' => '@FrameworkBundle/Resources/config/routing/errors.xml',
+            'prefix' => '/_error',
+        ],
+    ],
+];

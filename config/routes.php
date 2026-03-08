@@ -1,0 +1,11 @@
+<?php
+
+return [
+    'controllers' => [
+        'resource' => [
+            'path' => '../src/Controller/',
+            'namespace' => 'App\Controller',
+        ],
+        'type' => 'attribute',
+    ],
+];

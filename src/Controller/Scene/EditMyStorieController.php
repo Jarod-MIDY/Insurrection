@@ -17,10 +17,19 @@ use Symfony\UX\Turbo\TurboBundle;
 #[Route('/player/{player}/scene/{scene}/story/edit', name: 'app_scene_edit_my_scene_storie')]
 class EditMyStorieController extends AbstractController
 {
+    /**
+     * Summary of __invoke
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \App\Repository\SceneStoryRepository $sceneStoryRepository
+     * @param \App\Entity\Scene $scene
+     * @param \App\Entity\Player $player
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     * @throws \LogicException
+     * @return Response|\Symfony\Component\HttpFoundation\RedirectResponse
+     */
     public function __invoke(
         Request $request,
         SceneStoryRepository $sceneStoryRepository,
-        NewSceneFormType $form,
         Scene $scene,
         Player $player,
     ): Response {
@@ -28,8 +37,8 @@ class EditMyStorieController extends AbstractController
         if (
             null === $scene->getLeader()
             || !$scene->isStarted()
-            || ($scene->getGame() !== $player->getGame())
-            || ($this->getUser() !== $player->getLinkedUser())
+            || $scene->getGame() !== $player->getGame()
+            || $this->getUser() !== $player->getLinkedUser()
         ) {
             throw $this->createAccessDeniedException();
         }

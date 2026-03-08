@@ -13,73 +13,73 @@ class TokenAction
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    public ?int $id = null;
+    public null|int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'tokenActions')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Player $player = null;
+    private null|Player $player = null;
 
     #[ORM\ManyToOne(inversedBy: 'tokenActions')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Scene $scene = null;
+    private null|Scene $scene = null;
 
     #[ORM\Column(nullable: true, enumType: RolesActionsObtain::class)]
-    private ?RolesActionsObtain $actionObtain = null;
+    private null|RolesActionsObtain $actionObtain = null;
 
     #[ORM\Column(nullable: true, enumType: RolesActionsSuffer::class)]
-    private ?RolesActionsSuffer $actionSuffer = null;
+    private null|RolesActionsSuffer $actionSuffer = null;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: true)]
-    private ?InfluenceToken $influenceToken = null;
+    private null|InfluenceToken $influenceToken = null;
 
-    public function getId(): ?int
+    public function getId(): null|int
     {
         return $this->id;
     }
 
-    public function getPlayer(): ?Player
+    public function getPlayer(): null|Player
     {
         return $this->player;
     }
 
-    public function setPlayer(?Player $player): static
+    public function setPlayer(null|Player $player): static
     {
         $this->player = $player;
 
         return $this;
     }
 
-    public function getScene(): ?Scene
+    public function getScene(): null|Scene
     {
         return $this->scene;
     }
 
-    public function setScene(?Scene $scene): static
+    public function setScene(null|Scene $scene): static
     {
         $this->scene = $scene;
 
         return $this;
     }
 
-    public function getActionObtain(): ?RolesActionsObtain
+    public function getActionObtain(): null|RolesActionsObtain
     {
         return $this->actionObtain;
     }
 
-    public function setActionObtain(?RolesActionsObtain $actionObtain): static
+    public function setActionObtain(null|RolesActionsObtain $actionObtain): static
     {
         $this->actionObtain = $actionObtain;
 
         return $this;
     }
 
-    public function getActionSuffer(): ?RolesActionsSuffer
+    public function getActionSuffer(): null|RolesActionsSuffer
     {
         return $this->actionSuffer;
     }
 
-    public function setActionSuffer(?RolesActionsSuffer $actionSuffer): static
+    public function setActionSuffer(null|RolesActionsSuffer $actionSuffer): static
     {
         $this->actionSuffer = $actionSuffer;
 
@@ -89,7 +89,7 @@ class TokenAction
     /**
      * Get the value of influenceToken.
      */
-    public function getInfluenceToken(): ?InfluenceToken
+    public function getInfluenceToken(): null|InfluenceToken
     {
         return $this->influenceToken;
     }
@@ -97,7 +97,7 @@ class TokenAction
     /**
      * Set the value of influenceToken.
      */
-    public function setInfluenceToken(?InfluenceToken $influenceToken): self
+    public function setInfluenceToken(null|InfluenceToken $influenceToken): self
     {
         $this->influenceToken = $influenceToken;
 

@@ -17,11 +17,11 @@ class Scene
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    public ?int $id = null;
+    public null|int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'scenes')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Game $game = null;
+    private null|Game $game = null;
 
     /**
      * @var Collection<int, Character>
@@ -30,13 +30,13 @@ class Scene
     private Collection $characters;
 
     #[ORM\Column(nullable: true)]
-    private ?int $estimatedDuration = 0;
+    private null|int $estimatedDuration = 0;
 
     #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $finishedAt = null;
+    private null|\DateTimeImmutable $finishedAt = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $goal = null;
+    private null|string $goal = null;
 
     /**
      * @var Collection<int, Character>
@@ -52,7 +52,7 @@ class Scene
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: true)]
-    private ?Player $leader = null;
+    private null|Player $leader = null;
 
     /**
      * @var Collection<int, SceneStory>
@@ -61,7 +61,7 @@ class Scene
     private Collection $stories;
 
     #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $startedAt = null;
+    private null|\DateTimeImmutable $startedAt = null;
 
     /**
      * @var Collection<int, TokenAction>
@@ -87,17 +87,17 @@ class Scene
         $this->tokenActions = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId(): null|int
     {
         return $this->id;
     }
 
-    public function getGame(): ?Game
+    public function getGame(): null|Game
     {
         return $this->game;
     }
 
-    public function setGame(?Game $game): static
+    public function setGame(null|Game $game): static
     {
         $this->game = $game;
 
@@ -128,31 +128,31 @@ class Scene
         return $this;
     }
 
-    public function getEstimatedDuration(): ?int
+    public function getEstimatedDuration(): int
     {
-        return $this->estimatedDuration;
+        return (int) $this->estimatedDuration;
     }
 
-    public function setEstimatedDuration(?int $estimatedDuration): static
+    public function setEstimatedDuration(null|int $estimatedDuration): static
     {
         $this->estimatedDuration = $estimatedDuration;
 
         return $this;
     }
 
-    public function getEstimatedDateEnd(): ?\DateTimeInterface
+    public function getEstimatedDateEnd(): null|\DateTimeInterface
     {
-        return null !== $this->startedAt ?
-            $this->startedAt->add(new \DateInterval('PT'.$this->getEstimatedDuration().'M'))
+        return null !== $this->startedAt
+            ? $this->startedAt->add(new \DateInterval('PT' . $this->getEstimatedDuration() . 'M'))
             : null;
     }
 
-    public function getGoal(): ?string
+    public function getGoal(): null|string
     {
         return $this->goal;
     }
 
-    public function setGoal(?string $goal): static
+    public function setGoal(null|string $goal): static
     {
         $this->goal = $goal;
 
@@ -219,12 +219,12 @@ class Scene
         return $this;
     }
 
-    public function getLeader(): ?Player
+    public function getLeader(): null|Player
     {
         return $this->leader;
     }
 
-    public function setLeader(?Player $leader): static
+    public function setLeader(null|Player $leader): static
     {
         $this->leader = $leader;
 
@@ -261,12 +261,12 @@ class Scene
         return $this;
     }
 
-    public function getStartedAt(): ?\DateTimeImmutable
+    public function getStartedAt(): null|\DateTimeImmutable
     {
         return $this->startedAt;
     }
 
-    public function setStartedAt(?\DateTimeImmutable $startedAt): static
+    public function setStartedAt(null|\DateTimeImmutable $startedAt): static
     {
         $this->startedAt = $startedAt;
 
@@ -308,47 +308,68 @@ class Scene
         return $this;
     }
 
+    /**
+     * Summary of setReadyPlayer
+     * @param \App\Entity\Player $player
+     * @throws \InvalidArgumentException
+     * @return static
+     */
     public function setReadyPlayer(Player $player): static
     {
-        if (null === $player->getId()) {
-            throw new \Exception('Invalid player id in ready logs of scene '.$this->getId());
+        $id = $player->getId();
+        if (null === $id) {
+            throw new \InvalidArgumentException('Invalid player id in ready logs of scene ' . (string) $this->getId());
         }
-        $ready = key_exists($player->getId(), $this->readyLogs) ?
-                    !$this->readyLogs[$player->getId()]['readyStatus']
-                    : true;
-        $this->readyLogs[$player->getId()] = ['readyStatus' => $ready, 'date' => new \DateTimeImmutable()];
+        $ready = key_exists($id, $this->readyLogs) ? !$this->readyLogs[$id]['readyStatus'] : true;
+        $this->readyLogs[$id] = ['readyStatus' => $ready, 'date' => new \DateTimeImmutable()];
         $this->startScene();
 
         return $this;
     }
 
+    /**
+     * Summary of isPlayerReady
+     * @param \App\Entity\Player $player
+     * @throws \InvalidArgumentException
+     * @return bool
+     */
     public function isPlayerReady(Player $player): bool
     {
-        if (null === $player->getId()) {
-            throw new \Exception('Invalid player id in ready logs of scene '.$this->getId());
+        $id = $player->getId();
+        if (null === $id) {
+            throw new \InvalidArgumentException('Invalid player id in ready logs of scene ' . (string) $this->getId());
         }
 
-        return key_exists($player->getId(), $this->readyLogs) && $this->readyLogs[$player->getId()]['readyStatus'];
+        return key_exists($id, $this->readyLogs) && $this->readyLogs[$id]['readyStatus'];
     }
 
+    /**
+     * Summary of startScene
+     * @throws \InvalidArgumentException
+     * @return void
+     */
     private function startScene(): void
     {
-        if (null === $this->getGame()) {
-            throw new \Exception('Invalid game, cannot start scene ');
+        $game = $this->getGame();
+        if (null === $game) {
+            throw new \InvalidArgumentException('Invalid game, cannot start scene ');
         }
         $nbReadyPlayer = 0;
         foreach ($this->readyLogs as $key => $log) {
-            $foundPlayer = $this->getGame()->getPlayers()->findFirst(function (int $index, Player $player) use ($key): bool {
+            $foundPlayer = $game->getPlayers()->findFirst(function (int $_index, Player $player) use ($key): bool {
                 return $player->getId() === $key;
             });
             if (null === $foundPlayer) {
-                throw new \Exception('Invalid player id '.$key.' in ready logs of scene '.$this->getId());
+                throw new \InvalidArgumentException('Invalid player id '
+                . $key
+                . ' in ready logs of scene '
+                . (string) $this->getId());
             }
             if (key_exists('readyStatus', $log) && $log['readyStatus']) {
                 ++$nbReadyPlayer;
             }
         }
-        if ($nbReadyPlayer === $this->getGame()->getMaxPlayers()) {
+        if ($nbReadyPlayer === $game->getMaxPlayers()) {
             $this->setStartedAt(new \DateTimeImmutable('+10 seconds'));
         }
     }
@@ -356,7 +377,7 @@ class Scene
     /**
      * Get the value of finishedAt.
      */
-    public function getFinishedAt(): ?\DateTimeImmutable
+    public function getFinishedAt(): null|\DateTimeImmutable
     {
         return $this->finishedAt;
     }
@@ -364,7 +385,7 @@ class Scene
     /**
      * Set the value of finishedAt.
      */
-    public function setFinishedAt(?\DateTimeImmutable $finishedAt): self
+    public function setFinishedAt(null|\DateTimeImmutable $finishedAt): self
     {
         $this->finishedAt = $finishedAt;
 

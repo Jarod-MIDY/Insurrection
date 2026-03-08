@@ -10,6 +10,13 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/player/{player}/role-edit', name: 'app_player_role_edit')]
 class RoleEditController extends AbstractController
 {
+    /**
+     * Summary of __invoke
+     * @param \App\Entity\Player $player
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     * @throws \LogicException
+     * @return Response|\Symfony\Component\HttpFoundation\RedirectResponse
+     */
     public function __invoke(Player $player): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');

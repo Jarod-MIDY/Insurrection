@@ -20,34 +20,31 @@ class Game
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    public ?int $id = null;
+    public null|int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $name = null;
+    private null|string $name = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $subject = null;
+    private null|string $subject = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $thingsToTalkAbout = null;
+    private null|string $thingsToTalkAbout = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $thingsToHalfTalk = null;
+    private null|string $thingsToHalfTalk = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $banedTopics = null;
+    private null|string $banedTopics = null;
 
     /**
      * @var Collection<int, Player>
      */
-    #[Assert\Count(min: 0, max: 8, )]
+    #[Assert\Count(min: 0, max: 8)]
     #[ORM\OneToMany(targetEntity: Player::class, mappedBy: 'game', orphanRemoval: true)]
     private Collection $players;
 
-    #[Assert\Range(
-        min: 5,
-        max: 8,
-    )]
+    #[Assert\Range(min: 5, max: 8)]
     #[ORM\Column]
     private int $maxPlayers = 8;
 
@@ -60,13 +57,13 @@ class Game
 
     #[ORM\ManyToOne(inversedBy: 'games')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $author = null;
+    private null|User $author = null;
 
     #[ORM\Column(enumType: GameState::class)]
-    private ?GameState $state = null;
+    private null|GameState $state = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $password = null;
+    private null|string $password = null;
 
     public function __construct()
     {
@@ -74,12 +71,12 @@ class Game
         $this->scenes = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId(): null|int
     {
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getName(): null|string
     {
         return $this->name;
     }
@@ -91,48 +88,48 @@ class Game
         return $this;
     }
 
-    public function getSubject(): ?string
+    public function getSubject(): null|string
     {
         return $this->subject;
     }
 
-    public function setSubject(?string $subject): static
+    public function setSubject(null|string $subject): static
     {
         $this->subject = $subject;
 
         return $this;
     }
 
-    public function getThingsToTalkAbout(): ?string
+    public function getThingsToTalkAbout(): null|string
     {
         return $this->thingsToTalkAbout;
     }
 
-    public function setThingsToTalkAbout(?string $thingsToTalkAbout): static
+    public function setThingsToTalkAbout(null|string $thingsToTalkAbout): static
     {
         $this->thingsToTalkAbout = $thingsToTalkAbout;
 
         return $this;
     }
 
-    public function getThingsToHalfTalk(): ?string
+    public function getThingsToHalfTalk(): null|string
     {
         return $this->thingsToHalfTalk;
     }
 
-    public function setThingsToHalfTalk(?string $thingsToHalfTalk): static
+    public function setThingsToHalfTalk(null|string $thingsToHalfTalk): static
     {
         $this->thingsToHalfTalk = $thingsToHalfTalk;
 
         return $this;
     }
 
-    public function getBanedTopics(): ?string
+    public function getBanedTopics(): null|string
     {
         return $this->banedTopics;
     }
 
-    public function setBanedTopics(?string $banedTopics): static
+    public function setBanedTopics(null|string $banedTopics): static
     {
         $this->banedTopics = $banedTopics;
 
@@ -177,7 +174,11 @@ class Game
         return $this->scenes;
     }
 
-    public function getCurrentScene(): ?Scene
+    /**
+     * Summary of getCurrentScene
+     * @return null|Scene
+     */
+    public function getCurrentScene(): null|Scene
     {
         return false === $this->scenes->last() ? null : $this->scenes->last();
     }
@@ -204,12 +205,18 @@ class Game
         return $this;
     }
 
-    public function getAuthor(): ?User
+    public function getAuthor(): null|User
     {
         return $this->author;
     }
 
-    public function setAuthor(UserInterface|User|null $author): static
+    /**
+     * Summary of setAuthor
+     * @param \Symfony\Component\Security\Core\User\UserInterface|\App\Entity\User|null $author
+     * @throws \InvalidArgumentException
+     * @return Self
+     */
+    public function setAuthor(UserInterface|User|null $author): self
     {
         if (!($author instanceof User || null === $author)) {
             throw new \InvalidArgumentException();
@@ -219,7 +226,7 @@ class Game
         return $this;
     }
 
-    public function getState(): ?GameState
+    public function getState(): null|GameState
     {
         return $this->state;
     }
@@ -231,7 +238,7 @@ class Game
         return $this;
     }
 
-    public function getPassword(): ?string
+    public function getPassword(): null|string
     {
         return $this->password;
     }
@@ -246,7 +253,7 @@ class Game
     /**
      * @return GameRoles[]
      */
-    public function getRoles(?string $type = null): array
+    public function getRoles(null|string $type = null): array
     {
         if ('trajectories' === $type) {
             return GameRoles::getTrajectories();
@@ -271,6 +278,8 @@ class Game
     }
 
     /**
+     * @throws \TypeError
+     * @throws \ValueError
      * @return Player[]
      */
     public function getPlayersWithPreferedRole(string|GameRoles $role): array
@@ -292,7 +301,7 @@ class Game
     public function getCurrentTotalRadianceTokens(): int
     {
         return $this->getPlayers()->reduce(function (int $carry, Player $player) {
-            return $carry + $player->getRadianceToken();
+            return $carry + (int) $player->getRadianceToken();
         }, 0);
     }
 
@@ -301,12 +310,12 @@ class Game
         return $this->getCurrentTotalRadianceTokens() >= $this->getRadianceTokenLimit();
     }
 
-    public function userIsPlayer(?User $user): bool
+    public function userIsPlayer(null|User $user): bool
     {
         if (null === $user) {
             return false;
         }
-        $player = $this->players->findFirst(function (int $index, Player $player) use ($user): bool {
+        $player = $this->players->findFirst(function (int $_index, Player $player) use ($user): bool {
             return $player->getLinkedUser() === $user;
         });
 

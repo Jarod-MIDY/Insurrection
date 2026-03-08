@@ -12,7 +12,7 @@ class UpdateLoby extends AbstractHubEventHandler
         ],
     ];
 
-    public function __invoke(string $id = ''): void
+    public function __invoke(): void
     {
         $this->publish('UpdateLoby', $this->toJson(self::DATA));
     }

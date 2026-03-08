@@ -15,6 +15,12 @@ class DeleteFormComponent
     public string $warning = 'Êtes-vous sûr de bien vouloir supprimer cet élément ?';
     public bool $turbo = true;
 
+    /**
+     * Summary of __construct
+     * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
+     * @throws \Exception
+     * @throws \Symfony\Component\HttpFoundation\Exception\SessionNotFoundException
+     */
     public function __construct(RequestStack $requestStack)
     {
         $request = $requestStack->getCurrentRequest();

@@ -18,6 +18,17 @@ use Symfony\UX\Turbo\TurboBundle;
 #[Route('/scene/{scene}/vote', name: 'app_scene_leader_vote')]
 class LeaderVoteController extends AbstractController
 {
+    /**
+     * Summary of __invoke
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \App\Repository\PlayerRepository $playerRepository
+     * @param \App\Repository\SceneRepository $sceneRepository
+     * @param \App\Repository\SceneLeaderVoteRepository $sceneLeaderVoteRepository
+     * @param \App\Entity\Scene $scene
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     * @throws \LogicException
+     * @return Response|\Symfony\Component\HttpFoundation\RedirectResponse
+     */
     public function __invoke(
         Request $request,
         PlayerRepository $playerRepository,
@@ -72,12 +83,12 @@ class LeaderVoteController extends AbstractController
                     return $response;
                 }
                 $max = max($votesAsNumber);
-                $maxVotes = array_filter($votesAsNumber, fn ($value) => $value === $max);
+                $maxVotes = array_filter($votesAsNumber, fn($value) => $value === $max);
                 if ([] === $maxVotes) {
                     return $response;
                 }
                 $randLeader = array_rand($maxVotes);
-                $leader = $game->getPlayers()->filter(fn (Player $player) => $player->getId() === $randLeader)->first();
+                $leader = $game->getPlayers()->filter(fn(Player $player) => $player->getId() === $randLeader)->first();
                 if ($leader instanceof Player) {
                     $scene->setLeader($leader);
                     $sceneRepository->save($scene, true);

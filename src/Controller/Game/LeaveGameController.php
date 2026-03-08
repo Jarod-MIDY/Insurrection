@@ -13,11 +13,17 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/game/leave/{game}', name: 'app_game_leave')]
 class LeaveGameController extends AbstractController
 {
-    public function __invoke(
-        Game $game,
-        UpdateLoby $updateLobySSE,
-        PlayerRepository $playerRepository,
-    ): Response {
+    /**
+     * Summary of __invoke
+     * @param \App\Entity\Game $game
+     * @param \App\MercureEvent\Game\UpdateLoby $updateLobySSE
+     * @param \App\Repository\PlayerRepository $playerRepository
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     * @throws \LogicException
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function __invoke(Game $game, UpdateLoby $updateLobySSE, PlayerRepository $playerRepository): Response
+    {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
         $player = $playerRepository->findOneBy(['game' => $game, 'linkedUser' => $this->getUser()]);
         if (!$player instanceof Player || $player->getLinkedUser() === $game->getAuthor()) {

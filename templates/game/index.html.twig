@@ -35,7 +35,7 @@
                 mercureUrl: mercure('GameUpdated' ~ game.id),
                 mercureEventFlag: 'GameUpdated' ~ game.id,
             }) }} >
-        <turbo-frame id="GameContent" src="{{ path('app_game_show', {game: game.id}) }}">
+        <turbo-frame id="GameContent" src="{{ path('app_game_show', {game: game.id}) }}" class="flex">
         </turbo-frame>
     </section>
 {% endblock %}

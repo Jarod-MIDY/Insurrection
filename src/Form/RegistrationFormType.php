@@ -16,40 +16,40 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class RegistrationFormType extends AbstractType
 {
+    #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder
-            ->add('username', TextType::class, [
-                'label' => 'Identifiant',
-            ])
-            ->add('email', EmailType::class, [
-                'label' => 'Couriel',
-                'constraints' => [
-                    new NotBlank([
-                    ]),
-                ],
-            ])
-            ->add('agreeTerms', CheckboxType::class, [
-                'mapped' => false,
-                'constraints' => [
-                    new IsTrue(),
-                ],
-            ])
-            ->add('plainPassword', PasswordType::class, [
-                'label' => 'Mot de passe',
-                'mapped' => false,
-                'attr' => ['autocomplete' => 'new-password'],
-                'constraints' => [
-                    new NotBlank(),
-                    new Length([
-                        'min' => 6,
-                        'max' => 4096,
-                    ]),
-                ],
-            ])
-        ;
+        $builder->add('username', TextType::class, [
+            'label' => 'Identifiant',
+        ])->add('email', EmailType::class, [
+            'label' => 'Couriel',
+            'constraints' => [
+                new NotBlank([]),
+            ],
+        ])->add('agreeTerms', CheckboxType::class, [
+            'mapped' => false,
+            'constraints' => [
+                new IsTrue(),
+            ],
+        ])->add('plainPassword', PasswordType::class, [
+            'label' => 'Mot de passe',
+            'mapped' => false,
+            'attr' => ['autocomplete' => 'new-password'],
+            'constraints' => [
+                new NotBlank(),
+                new Length(min: 6, max: 4096),
+            ],
+        ]);
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param OptionsResolver $resolver
+     * @throws \Symfony\Component\OptionsResolver\Exception\AccessException
+     * @return void
+     */
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

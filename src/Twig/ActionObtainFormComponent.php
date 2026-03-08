@@ -30,7 +30,7 @@ class ActionObtainFormComponent extends AbstractController
     public Player $player;
 
     #[LiveProp]
-    public ?TokenAction $initialFormData = null;
+    public null|TokenAction $initialFormData = null;
 
     public function __construct()
     {
@@ -87,10 +87,7 @@ class ActionObtainFormComponent extends AbstractController
         }
         // check if using influence token
         if ($actionRole !== $player->getRole()) {
-            $influenceToken = $influenceTokenRepository->findUsableToken(
-                $player,
-                $actionRole,
-            );
+            $influenceToken = $influenceTokenRepository->findUsableToken($player, $actionRole);
             if (null === $influenceToken) {
                 $this->addFlash('error', 'Le jeton d\'influence utiliser ne semble pas exister');
 

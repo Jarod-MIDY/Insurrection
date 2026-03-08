@@ -17,17 +17,17 @@ class Character
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    public ?int $id = null;
+    public null|int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'characters')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Player $owner = null;
+    private null|Player $owner = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $name = null;
+    private null|string $name = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $features = null;
+    private null|string $features = null;
 
     /**
      * @var Collection<int, Scene>
@@ -39,7 +39,7 @@ class Character
     private bool $isDead = false;
 
     #[ORM\ManyToOne(inversedBy: 'deadCharacters')]
-    private ?Scene $dyingScene = null;
+    private null|Scene $dyingScene = null;
 
     public function __construct()
     {
@@ -48,27 +48,27 @@ class Character
 
     public function __toString(): string
     {
-        return $this->getName().' ('.$this->getId().')';
+        return (string) $this->getName() . ' (' . (string) $this->getId() . ')';
     }
 
-    public function getId(): ?int
+    public function getId(): null|int
     {
         return $this->id;
     }
 
-    public function getOwner(): ?Player
+    public function getOwner(): null|Player
     {
         return $this->owner;
     }
 
-    public function setOwner(?Player $owner): static
+    public function setOwner(null|Player $owner): static
     {
         $this->owner = $owner;
 
         return $this;
     }
 
-    public function getName(): ?string
+    public function getName(): null|string
     {
         return $this->name;
     }
@@ -80,12 +80,12 @@ class Character
         return $this;
     }
 
-    public function getFeatures(): ?string
+    public function getFeatures(): null|string
     {
         return $this->features;
     }
 
-    public function setFeatures(?string $features): static
+    public function setFeatures(null|string $features): static
     {
         $this->features = $features;
 
@@ -131,12 +131,12 @@ class Character
         return $this;
     }
 
-    public function getDyingScene(): ?Scene
+    public function getDyingScene(): null|Scene
     {
         return $this->dyingScene;
     }
 
-    public function setDyingScene(?Scene $dyingScene): static
+    public function setDyingScene(null|Scene $dyingScene): static
     {
         $this->dyingScene = $dyingScene;
 

@@ -11,6 +11,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class RolesSelectionFormType extends AbstractType
 {
+    #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('trajectories', EnumType::class, [
@@ -24,8 +25,7 @@ class RolesSelectionFormType extends AbstractType
             'multiple' => true,
             'expanded' => true,
             'required' => false,
-        ])
-        ->add('rightsOfWay', EnumType::class, [
+        ])->add('rightsOfWay', EnumType::class, [
             'class' => GameRoles::class,
             'choice_label' => function (GameRoles $choice) {
                 return $choice->getDescription();
@@ -39,6 +39,14 @@ class RolesSelectionFormType extends AbstractType
         ]);
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param OptionsResolver $resolver
+     * @throws \Symfony\Component\OptionsResolver\Exception\AccessException
+     * @return void
+     */
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

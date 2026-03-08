@@ -46,7 +46,13 @@ class StarSheet extends AbstractTrajSheet implements CharacterSheet
 
     public string $shineIn = '';
 
-    public function __construct(?InformationCollection $data = null)
+    /**
+     * Summary of __construct
+     * @throws \TypeError
+     * @throws \ValueError
+     * @param null|\App\Records\InformationCollection $data
+     */
+    public function __construct(null|InformationCollection $data = null)
     {
         if (null !== $data) {
             parent::__construct($data);
@@ -56,8 +62,21 @@ class StarSheet extends AbstractTrajSheet implements CharacterSheet
     }
 
     /**
-     * @return StarArray
+     * @return array{
+     *      name: string,
+     *      features: string,
+     *      bestQuality: string,
+     *      shineIn: string,
+     *      ROWQuestion: string,
+     *      ROWRole: string|null,
+     *      ROWAnswer: string,
+     *      trajQuestion: string,
+     *      trajRole: string|null,
+     *      trajAnswer: string,
+     *      notes: string,
+     * }
      */
+    #[\Override]
     public function __serialize(): array
     {
         return [
@@ -76,8 +95,23 @@ class StarSheet extends AbstractTrajSheet implements CharacterSheet
     }
 
     /**
-     * @param StarArray $data
+     * @param array{
+     *      name: string,
+     *      features: string,
+     *      bestQuality: string,
+     *      shineIn: string,
+     *      ROWQuestion: string,
+     *      ROWRole: string|null,
+     *      ROWAnswer: string,
+     *      trajQuestion: string,
+     *      trajRole: string|null,
+     *      trajAnswer: string,
+     *      notes: string,
+     * } $data
+     * @throws \TypeError
+     * @throws \ValueError
      */
+    #[\Override]
     public function __unserialize(array $data): void
     {
         $this->name = $data['name'];
@@ -88,8 +122,8 @@ class StarSheet extends AbstractTrajSheet implements CharacterSheet
         $this->ROWAnswer = $data['ROWAnswer'];
         $this->trajQuestion = $data['trajQuestion'];
         $this->trajAnswer = $data['trajAnswer'];
-        $this->ROWRole = (bool) $data['ROWRole'] ? GameRoles::tryFrom($data['ROWRole']) : null;
-        $this->trajRole = (bool) $data['trajRole'] ? GameRoles::tryFrom($data['trajRole']) : null;
+        $this->ROWRole = (bool) $data['ROWRole'] ? GameRoles::tryFrom($data['ROWRole'] ?? 'null') : null;
+        $this->trajRole = (bool) $data['trajRole'] ? GameRoles::tryFrom($data['trajRole'] ?? 'null') : null;
         $this->notes = $data['notes'];
     }
 
@@ -105,6 +139,7 @@ class StarSheet extends AbstractTrajSheet implements CharacterSheet
         return $renderData;
     }
 
+    #[\Override]
     public function isReady(): bool
     {
         return '' !== $this->bestQuality && '' !== $this->shineIn && $this->partialReady();

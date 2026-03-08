@@ -5,17 +5,6 @@ namespace App\Records;
 use App\Enum\GameRoles;
 use App\Interface\CharacterSheet;
 
-/**
- * @phpstan-type OrderArray array{
- *      fearedBecause: string,
- *      accountableTo: string,
- *      blamedFor: string,
- *      notes: string,
- *      chosenQuestion: string,
- *      chosenTrajectorie: string|null,
- *      answer: string
- * }
- */
 class OrderSheet extends AbstractRowSheet implements CharacterSheet
 {
     /**
@@ -51,7 +40,13 @@ class OrderSheet extends AbstractRowSheet implements CharacterSheet
     public string $fearedBecause = '';
     public string $accountableTo = '';
 
-    public function __construct(?InformationCollection $data = null)
+    /**
+     * Summary of __construct
+     * @throws \TypeError
+     * @throws \ValueError
+     * @param null|\App\Records\InformationCollection $data
+     */
+    public function __construct(null|InformationCollection $data = null)
     {
         if (null !== $data) {
             parent::__construct($data);
@@ -61,7 +56,17 @@ class OrderSheet extends AbstractRowSheet implements CharacterSheet
     }
 
     /**
-     * @param OrderArray $data
+     * @param array{
+     *      fearedBecause: string,
+     *      accountableTo: string,
+     *      blamedFor: string,
+     *      notes: string,
+     *      chosenQuestion: string,
+     *      chosenTrajectorie: string|null,
+     *      answer: string
+     * } $data
+     * @throws \TypeError
+     * @throws \ValueError
      */
     public function __unserialize(array $data): void
     {
@@ -71,11 +76,19 @@ class OrderSheet extends AbstractRowSheet implements CharacterSheet
         $this->notes = $data['notes'];
         $this->chosenQuestion = $data['chosenQuestion'];
         $this->answer = $data['answer'];
-        $this->chosenTrajectorie = GameRoles::from($data['chosenTrajectorie'] ?? '');
+        $this->chosenTrajectorie = GameRoles::from($data['chosenTrajectorie'] ?? 'null');
     }
 
     /**
-     * @return OrderArray
+     * @return array{
+     *      fearedBecause: string,
+     *      accountableTo: string,
+     *      blamedFor: string,
+     *      notes: string,
+     *      chosenQuestion: string,
+     *      chosenTrajectorie: string|null,
+     *      answer: string
+     * }
      */
     public function __serialize(): array
     {

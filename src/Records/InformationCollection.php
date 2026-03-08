@@ -27,7 +27,7 @@ class InformationCollection
         return $this->getValues();
     }
 
-    public function addValue(string $key, ?string $value): void
+    public function addValue(string $key, null|string $value): void
     {
         $this->informations[$key] = $value;
     }

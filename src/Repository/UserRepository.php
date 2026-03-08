@@ -22,6 +22,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     /**
      * Used to upgrade (rehash) the user's password automatically over time.
      */
+    #[\Override]
     public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
     {
         if (!$user instanceof User) {
@@ -47,7 +48,6 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     //            ->getResult()
     //        ;
     //    }
-
     //    public function findOneBySomeField($value): ?User
     //    {
     //        return $this->createQueryBuilder('u')

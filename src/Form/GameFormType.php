@@ -16,42 +16,40 @@ class GameFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder
-            ->add('name', TextType::class, [
-                'label' => 'Nom de la session',
-                'constraints' => [
-                    new NotBlank(),
-                    new NotNull(),
-                ],
-            ])
-            ->add('maxPlayers', ChoiceType::class, [
-                'label' => 'Nombre de Joueurs Maximum',
-                'autocomplete' => true,
-                'choices' => [
-                    '5' => 5,
-                    '6' => 6,
-                    '7' => 7,
-                    '8' => 8,
-                ],
-            ])
-            ->add('subject', TextareaType::class, [
-                'label' => 'Explication du Thème',
-            ])
-            ->add('thingsToTalkAbout', TextareaType::class, [
-                'label' => 'Sujets à Aborder',
-            ])
-            ->add('thingsToHalfTalk', TextareaType::class, [
-                'label' => 'Sujets Voilés',
-            ])
-            ->add('banedTopics', TextareaType::class, [
-                'label' => 'Sujets Bannis',
-            ])
-            ->add('password', TextType::class, [
-                'label' => 'Mot de Passe',
-            ])
-        ;
+        $builder->add('name', TextType::class, [
+            'label' => 'Nom de la session',
+            'constraints' => [
+                new NotBlank(),
+                new NotNull(),
+            ],
+        ])->add('maxPlayers', ChoiceType::class, [
+            'label' => 'Nombre de Joueurs Maximum',
+            'autocomplete' => true,
+            'choices' => [
+                '5' => 5,
+                '6' => 6,
+                '7' => 7,
+                '8' => 8,
+            ],
+        ])->add('subject', TextareaType::class, [
+            'label' => 'Explication du Thème',
+        ])->add('thingsToTalkAbout', TextareaType::class, [
+            'label' => 'Sujets à Aborder',
+        ])->add('thingsToHalfTalk', TextareaType::class, [
+            'label' => 'Sujets Voilés',
+        ])->add('banedTopics', TextareaType::class, [
+            'label' => 'Sujets Bannis',
+        ])->add('password', TextType::class, [
+            'label' => 'Mot de Passe',
+        ]);
     }
 
+    /**
+     * @param OptionsResolver $resolver
+     * @throws \Symfony\Component\OptionsResolver\Exception\AccessException
+     * @return void
+     */
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

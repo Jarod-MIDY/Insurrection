@@ -91,10 +91,10 @@
                 <p class="info-text">
                     Vous êtes actuelement dans l'entre scène. Vous êtes invité(e) à discuter entre vous de scènes possible avant de voter pour la scène que vous préférez en choisisant son joueur ou sa joueuse corespondante. Vous pouvez voter pour vous même.
                 </p>
-                <a class="button" href="{{ path('app_scene_leader_vote', {scene: currentScene.id}) }}"
+                <button class="button" data-route="{{ path('app_scene_leader_vote', {scene: currentScene.id}) }}"
                 {{ stimulus_action('modal', 'open') }}>
                     Voter pour la prochaine scène
-                </a>
+                </button>
             {% endif %}
         </div>
         <aside class="game-board-aside">

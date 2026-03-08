@@ -11,17 +11,23 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class NewSceneFormType extends AbstractType
 {
+    #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('estimatedDuration', NumberType::class, [
             'label' => 'Durée estimée (en minutes)',
-        ])
-        ->add('goal', TextareaType::class, [
+        ])->add('goal', TextareaType::class, [
             'label' => 'Description de la situation initiale et du but de la scène',
-        ])
-        ;
+        ]);
     }
 
+    /**
+     * Summary of configureOptions
+     * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
+     * @throws \Symfony\Component\OptionsResolver\Exception\AccessException
+     * @return void
+     */
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

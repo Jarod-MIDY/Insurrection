@@ -5,17 +5,6 @@ namespace App\Records;
 use App\Enum\GameRoles;
 use App\Interface\CharacterSheet;
 
-/**
- * @phpstan-type PowerArray array{
- *      legitimacy: string,
- *      importantAgentType: string,
- *      blamedFor: string,
- *      notes: string,
- *      chosenQuestion: string,
- *      chosenTrajectorie: string|null,
- *      answer: string
- * }
- */
 class PowerSheet extends AbstractRowSheet implements CharacterSheet
 {
     /**
@@ -51,7 +40,13 @@ class PowerSheet extends AbstractRowSheet implements CharacterSheet
     public string $legitimacy = '';
     public string $importantAgentType = '';
 
-    public function __construct(?InformationCollection $data = null)
+    /**
+     * Summary of __construct
+     * @throws \TypeError
+     * @throws \ValueError
+     * @param null|\App\Records\InformationCollection $data
+     */
+    public function __construct(null|InformationCollection $data = null)
     {
         if (null !== $data) {
             parent::__construct($data);
@@ -61,8 +56,17 @@ class PowerSheet extends AbstractRowSheet implements CharacterSheet
     }
 
     /**
-     * @return PowerArray
+     * @return array{
+     *      legitimacy: string,
+     *      importantAgentType: string,
+     *      blamedFor: string,
+     *      notes: string,
+     *      chosenQuestion: string,
+     *      chosenTrajectorie: string|null,
+     *      answer: string
+     * }
      */
+    #[\Override]
     public function __serialize(): array
     {
         return [
@@ -77,8 +81,19 @@ class PowerSheet extends AbstractRowSheet implements CharacterSheet
     }
 
     /**
-     * @param PowerArray $data
+     * @param array{
+     *      legitimacy: string,
+     *      importantAgentType: string,
+     *      blamedFor: string,
+     *      notes: string,
+     *      chosenQuestion: string,
+     *      chosenTrajectorie: string|null,
+     *      answer: string
+     * } $data
+     * @throws \TypeError
+     * @throws \ValueError
      */
+    #[\Override]
     public function __unserialize(array $data): void
     {
         $this->legitimacy = $data['legitimacy'];
@@ -87,7 +102,7 @@ class PowerSheet extends AbstractRowSheet implements CharacterSheet
         $this->notes = $data['notes'];
         $this->chosenQuestion = $data['chosenQuestion'];
         $this->answer = $data['answer'];
-        $this->chosenTrajectorie = GameRoles::from($data['chosenTrajectorie'] ?? '');
+        $this->chosenTrajectorie = GameRoles::from($data['chosenTrajectorie'] ?? 'null');
     }
 
     public function getRenderData(): RoleRender
@@ -102,6 +117,7 @@ class PowerSheet extends AbstractRowSheet implements CharacterSheet
         return $renderData;
     }
 
+    #[\Override]
     public function isReady(): bool
     {
         return '' !== $this->legitimacy && '' !== $this->importantAgentType && $this->partialReady();

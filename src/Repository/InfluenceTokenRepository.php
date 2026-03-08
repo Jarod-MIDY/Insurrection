@@ -23,8 +23,18 @@ class InfluenceTokenRepository extends ServiceEntityRepository
         parent::__construct($registry, InfluenceToken::class);
     }
 
-    public function findUsableToken(Player $receiver, GameRoles $senderRole): ?InfluenceToken
+    /**
+     * Summary of findUsableToken
+     * @param \App\Entity\Player $receiver
+     * @param \App\Enum\GameRoles $senderRole
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @return InfluenceToken|null
+     */
+    public function findUsableToken(Player $receiver, GameRoles $senderRole): null|InfluenceToken
     {
+        /**
+         * @var InfluenceToken|null $result
+         */
         $result = $this->createQueryBuilder('influenceToken')
             ->join('influenceToken.sender', 'sender')
             ->where('influenceToken.receiver = :receiver')
@@ -36,6 +46,6 @@ class InfluenceTokenRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
 
-        return $result instanceof InfluenceToken ? $result : null;
+        return $result;
     }
 }

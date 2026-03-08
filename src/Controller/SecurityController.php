@@ -18,7 +18,9 @@ class SecurityController extends AbstractController
 
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
-        $view = null !== $request->headers->get('Turbo-Frame') ? 'security/_modal_login.html.twig' : 'security/login.html.twig';
+        $view = null !== $request->headers->get('Turbo-Frame')
+            ? 'security/_modal_login.html.twig'
+            : 'security/login.html.twig';
 
         return $this->render($view, [
             'last_username' => $lastUsername,
@@ -29,6 +31,8 @@ class SecurityController extends AbstractController
     #[Route(path: '/logout', name: 'app_logout')]
     public function logout(): void
     {
-        throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+        throw new \LogicException(
+            'This method can be blank - it will be intercepted by the logout key on your firewall.',
+        );
     }
 }

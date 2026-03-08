@@ -12,16 +12,22 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/player/{player}/clear-roles-preferences', name: 'app_player_clear_roles_preferences')]
 class ClearPreferedRolesController extends AbstractController
 {
-    public function __invoke(
-        Player $player,
-        PlayerRepository $playerRepository,
-        UpdateGame $updateGameSSE,
-    ): Response {
+    /**
+     * Summary of __invoke
+     * @param \App\Entity\Player $player
+     * @param \App\Repository\PlayerRepository $playerRepository
+     * @param \App\MercureEvent\Game\UpdateGame $updateGameSSE
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     * @throws \LogicException
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function __invoke(Player $player, PlayerRepository $playerRepository, UpdateGame $updateGameSSE): Response
+    {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
         if ($this->getUser() !== $player->getLinkedUser()) {
             throw $this->createAccessDeniedException();
         }
-        if ([] === $player->getPreferedRoles() || null === $player->getPreferedRoles()) {
+        if ((bool) $player->getPreferedRoles()) {
             return $this->redirectToRoute('app_player_save_roles_preferences', [
                 'player' => $player->getId(),
             ]);

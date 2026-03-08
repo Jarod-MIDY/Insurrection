@@ -8,11 +8,17 @@ abstract class AbstractRowSheet
 {
     public string $notes = '';
     public string $chosenQuestion = '';
-    public ?GameRoles $chosenTrajectorie = null;
+    public null|GameRoles $chosenTrajectorie = null;
     public string $answer = '';
     public string $blamedFor = '';
 
-    public function __construct(?InformationCollection $data = null)
+    /**
+     * Summary of __construct
+     * @throws \ValueError
+     * @throws \TypeError
+     * @param null|\App\Records\InformationCollection $data
+     */
+    public function __construct(null|InformationCollection $data = null)
     {
         if (null !== $data) {
             $this->notes = $data->getValue('notes');

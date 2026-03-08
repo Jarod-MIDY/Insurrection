@@ -28,8 +28,7 @@ class PlayerReadyComponent
     public function __construct(
         private PlayerRepository $playerRepository,
         private UpdatePlayerList $updateGameSSE,
-    ) {
-    }
+    ) {}
 
     public function mount(Player $player): void
     {
@@ -37,14 +36,15 @@ class PlayerReadyComponent
         $this->readyToPlay = $player->isReadyToPlay();
     }
 
-    #[LiveAction()]
+    #[LiveAction]
     public function changeReadyStatus(): void
     {
         $player = $this->playerRepository->find($this->playerId);
-        if (null === $player || null === $player->getRole()) {
+        $role = $player?->getRole();
+        if ($role === null || $player === null) {
             return;
         }
-        $characterSheet = $player->getRole()->getCharacterSheet($player->getInformations());
+        $characterSheet = $role->getCharacterSheet($player->getInformations());
         if (!$characterSheet->isReady()) {
             $this->dispatchBrowserEvent('characterSheetNotReady');
 

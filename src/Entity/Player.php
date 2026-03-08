@@ -22,18 +22,18 @@ class Player
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    public ?int $id = null;
+    public null|int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'players')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $linkedUser = null;
+    private null|User $linkedUser = null;
 
     #[ORM\ManyToOne(inversedBy: 'players')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Game $game = null;
+    private null|Game $game = null;
 
     #[ORM\Column(enumType: GameRoles::class, nullable: true)]
-    private ?GameRoles $role = null;
+    private null|GameRoles $role = null;
 
     /** @var array<string, string|null> */
     #[ORM\Column]
@@ -46,7 +46,7 @@ class Player
     private Collection $characters;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $notes = null;
+    private null|string $notes = null;
 
     #[ORM\Column]
     private int $radianceToken = 0;
@@ -61,17 +61,14 @@ class Player
      * @var Collection<int, InfluenceToken>
      */
     #[ORM\OneToMany(targetEntity: InfluenceToken::class, mappedBy: 'sender', orphanRemoval: true)]
-    #[Assert\Count(
-        min: 0,
-        max: 3,
-    )]
+    #[Assert\Count(min: 0, max: 3)]
     private Collection $givenInfluenceTokens;
 
     /**
      * @var GameRoles[]|null
      */
     #[ORM\Column(type: Types::SIMPLE_ARRAY, nullable: true, enumType: GameRoles::class)]
-    private ?array $preferedRoles = null;
+    private null|array $preferedRoles = null;
 
     #[ORM\Column]
     private bool $readyToPlay = false;
@@ -90,12 +87,12 @@ class Player
         $this->givenInfluenceTokens = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId(): null|int
     {
         return $this->id;
     }
 
-    public function getLinkedUser(): ?User
+    public function getLinkedUser(): null|User
     {
         return $this->linkedUser;
     }
@@ -110,19 +107,19 @@ class Player
         return $this;
     }
 
-    public function getGame(): ?Game
+    public function getGame(): null|Game
     {
         return $this->game;
     }
 
-    public function setGame(?Game $game): static
+    public function setGame(null|Game $game): static
     {
         $this->game = $game;
 
         return $this;
     }
 
-    public function getRole(): ?GameRoles
+    public function getRole(): null|GameRoles
     {
         return $this->role;
     }
@@ -193,7 +190,7 @@ class Player
      */
     public function getGivenInfluenceToken(): Collection
     {
-        return $this->givenInfluenceTokens->filter(fn (InfluenceToken $token): bool => !$token->isIsUsed());
+        return $this->givenInfluenceTokens->filter(fn(InfluenceToken $token): bool => !$token->isIsUsed());
     }
 
     public function addGivenInfluenceToken(InfluenceToken $token): static
@@ -218,19 +215,19 @@ class Player
         return $this;
     }
 
-    public function getNotes(): ?string
+    public function getNotes(): null|string
     {
         return $this->notes;
     }
 
-    public function setNotes(?string $notes): static
+    public function setNotes(null|string $notes): static
     {
         $this->notes = $notes;
 
         return $this;
     }
 
-    public function getRadianceToken(): ?int
+    public function getRadianceToken(): null|int
     {
         return $this->radianceToken;
     }
@@ -252,13 +249,13 @@ class Player
      */
     public function getInfluenceTokens(): Collection
     {
-        return $this->influenceTokens->filter(fn (InfluenceToken $token): bool => !$token->isIsUsed());
+        return $this->influenceTokens->filter(fn(InfluenceToken $token): bool => !$token->isIsUsed());
     }
 
     /**
      * @return GameRoles[]|null
      */
-    public function getPreferedRoles(): ?array
+    public function getPreferedRoles(): null|array
     {
         return $this->preferedRoles;
     }
@@ -266,7 +263,7 @@ class Player
     /**
      * @param GameRoles[]|null $preferedRoles
      */
-    public function setPreferedRoles(?array $preferedRoles): static
+    public function setPreferedRoles(null|array $preferedRoles): static
     {
         $this->preferedRoles = $preferedRoles;
 
@@ -315,10 +312,10 @@ class Player
         return $this;
     }
 
-    public function isReadyForSceneStart(): ?bool
+    public function isReadyForSceneStart(): null|bool
     {
         $lastScene = $this->game?->getScenes()->last();
 
-        return (false === $lastScene) || (null === $lastScene) ? false : $lastScene->isPlayerReady($this);
+        return false === $lastScene || null === $lastScene ? false : $lastScene->isPlayerReady($this);
     }
 }

@@ -34,17 +34,24 @@ class GameRepository extends ServiceEntityRepository
         }
     }
 
-    public function findUnfinishedOrNull(?User $author = null): ?Game
+    /**
+     * @param null|\App\Entity\User $author
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @return Game|null
+     */
+    public function findUnfinishedOrNull(null|User $author = null): null|Game
     {
+        /**
+         * @var Game|null $result
+         */
         $result = $this->createQueryBuilder('game')
             ->andWhere('game.author = :author')
             ->andWhere('game.state != :state')
             ->setParameter('state', GameState::CLOSED)
             ->setParameter('author', $author)
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getOneOrNullResult();
 
-        return $result instanceof Game ? $result : null;
+        return $result;
     }
 }

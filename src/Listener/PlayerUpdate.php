@@ -26,8 +26,7 @@ class PlayerUpdate
         private RolesSelector $rolesSelector,
         private SceneRepository $sceneRepository,
         private UpdateGame $updateGameSSE,
-    ) {
-    }
+    ) {}
 
     public function postUpdate(Player $savedPlayer): void
     {
@@ -88,7 +87,7 @@ class PlayerUpdate
         }
         $startRoleAttribution = true;
         foreach ($players as $player) {
-            if ([] === $player->getPreferedRoles() || null !== $player->getRole()) {
+            if (null !== $player->getRole() || (bool) $player->getPreferedRoles()) {
                 $startRoleAttribution = false;
                 break;
             }

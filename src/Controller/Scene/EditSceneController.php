@@ -14,11 +14,17 @@ use Symfony\UX\Turbo\TurboBundle;
 #[Route('/scene/{scene}', name: 'app_scene_edit')]
 class EditSceneController extends AbstractController
 {
-    public function __invoke(
-        Request $request,
-        Scene $scene,
-        SceneRepository $sceneRepository,
-    ): Response {
+    /**
+     * Summary of __invoke
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \App\Entity\Scene $scene
+     * @param \App\Repository\SceneRepository $sceneRepository
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     * @throws \LogicException
+     * @return Response|\Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function __invoke(Request $request, Scene $scene, SceneRepository $sceneRepository): Response
+    {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
         if ($scene->getLeader()?->getLinkedUser() !== $this->getUser()) {
             throw $this->createAccessDeniedException();

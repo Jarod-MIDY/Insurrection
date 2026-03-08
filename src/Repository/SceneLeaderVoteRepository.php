@@ -39,7 +39,6 @@ class SceneLeaderVoteRepository extends ServiceEntityRepository
     //            ->getResult()
     //        ;
     //    }
-
     //    public function findOneBySomeField($value): ?SceneLeaderVote
     //    {
     //        return $this->createQueryBuilder('s')

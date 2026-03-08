@@ -14,11 +14,17 @@ use Symfony\UX\Turbo\TurboBundle;
 #[Route('/player/{player}/character/edit/{character}', name: 'app_character_edit')]
 class EditPlayerCharacterController extends AbstractController
 {
-    public function __invoke(
-        Character $character,
-        Request $request,
-        CharacterRepository $characterRepository,
-    ): Response {
+    /**
+     * Summary of __invoke
+     * @param \App\Entity\Character $character
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \App\Repository\CharacterRepository $characterRepository
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     * @throws \LogicException
+     * @return Response|\Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function __invoke(Character $character, Request $request, CharacterRepository $characterRepository): Response
+    {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
         $player = $character->getOwner();
         if (null === $player) {

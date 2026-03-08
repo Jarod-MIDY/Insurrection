@@ -28,14 +28,14 @@ class ActionSendInfluenceTokenComponent extends AbstractController
     public function __construct(
         #[LiveProp]
         public InfluenceToken $initialFormData = new InfluenceToken(),
-    ) {
-    }
+    ) {}
 
     public function mount(Player $sender): void
     {
         $this->sender = $sender;
     }
 
+    #[\Override]
     public function instantiateForm(): FormInterface
     {
         $this->initialFormData->setSender($this->sender);
@@ -43,6 +43,13 @@ class ActionSendInfluenceTokenComponent extends AbstractController
         return $this->createForm(SendInfluenceTokenFormType::class, $this->initialFormData);
     }
 
+    /**
+     * Summary of save
+     * @param \Doctrine\ORM\EntityManagerInterface $entityManager
+     * @throws \LogicException
+     * @throws \Symfony\Component\Form\Exception\RuntimeException
+     * @return RedirectResponse
+     */
     #[LiveAction]
     public function save(EntityManagerInterface $entityManager): RedirectResponse
     {

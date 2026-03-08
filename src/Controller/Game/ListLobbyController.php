@@ -12,12 +12,18 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/game/lobby', name: 'app_game_list_lobby')]
 class ListLobbyController extends AbstractController
 {
+    /**
+     * @throws \UnexpectedValueException
+     */
     public function __invoke(Request $request, GameRepository $gameRepository): Response
     {
         if (null === $request->headers->get('Turbo-Frame')) {
             return $this->redirectToRoute('app_home');
         }
 
+        /**
+         * @throws \UnexpectedValueException
+         */
         return $this->render('game/_lobby_list.html.twig', [
             'games' => $gameRepository->findBy(['state' => [GameState::LOBBY, GameState::PLAYING]]),
         ]);

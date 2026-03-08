@@ -39,7 +39,6 @@ class TokenActionRepository extends ServiceEntityRepository
     //            ->getResult()
     //        ;
     //    }
-
     //    public function findOneBySomeField($value): ?TokenAction
     //    {
     //        return $this->createQueryBuilder('t')

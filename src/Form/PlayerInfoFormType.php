@@ -21,6 +21,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class PlayerInfoFormType extends AbstractType
 {
+    #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $data = $options['data'];
@@ -48,13 +49,12 @@ class PlayerInfoFormType extends AbstractType
         if ($data instanceof StarSheet) {
             $this->buildStarInfoForm($builder, $data);
         }
-        $builder
-            ->add('notes', TextareaType::class, [
-                'label' => 'Notes sur mon Rôle',
-            ])
-        ;
+        $builder->add('notes', TextareaType::class, [
+            'label' => 'Notes sur mon Rôle',
+        ]);
     }
 
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
@@ -64,59 +64,56 @@ class PlayerInfoFormType extends AbstractType
 
     private function buildPowerInfoForm(FormBuilderInterface $builder, PowerSheet $data): void
     {
-        $builder
-            ->add('legitimacy', ChoiceType::class, [
-                'label' => 'Votre légitimité est',
-                'autocomplete' => true,
-                'tom_select_options' => [
-                    'create' => true,
-                ],
-                'choices' => $data::CHOICES_LEGITIMACY + [
-                    $data->legitimacy => $data->legitimacy,
-                ],
-            ])
-            ->add('importantAgentType', ChoiceType::class, [
-                'label' => 'Vos agents importants sont',
-                'autocomplete' => true,
-                'tom_select_options' => [
-                    'create' => true,
-                ],
-                'choices' => $data::CHOICES_AGENT_TYPE + [
-                    $data->importantAgentType => $data->importantAgentType,
-                ],
-            ])
-            ->add('blamedFor', ChoiceType::class, [
-                'label' => 'On vous reproche surtout de gouverner par',
-                'autocomplete' => true,
-                'tom_select_options' => [
-                    'create' => true,
-                ],
-                'choices' => $data::CHOICES_BLAMED_FOR + [
-                    $data->blamedFor => $data->blamedFor,
-                ],
-            ])
-            ->add('chosenQuestion', ChoiceType::class, [
-                'label' => 'Posez UNE question à UNE trajectoire',
-                'autocomplete' => true,
-                'choices' => [
-                    'Pourquoi est-ce que le Pouvoir te considère comme une menace prioritaire ?' => 'Pourquoi est-ce que le Pouvoir te considère comme une menace prioritaire ?',
-                    'Pourquoi est-ce que le Pouvoir te considère comme un élément prometteur ?' => 'Pourquoi est-ce que le Pouvoir te considère comme un élément prometteur ?',
-                ],
-            ])
-            ->add('chosenTrajectorie', EnumType::class, [
-                'label' => 'Trajectoire choisie',
-                'class' => GameRoles::class,
-                'autocomplete' => true,
-                'choice_label' => function (GameRoles $choice) {
-                    return $choice->label();
-                },
-                'choice_filter' => function (?GameRoles $choice) {
-                    return in_array($choice, GameRoles::getTrajectories());
-                },
-            ])
-            ->add('answer', TextType::class, [
-                'label' => 'Reponse de la trajectoires',
-            ]);
+        $builder->add('legitimacy', ChoiceType::class, [
+            'label' => 'Votre légitimité est',
+            'autocomplete' => true,
+            'tom_select_options' => [
+                'create' => true,
+            ],
+            'choices' => $data::CHOICES_LEGITIMACY
+            + [
+                $data->legitimacy => $data->legitimacy,
+            ],
+        ])->add('importantAgentType', ChoiceType::class, [
+            'label' => 'Vos agents importants sont',
+            'autocomplete' => true,
+            'tom_select_options' => [
+                'create' => true,
+            ],
+            'choices' => $data::CHOICES_AGENT_TYPE
+            + [
+                $data->importantAgentType => $data->importantAgentType,
+            ],
+        ])->add('blamedFor', ChoiceType::class, [
+            'label' => 'On vous reproche surtout de gouverner par',
+            'autocomplete' => true,
+            'tom_select_options' => [
+                'create' => true,
+            ],
+            'choices' => $data::CHOICES_BLAMED_FOR
+            + [
+                $data->blamedFor => $data->blamedFor,
+            ],
+        ])->add('chosenQuestion', ChoiceType::class, [
+            'label' => 'Posez UNE question à UNE trajectoire',
+            'autocomplete' => true,
+            'choices' => [
+                'Pourquoi est-ce que le Pouvoir te considère comme une menace prioritaire ?' => 'Pourquoi est-ce que le Pouvoir te considère comme une menace prioritaire ?',
+                'Pourquoi est-ce que le Pouvoir te considère comme un élément prometteur ?' => 'Pourquoi est-ce que le Pouvoir te considère comme un élément prometteur ?',
+            ],
+        ])->add('chosenTrajectorie', EnumType::class, [
+            'label' => 'Trajectoire choisie',
+            'class' => GameRoles::class,
+            'autocomplete' => true,
+            'choice_label' => function (GameRoles $choice) {
+                return $choice->label();
+            },
+            'choice_filter' => function (null|GameRoles $choice) {
+                return in_array($choice, GameRoles::getTrajectories());
+            },
+        ])->add('answer', TextType::class, [
+            'label' => 'Reponse de la trajectoires',
+        ]);
         $builder->get('legitimacy')->resetViewTransformers();
         $builder->get('importantAgentType')->resetViewTransformers();
         $builder->get('blamedFor')->resetViewTransformers();
@@ -124,59 +121,56 @@ class PlayerInfoFormType extends AbstractType
 
     private function buildOrderInfoForm(FormBuilderInterface $builder, OrderSheet $data): void
     {
-        $builder
-            ->add('fearedBecause', ChoiceType::class, [
-                'label' => 'Ce qu\'on craint le plus chez vous, c\'est',
-                'autocomplete' => true,
-                'tom_select_options' => [
-                    'create' => true,
-                ],
-                'choices' => $data::CHOICES_FEARED_BECAUSE + [
-                    $data->fearedBecause => $data->fearedBecause,
-                ],
-            ])
-            ->add('accountableTo', ChoiceType::class, [
-                'label' => 'Vous rendez des comptes',
-                'autocomplete' => true,
-                'tom_select_options' => [
-                    'create' => true,
-                ],
-                'choices' => $data::CHOICES_ACCOUNTABLE_TO + [
-                    $data->accountableTo => $data->accountableTo,
-                ],
-            ])
-            ->add('blamedFor', ChoiceType::class, [
-                'label' => 'On vous reproche surtout d\'être',
-                'autocomplete' => true,
-                'tom_select_options' => [
-                    'create' => true,
-                ],
-                'choices' => $data::CHOICES_BLAMED_FOR + [
-                    $data->blamedFor => $data->blamedFor,
-                ],
-            ])
-            ->add('chosenQuestion', ChoiceType::class, [
-                'label' => 'Posez UNE question à UNE trajectoire',
-                'autocomplete' => true,
-                'choices' => [
-                    'Pourquoi est-ce que l\'Ordre te considère comme une menace prioritaire ?' => 'Pourquoi est-ce que l\'Ordre te considère comme une menace prioritaire ?',
-                    'Pourquoi est-ce que l\'Ordre te considère comme un élément prometteur ?' => 'Pourquoi est-ce que l\'Ordre te considère comme un élément prometteur ?',
-                ],
-            ])
-            ->add('chosenTrajectorie', EnumType::class, [
-                'class' => GameRoles::class,
-                'label' => 'Trajectoire choisie',
-                'autocomplete' => true,
-                'choice_label' => function (GameRoles $choice) {
-                    return $choice->label();
-                },
-                'choice_filter' => function (?GameRoles $choice) {
-                    return in_array($choice, GameRoles::getTrajectories());
-                },
-            ])
-            ->add('answer', TextType::class, [
-                'label' => 'Reponse de la trajectoires',
-            ]);
+        $builder->add('fearedBecause', ChoiceType::class, [
+            'label' => 'Ce qu\'on craint le plus chez vous, c\'est',
+            'autocomplete' => true,
+            'tom_select_options' => [
+                'create' => true,
+            ],
+            'choices' => $data::CHOICES_FEARED_BECAUSE
+            + [
+                $data->fearedBecause => $data->fearedBecause,
+            ],
+        ])->add('accountableTo', ChoiceType::class, [
+            'label' => 'Vous rendez des comptes',
+            'autocomplete' => true,
+            'tom_select_options' => [
+                'create' => true,
+            ],
+            'choices' => $data::CHOICES_ACCOUNTABLE_TO
+            + [
+                $data->accountableTo => $data->accountableTo,
+            ],
+        ])->add('blamedFor', ChoiceType::class, [
+            'label' => 'On vous reproche surtout d\'être',
+            'autocomplete' => true,
+            'tom_select_options' => [
+                'create' => true,
+            ],
+            'choices' => $data::CHOICES_BLAMED_FOR
+            + [
+                $data->blamedFor => $data->blamedFor,
+            ],
+        ])->add('chosenQuestion', ChoiceType::class, [
+            'label' => 'Posez UNE question à UNE trajectoire',
+            'autocomplete' => true,
+            'choices' => [
+                'Pourquoi est-ce que l\'Ordre te considère comme une menace prioritaire ?' => 'Pourquoi est-ce que l\'Ordre te considère comme une menace prioritaire ?',
+                'Pourquoi est-ce que l\'Ordre te considère comme un élément prometteur ?' => 'Pourquoi est-ce que l\'Ordre te considère comme un élément prometteur ?',
+            ],
+        ])->add('chosenTrajectorie', EnumType::class, [
+            'class' => GameRoles::class,
+            'label' => 'Trajectoire choisie',
+            'autocomplete' => true,
+            'choice_label' => function (GameRoles $choice) {
+                return $choice->label();
+            },
+            'choice_filter' => function (null|GameRoles $choice) {
+                return in_array($choice, GameRoles::getTrajectories());
+            },
+        ])->add('answer', TextType::class, [
+            'label' => 'Reponse de la trajectoires',
+        ]);
 
         $builder->get('fearedBecause')->resetViewTransformers();
         $builder->get('accountableTo')->resetViewTransformers();
@@ -185,119 +179,120 @@ class PlayerInfoFormType extends AbstractType
 
     public function buildEchoInfoForm(FormBuilderInterface $builder, EchoSheet $data): void
     {
-        $builder
-            ->add('financedBy', ChoiceType::class, [
-                'label' => 'Vous êtes principalement financés par',
-                'autocomplete' => true,
-                'tom_select_options' => [
-                    'create' => true,
-                ],
-                'choices' => $data::CHOICES_FINANCED_BY + [
-                    $data->financedBy => $data->financedBy,
-                ],
-            ])
-            ->add('importantAgentType', ChoiceType::class, [
-                'label' => 'Vos représentants les plus influents sont',
-                'autocomplete' => true,
-                'tom_select_options' => [
-                    'create' => true,
-                ],
-                'choices' => $data::CHOICES_IMPORTANT_AGENT_TYPE + [
-                    $data->importantAgentType => $data->importantAgentType,
-                ],
-            ])
-            ->add('blamedFor', ChoiceType::class, [
-                'label' => 'On vous reproche principalement d\'abord d\'être',
-                'autocomplete' => true,
-                'tom_select_options' => [
-                    'create' => true,
-                ],
-                'choices' => $data::CHOICES_BLAMED_FOR + [
-                    $data->blamedFor => $data->blamedFor,
-                ],
-            ])
-            ->add('chosenQuestion', ChoiceType::class, [
-                'label' => 'Posez UNE question à UNE trajectoire',
-                'autocomplete' => true,
-                'choices' => [
-                    'Pourquoi est-ce que l\'Écho te considère comme une menace prioritaire ?' => 'Pourquoi est-ce que l\'Écho te considère comme une menace prioritaire ?',
-                    'Pourquoi est-ce que l\'Écho te considère comme un élément prometteur ?' => 'Pourquoi est-ce que l\'Écho te considère comme un élément prometteur ?',
-                ],
-            ])
-            ->add('chosenTrajectorie', EnumType::class, [
-                'class' => GameRoles::class,
-                'label' => 'Trajectoire choisie',
-                'autocomplete' => true,
-                'choice_label' => function (GameRoles $choice) {
-                    return $choice->label();
-                },
-                'choice_filter' => function (?GameRoles $choice) {
-                    return in_array($choice, GameRoles::getTrajectories());
-                },
-            ])
-            ->add('answer', TextType::class, [
-                'label' => 'Reponse de la trajectoires',
-            ]);
+        $builder->add('financedBy', ChoiceType::class, [
+            'label' => 'Vous êtes principalement financés par',
+            'autocomplete' => true,
+            'tom_select_options' => [
+                'create' => true,
+            ],
+            'choices' => $data::CHOICES_FINANCED_BY
+            + [
+                $data->financedBy => $data->financedBy,
+            ],
+        ])->add('importantAgentType', ChoiceType::class, [
+            'label' => 'Vos représentants les plus influents sont',
+            'autocomplete' => true,
+            'tom_select_options' => [
+                'create' => true,
+            ],
+            'choices' => $data::CHOICES_IMPORTANT_AGENT_TYPE
+            + [
+                $data->importantAgentType => $data->importantAgentType,
+            ],
+        ])->add('blamedFor', ChoiceType::class, [
+            'label' => 'On vous reproche principalement d\'abord d\'être',
+            'autocomplete' => true,
+            'tom_select_options' => [
+                'create' => true,
+            ],
+            'choices' => $data::CHOICES_BLAMED_FOR
+            + [
+                $data->blamedFor => $data->blamedFor,
+            ],
+        ])->add('chosenQuestion', ChoiceType::class, [
+            'label' => 'Posez UNE question à UNE trajectoire',
+            'autocomplete' => true,
+            'choices' => [
+                'Pourquoi est-ce que l\'Écho te considère comme une menace prioritaire ?' => 'Pourquoi est-ce que l\'Écho te considère comme une menace prioritaire ?',
+                'Pourquoi est-ce que l\'Écho te considère comme un élément prometteur ?' => 'Pourquoi est-ce que l\'Écho te considère comme un élément prometteur ?',
+            ],
+        ])->add('chosenTrajectorie', EnumType::class, [
+            'class' => GameRoles::class,
+            'label' => 'Trajectoire choisie',
+            'autocomplete' => true,
+            'choice_label' => function (GameRoles $choice) {
+                return $choice->label();
+            },
+            'choice_filter' => function (null|GameRoles $choice) {
+                return in_array($choice, GameRoles::getTrajectories());
+            },
+        ])->add('answer', TextType::class, [
+            'label' => 'Reponse de la trajectoires',
+        ]);
         $builder->get('financedBy')->resetViewTransformers();
         $builder->get('importantAgentType')->resetViewTransformers();
         $builder->get('blamedFor')->resetViewTransformers();
     }
 
+    /**
+     * Summary of buildPeopleInfoForm
+     * @param \Symfony\Component\Form\FormBuilderInterface $builder
+     * @param \App\Records\PeopleSheet $data
+     * @throws \Symfony\Component\Form\Exception\InvalidArgumentException
+     * @return void
+     */
     public function buildPeopleInfoForm(FormBuilderInterface $builder, PeopleSheet $data): void
     {
-        $builder
-            ->add('trust', ChoiceType::class, [
-                'label' => 'Vous placeriez plutôt votre confiance dans',
-                'autocomplete' => true,
-                'tom_select_options' => [
-                    'create' => true,
-                ],
-                'choices' => $data::CHOICES_TRUST + [
-                    $data->trust => $data->trust,
-                ],
-            ])
-            ->add('priority', ChoiceType::class, [
-                'label' => 'Ce qui vous importe le plus, c\'est',
-                'autocomplete' => true,
-                'tom_select_options' => [
-                    'create' => true,
-                ],
-                'choices' => $data::CHOICES_PRIORITY + [
-                    $data->priority => $data->priority,
-                ],
-            ])
-            ->add('blamedFor', ChoiceType::class, [
-                'label' => 'On vous reproche avant tout de',
-                'autocomplete' => true,
-                'tom_select_options' => [
-                    'create' => true,
-                ],
-                'choices' => $data::CHOICES_BLAMED_FOR + [
-                    $data->blamedFor => $data->blamedFor,
-                ],
-            ])
-            ->add('chosenQuestion', ChoiceType::class, [
-                'label' => 'Posez UNE question à UNE trajectoire',
-                'autocomplete' => true,
-                'choices' => [
-                    'Pourquoi est-ce que le Peuple te considère comme une menace prioritaire ?' => 'Pourquoi est-ce que le Peuple te considère comme une menace prioritaire ?',
-                    'Pourquoi est-ce que le Peuple te considère comme un élément prometteur ?' => 'Pourquoi est-ce que le Peuple te considère comme un élément prometteur ?',
-                ],
-            ])
-            ->add('chosenTrajectorie', EnumType::class, [
-                'class' => GameRoles::class,
-                'label' => 'Trajectoire choisie',
-                'autocomplete' => true,
-                'choice_label' => function (GameRoles $choice) {
-                    return $choice->label();
-                },
-                'choice_filter' => function (?GameRoles $choice) {
-                    return in_array($choice, GameRoles::getTrajectories());
-                },
-            ])
-            ->add('answer', TextType::class, [
-                'label' => 'Reponse de la trajectoires',
-            ]);
+        $builder->add('trust', ChoiceType::class, [
+            'label' => 'Vous placeriez plutôt votre confiance dans',
+            'autocomplete' => true,
+            'tom_select_options' => [
+                'create' => true,
+            ],
+            'choices' => $data::CHOICES_TRUST
+            + [
+                $data->trust => $data->trust,
+            ],
+        ])->add('priority', ChoiceType::class, [
+            'label' => 'Ce qui vous importe le plus, c\'est',
+            'autocomplete' => true,
+            'tom_select_options' => [
+                'create' => true,
+            ],
+            'choices' => $data::CHOICES_PRIORITY
+            + [
+                $data->priority => $data->priority,
+            ],
+        ])->add('blamedFor', ChoiceType::class, [
+            'label' => 'On vous reproche avant tout de',
+            'autocomplete' => true,
+            'tom_select_options' => [
+                'create' => true,
+            ],
+            'choices' => $data::CHOICES_BLAMED_FOR
+            + [
+                $data->blamedFor => $data->blamedFor,
+            ],
+        ])->add('chosenQuestion', ChoiceType::class, [
+            'label' => 'Posez UNE question à UNE trajectoire',
+            'autocomplete' => true,
+            'choices' => [
+                'Pourquoi est-ce que le Peuple te considère comme une menace prioritaire ?' => 'Pourquoi est-ce que le Peuple te considère comme une menace prioritaire ?',
+                'Pourquoi est-ce que le Peuple te considère comme un élément prometteur ?' => 'Pourquoi est-ce que le Peuple te considère comme un élément prometteur ?',
+            ],
+        ])->add('chosenTrajectorie', EnumType::class, [
+            'class' => GameRoles::class,
+            'label' => 'Trajectoire choisie',
+            'autocomplete' => true,
+            'choice_label' => function (GameRoles $choice) {
+                return $choice->label();
+            },
+            'choice_filter' => function (null|GameRoles $choice) {
+                return in_array($choice, GameRoles::getTrajectories());
+            },
+        ])->add('answer', TextType::class, [
+            'label' => 'Reponse de la trajectoires',
+        ]);
         $builder->get('trust')->resetViewTransformers();
         $builder->get('priority')->resetViewTransformers();
         $builder->get('blamedFor')->resetViewTransformers();
@@ -305,15 +300,20 @@ class PlayerInfoFormType extends AbstractType
 
     public function buildTrajectory(FormBuilderInterface $builder): void
     {
-        $builder
-            ->add('name', TextType::class, [
-                'label' => 'On t\'appelle',
-            ])
-            ->add('features', TextareaType::class, [
-                'label' => 'Ce qu\'on retient de toi',
-            ]);
+        $builder->add('name', TextType::class, [
+            'label' => 'On t\'appelle',
+        ])->add('features', TextareaType::class, [
+            'label' => 'Ce qu\'on retient de toi',
+        ]);
     }
 
+    /**
+     * Summary of buildPamphletInfoForm
+     * @param \Symfony\Component\Form\FormBuilderInterface $builder
+     * @param \App\Records\PamphletSheet $data
+     * @throws \Symfony\Component\Form\Exception\InvalidArgumentException
+     * @return void
+     */
     public function buildPamphletInfoForm(FormBuilderInterface $builder, PamphletSheet $data): void
     {
         $this->buildTrajectory($builder);
@@ -324,7 +324,8 @@ class PlayerInfoFormType extends AbstractType
                 'tom_select_options' => [
                     'create' => true,
                 ],
-                'choices' => $data::CHOICES_ORIGINS + [
+                'choices' => $data::CHOICES_ORIGINS
+                + [
                     $data->origins => $data->origins,
                 ],
             ])
@@ -334,7 +335,8 @@ class PlayerInfoFormType extends AbstractType
                 'tom_select_options' => [
                     'create' => true,
                 ],
-                'choices' => $data::CHOICES_MODUS_OPERENDI + [
+                'choices' => $data::CHOICES_MODUS_OPERENDI
+                + [
                     $data->modusOperendi => $data->modusOperendi,
                 ],
             ])
@@ -353,7 +355,7 @@ class PlayerInfoFormType extends AbstractType
                 'choice_label' => function (GameRoles $choice) {
                     return $choice->label();
                 },
-                'choice_filter' => function (?GameRoles $choice) {
+                'choice_filter' => function (null|GameRoles $choice) {
                     return GameRoles::ECHO === $choice || GameRoles::ORDER === $choice;
                 },
             ])
@@ -375,7 +377,7 @@ class PlayerInfoFormType extends AbstractType
                 'choice_label' => function (GameRoles $choice) {
                     return $choice->label();
                 },
-                'choice_filter' => function (?GameRoles $choice) {
+                'choice_filter' => function (null|GameRoles $choice) {
                     return in_array($choice, GameRoles::getTrajectories()) && GameRoles::PAMPHLET !== $choice;
                 },
             ])
@@ -386,6 +388,13 @@ class PlayerInfoFormType extends AbstractType
         $builder->get('modusOperendi')->resetViewTransformers();
     }
 
+    /**
+     * Summary of buildMolotovInfoForm
+     * @param \Symfony\Component\Form\FormBuilderInterface $builder
+     * @param \App\Records\MolotovSheet $data
+     * @throws \Symfony\Component\Form\Exception\InvalidArgumentException
+     * @return void
+     */
     public function buildMolotovInfoForm(FormBuilderInterface $builder, MolotovSheet $data): void
     {
         $this->buildTrajectory($builder);
@@ -396,7 +405,8 @@ class PlayerInfoFormType extends AbstractType
                 'tom_select_options' => [
                     'create' => true,
                 ],
-                'choices' => $data::CHOICES_PART_OF + [
+                'choices' => $data::CHOICES_PART_OF
+                + [
                     $data->partOf => $data->partOf,
                 ],
             ])
@@ -406,7 +416,8 @@ class PlayerInfoFormType extends AbstractType
                 'tom_select_options' => [
                     'create' => true,
                 ],
-                'choices' => $data::CHOICES_DISSENT_REASON + [
+                'choices' => $data::CHOICES_DISSENT_REASON
+                + [
                     $data->dissentReason => $data->dissentReason,
                 ],
             ])
@@ -425,7 +436,7 @@ class PlayerInfoFormType extends AbstractType
                 'choice_label' => function (GameRoles $choice) {
                     return $choice->label();
                 },
-                'choice_filter' => function (?GameRoles $choice) {
+                'choice_filter' => function (null|GameRoles $choice) {
                     return GameRoles::ECHO === $choice || GameRoles::PEOPLE === $choice;
                 },
             ])
@@ -447,7 +458,7 @@ class PlayerInfoFormType extends AbstractType
                 'choice_label' => function (GameRoles $choice) {
                     return $choice->label();
                 },
-                'choice_filter' => function (?GameRoles $choice) {
+                'choice_filter' => function (null|GameRoles $choice) {
                     return in_array($choice, GameRoles::getTrajectories()) && GameRoles::MOLOTOV !== $choice;
                 },
             ])
@@ -458,6 +469,13 @@ class PlayerInfoFormType extends AbstractType
         $builder->get('dissentReason')->resetViewTransformers();
     }
 
+    /**
+     * Summary of buildBadgeInfoForm
+     * @param \Symfony\Component\Form\FormBuilderInterface $builder
+     * @param \App\Records\BadgeSheet $data
+     * @throws \Symfony\Component\Form\Exception\InvalidArgumentException
+     * @return void
+     */
     public function buildBadgeInfoForm(FormBuilderInterface $builder, BadgeSheet $data): void
     {
         $this->buildTrajectory($builder);
@@ -468,7 +486,8 @@ class PlayerInfoFormType extends AbstractType
                 'tom_select_options' => [
                     'create' => true,
                 ],
-                'choices' => $data::CHOICES_RED_TAPE + [
+                'choices' => $data::CHOICES_RED_TAPE
+                + [
                     $data->firstRedTapeRisk => $data->firstRedTapeRisk,
                 ],
             ])
@@ -478,7 +497,8 @@ class PlayerInfoFormType extends AbstractType
                 'tom_select_options' => [
                     'create' => true,
                 ],
-                'choices' => $data::CHOICES_DISSENT_GOAL + [
+                'choices' => $data::CHOICES_DISSENT_GOAL
+                + [
                     $data->dissentGoal => $data->dissentGoal,
                 ],
             ])
@@ -497,7 +517,7 @@ class PlayerInfoFormType extends AbstractType
                 'choice_label' => function (GameRoles $choice) {
                     return $choice->label();
                 },
-                'choice_filter' => function (?GameRoles $choice) {
+                'choice_filter' => function (null|GameRoles $choice) {
                     return GameRoles::ORDER === $choice || GameRoles::POWER === $choice;
                 },
             ])
@@ -519,7 +539,7 @@ class PlayerInfoFormType extends AbstractType
                 'choice_label' => function (GameRoles $choice) {
                     return $choice->label();
                 },
-                'choice_filter' => function (?GameRoles $choice) {
+                'choice_filter' => function (null|GameRoles $choice) {
                     return in_array($choice, GameRoles::getTrajectories()) && GameRoles::BADGE !== $choice;
                 },
             ])
@@ -530,6 +550,13 @@ class PlayerInfoFormType extends AbstractType
         $builder->get('dissentGoal')->resetViewTransformers();
     }
 
+    /**
+     * Summary of buildStarInfoForm
+     * @param \Symfony\Component\Form\FormBuilderInterface $builder
+     * @param \App\Records\StarSheet $data
+     * @throws \Symfony\Component\Form\Exception\InvalidArgumentException
+     * @return void
+     */
     public function buildStarInfoForm(FormBuilderInterface $builder, StarSheet $data): void
     {
         $this->buildTrajectory($builder);
@@ -540,7 +567,8 @@ class PlayerInfoFormType extends AbstractType
                 'tom_select_options' => [
                     'create' => true,
                 ],
-                'choices' => $data::CHOICES_QUALITY + [
+                'choices' => $data::CHOICES_QUALITY
+                + [
                     $data->bestQuality => $data->bestQuality,
                 ],
             ])
@@ -550,7 +578,8 @@ class PlayerInfoFormType extends AbstractType
                 'tom_select_options' => [
                     'create' => true,
                 ],
-                'choices' => $data::CHOICES_SHINE + [
+                'choices' => $data::CHOICES_SHINE
+                + [
                     $data->shineIn => $data->shineIn,
                 ],
             ])
@@ -569,7 +598,7 @@ class PlayerInfoFormType extends AbstractType
                 'choice_label' => function (GameRoles $choice) {
                     return $choice->label();
                 },
-                'choice_filter' => function (?GameRoles $choice) {
+                'choice_filter' => function (null|GameRoles $choice) {
                     return GameRoles::PEOPLE === $choice || GameRoles::POWER === $choice;
                 },
             ])
@@ -591,7 +620,7 @@ class PlayerInfoFormType extends AbstractType
                 'choice_label' => function (GameRoles $choice) {
                     return $choice->label();
                 },
-                'choice_filter' => function (?GameRoles $choice) {
+                'choice_filter' => function (null|GameRoles $choice) {
                     return in_array($choice, GameRoles::getTrajectories()) && GameRoles::STAR !== $choice;
                 },
             ])

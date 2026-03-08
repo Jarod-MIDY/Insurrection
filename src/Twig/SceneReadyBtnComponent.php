@@ -25,10 +25,20 @@ class SceneReadyBtnComponent
         $this->player = $player;
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param EntityManagerInterface $entityManager
+     * @throws \InvalidArgumentException
+     * @return void
+     */
     #[LiveAction]
     public function changeReadyStatus(EntityManagerInterface $entityManager): void
     {
-        $currentScene = $this->player->getGame()?->getScenes()->last();
+        $currentScene = $this->player
+            ->getGame()
+            ?->getScenes()
+            ?->last();
         if (false === $currentScene || null === $currentScene) {
             return;
         }

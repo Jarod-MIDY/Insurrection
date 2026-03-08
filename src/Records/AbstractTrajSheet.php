@@ -12,19 +12,19 @@ abstract class AbstractTrajSheet
 
     public string $ROWQuestion = '';
 
-    public ?GameRoles $ROWRole = null;
+    public null|GameRoles $ROWRole = null;
 
     public string $ROWAnswer = '';
 
     public string $trajQuestion = '';
 
-    public ?GameRoles $trajRole = null;
+    public null|GameRoles $trajRole = null;
 
     public string $trajAnswer = '';
 
     public string $notes = '';
 
-    public function __construct(?InformationCollection $data = null)
+    public function __construct(null|InformationCollection $data = null)
     {
         if (null !== $data) {
             $this->name = $data->getValue('name');
@@ -47,7 +47,15 @@ abstract class AbstractTrajSheet
 
     public function partialReady(): bool
     {
-        return '' !== $this->name && '' !== $this->features && '' !== $this->ROWQuestion && '' !== $this->ROWAnswer && '' !== $this->trajQuestion && '' !== $this->trajAnswer
-            && null !== $this->ROWRole && null !== $this->trajRole;
+        return (
+            '' !== $this->name
+            && '' !== $this->features
+            && '' !== $this->ROWQuestion
+            && '' !== $this->ROWAnswer
+            && '' !== $this->trajQuestion
+            && '' !== $this->trajAnswer
+            && null !== $this->ROWRole
+            && null !== $this->trajRole
+        );
     }
 }

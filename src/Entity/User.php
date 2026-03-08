@@ -23,12 +23,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    public ?int $id = null;
+    public null|int $id = null;
 
     #[ORM\Column(length: 180)]
     #[Assert\NotNull]
     #[Assert\NotBlank]
-    private ?string $username = null;
+    private null|string $username = null;
 
     /**
      * @var list<string> The user roles
@@ -40,13 +40,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
-    private ?string $password = null;
+    private null|string $password = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotNull]
     #[Assert\NotBlank]
     #[Assert\Email]
-    private ?string $email = null;
+    private null|string $email = null;
 
     #[ORM\Column]
     private bool $isVerified = false;
@@ -69,12 +69,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->games = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId(): null|int
     {
         return $this->id;
     }
 
-    public function getUsername(): ?string
+    public function getUsername(): null|string
     {
         return $this->username;
     }
@@ -90,11 +90,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * A visual identifier that represents this user.
      *
      * @see UserInterface
+     * @throws \InvalidArgumentException
      */
+    #[\Override]
     public function getUserIdentifier(): string
     {
         if (null === $this->username || '' === $this->username) {
-            throw new \InvalidArgumentException('Invalid username :'.$this->username);
+            throw new \InvalidArgumentException('Invalid username :' . (string) $this->username);
         }
 
         return $this->username;
@@ -105,6 +107,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      *
      * @return array<string>
      */
+    #[\Override]
     public function getRoles(): array
     {
         $roles = $this->roles;
@@ -127,7 +130,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see PasswordAuthenticatedUserInterface
      */
-    public function getPassword(): ?string
+    #[\Override]
+    public function getPassword(): null|string
     {
         return $this->password;
     }
@@ -142,13 +146,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see UserInterface
      */
+    #[\Override]
     public function eraseCredentials(): void
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
     }
 
-    public function getEmail(): ?string
+    public function getEmail(): null|string
     {
         return $this->email;
     }
@@ -210,7 +215,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->games;
     }
 
-    public function addGame(Game $game): static
+    /**
+     * Summary of addGame
+     * @param \App\Entity\Game $game
+     * @throws \InvalidArgumentException
+     * @return Self
+     */
+    public function addGame(Game $game): Self
     {
         if (!$this->games->contains($game)) {
             $this->games->add($game);
@@ -220,7 +231,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function removeGame(Game $game): static
+    /**
+     * Summary of removeGame
+     * @param \App\Entity\Game $game
+     * @throws \InvalidArgumentException
+     * @return Self
+     */
+    public function removeGame(Game $game): Self
     {
         if ($this->games->removeElement($game)) {
             // set the owning side to null (unless already changed)

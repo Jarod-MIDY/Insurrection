@@ -8,6 +8,7 @@ use App\Form\JoinFormType;
 use App\MercureEvent\Game\UpdateLoby;
 use App\Repository\PlayerRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -16,12 +17,22 @@ use Symfony\UX\Turbo\TurboBundle;
 #[Route('/game/join/{game}', name: 'app_game_join')]
 class JoinGameController extends AbstractController
 {
+    /**
+     * Summary of __invoke
+     * @param \App\Entity\Game $game
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \App\Repository\PlayerRepository $playerRepository
+     * @param \App\MercureEvent\Game\UpdateLoby $updateLobySSE
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     * @throws \LogicException
+     * @return Response|\Symfony\Component\HttpFoundation\RedirectResponse
+     */
     public function __invoke(
         Game $game,
         Request $request,
         PlayerRepository $playerRepository,
         UpdateLoby $updateLobySSE,
-    ): Response {
+    ): Response|RedirectResponse {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
         if ($playerRepository->findOneBy(['game' => $game, 'linkedUser' => $this->getUser()])) {
             return $this->redirectToRoute('app_game_show', ['game' => $game->getId()]);

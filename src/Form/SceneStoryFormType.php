@@ -10,14 +10,22 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SceneStoryFormType extends AbstractType
 {
+    #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('body', TextareaType::class, [
             'label' => 'Mon résumer de la scène',
-        ])
-        ;
+        ]);
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param OptionsResolver $resolver
+     * @throws \Symfony\Component\OptionsResolver\Exception\AccessException
+     * @return void
+     */
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

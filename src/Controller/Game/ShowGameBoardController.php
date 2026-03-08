@@ -13,12 +13,20 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/game/board/{game}', name: 'app_game_board')]
 class ShowGameBoardController extends AbstractController
 {
-    public function __invoke(
-        Game $game,
-        SceneRepository $sceneRepository,
-    ): Response {
+    /**
+     * Summary of __invoke
+     * @param \App\Entity\Game $game
+     * @param \App\Repository\SceneRepository $sceneRepository
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     * @throws \LogicException
+     * @return Response
+     */
+    public function __invoke(Game $game, SceneRepository $sceneRepository): Response
+    {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
-        $player = $game->getPlayers()->findFirst(fn (int $index, Player $player): bool => $player->getLinkedUser() === $this->getUser());
+        $player = $game->getPlayers()->findFirst(
+            fn(int $_index, Player $player): bool => $player->getLinkedUser() === $this->getUser(),
+        );
         if (!$player) {
             throw $this->createAccessDeniedException();
         }
@@ -30,10 +38,7 @@ class ShowGameBoardController extends AbstractController
             $sceneRepository->save($lastScene, true);
         }
 
-        $unUsedCharacters = array_diff(
-            $player->getCharacters()->toArray(),
-            $lastScene->getCharacters()->toArray()
-        );
+        $unUsedCharacters = array_diff($player->getCharacters()->toArray(), $lastScene->getCharacters()->toArray());
 
         return $this->render('game/board.html.twig', [
             'game' => $game,

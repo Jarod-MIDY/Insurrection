@@ -1,0 +1,13 @@
+<?php
+
+return [
+    'twig' => [
+        'file_name_pattern' => '*.twig',
+    ],
+
+    'when@test' => [
+        'twig' => [
+            'strict_variables' => true,
+        ],
+    ],
+];

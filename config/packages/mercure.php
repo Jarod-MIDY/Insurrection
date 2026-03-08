@@ -1,0 +1,15 @@
+<?php
+
+return [
+    'mercure' => [
+        'hubs' => [
+            'default' => [
+                'url' => '%env(MERCURE_URL)%',
+                'public_url' => '%env(MERCURE_PUBLIC_URL)%',
+                'jwt' => [
+                    'value' => '%env(MERCURE_JWT_TOKEN)%',
+                ],
+            ],
+        ],
+    ],
+];

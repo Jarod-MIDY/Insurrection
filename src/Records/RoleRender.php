@@ -2,39 +2,35 @@
 
 namespace App\Records;
 
-/**
- * @phpstan-type LabelValue array{
- *      label: string,
- *      value: string,
- * }
- * @phpstan-type Question array{
- *      question: string,
- *      answer: string,
- *      trajectorie: string,
- * }
- * @phpstan-type TrajectorieQuestion array{
- *      question: string,
- *      answer: string,
- *      role: string,
- * }
- */
 class RoleRender
 {
-    /** @var LabelValue[] */
-    public array $listable = [];
-    /** @var Question */
+    /** @var non-empty-list<array{'label': string, 'value': string}> */
+    public array $listable;
+    /** @var array{
+     *      question: string,
+     *      answer: string,
+     *      trajectorie: string,
+     * } */
     public array $question = [
         'question' => '',
         'answer' => '',
         'trajectorie' => '',
     ];
-    /** @var TrajectorieQuestion */
+    /** @var array{
+     *      question: string,
+     *      answer: string,
+     *      role: string,
+     * } */
     public array $row_question = [
         'question' => '',
         'answer' => '',
         'role' => '',
     ];
-    /** @var TrajectorieQuestion */
+    /** @var array{
+     *      question: string,
+     *      answer: string,
+     *      role: string,
+     * } */
     public array $traj_question = [
         'question' => '',
         'answer' => '',
@@ -43,8 +39,8 @@ class RoleRender
     public string $notes = '';
 
     public function __construct(
-        public ?string $name = null,
-        public ?string $features = null,
+        public null|string $name = null,
+        public null|string $features = null,
     ) {
         if (null !== $name) {
             $this->addListable('On t\'appelle', $name);

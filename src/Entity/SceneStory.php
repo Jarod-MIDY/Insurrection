@@ -14,54 +14,54 @@ class SceneStory
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    public ?int $id = null;
+    public null|int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'stories')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Scene $scene = null;
+    private null|Scene $scene = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Player $player = null;
+    private null|Player $player = null;
 
     #[ORM\Column(nullable: false)]
-    private ?string $body = null;
+    private null|string $body = null;
 
-    public function getId(): ?int
+    public function getId(): null|int
     {
         return $this->id;
     }
 
-    public function getScene(): ?Scene
+    public function getScene(): null|Scene
     {
         return $this->scene;
     }
 
-    public function setScene(?Scene $scene): static
+    public function setScene(null|Scene $scene): static
     {
         $this->scene = $scene;
 
         return $this;
     }
 
-    public function getPlayer(): ?Player
+    public function getPlayer(): null|Player
     {
         return $this->player;
     }
 
-    public function setPlayer(?Player $player): static
+    public function setPlayer(null|Player $player): static
     {
         $this->player = $player;
 
         return $this;
     }
 
-    public function getBody(): ?string
+    public function getBody(): null|string
     {
         return $this->body;
     }
 
-    public function setBody(?string $body): static
+    public function setBody(null|string $body): static
     {
         $this->body = $body;
 

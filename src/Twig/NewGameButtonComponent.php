@@ -10,14 +10,19 @@ use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 #[AsTwigComponent('NewGameButton')]
 class NewGameButtonComponent
 {
-    public ?Game $unfinishedGame = null;
+    public null|Game $unfinishedGame = null;
 
     public function __construct(
         private GameRepository $gameRepository,
-    ) {
-    }
+    ) {}
 
-    public function mount(?User $author = null): void
+    /**
+     * Summary of mount
+     * @param null|\App\Entity\User $author
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @return void
+     */
+    public function mount(null|User $author = null): void
     {
         $this->unfinishedGame = $this->gameRepository->findUnfinishedOrNull($author);
     }

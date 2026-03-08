@@ -5,17 +5,6 @@ namespace App\Records;
 use App\Enum\GameRoles;
 use App\Interface\CharacterSheet;
 
-/**
- * @phpstan-type EchoArray array{
- *      answer: string,
- *      blamedFor: string,
- *      chosenQuestion: string,
- *      chosenTrajectorie: string|null,
- *      financedBy: string,
- *      importantAgentType: string,
- *      notes: string
- * }
- */
 class EchoSheet extends AbstractRowSheet implements CharacterSheet
 {
     /**
@@ -51,7 +40,13 @@ class EchoSheet extends AbstractRowSheet implements CharacterSheet
     public string $financedBy = '';
     public string $importantAgentType = '';
 
-    public function __construct(?InformationCollection $data = null)
+    /**
+     * Summary of __construct
+     * @throws \TypeError
+     * @throws \ValueError
+     * @param null|\App\Records\InformationCollection $data
+     */
+    public function __construct(null|InformationCollection $data = null)
     {
         if (null !== $data) {
             parent::__construct($data);
@@ -61,8 +56,17 @@ class EchoSheet extends AbstractRowSheet implements CharacterSheet
     }
 
     /**
-     * @return EchoArray
+     * @return array{
+     *      answer: string,
+     *      blamedFor: string,
+     *      chosenQuestion: string,
+     *      chosenTrajectorie: string|null,
+     *      financedBy: string,
+     *      importantAgentType: string,
+     *      notes: string
+     * }
      */
+    #[\Override]
     public function __serialize(): array
     {
         return [
@@ -77,8 +81,19 @@ class EchoSheet extends AbstractRowSheet implements CharacterSheet
     }
 
     /**
-     * @param EchoArray $data
+     * @param array{
+     *      answer: string,
+     *      blamedFor: string,
+     *      chosenQuestion: string,
+     *      chosenTrajectorie: string|null,
+     *      financedBy: string,
+     *      importantAgentType: string,
+     *      notes: string
+     * } $data
+     * @throws \TypeError
+     * @throws \ValueError
      */
+    #[\Override]
     public function __unserialize(array $data): void
     {
         $this->financedBy = $data['financedBy'];
@@ -87,7 +102,7 @@ class EchoSheet extends AbstractRowSheet implements CharacterSheet
         $this->notes = $data['notes'];
         $this->chosenQuestion = $data['chosenQuestion'];
         $this->answer = $data['answer'];
-        $this->chosenTrajectorie = GameRoles::from($data['chosenTrajectorie'] ?? '');
+        $this->chosenTrajectorie = GameRoles::from($data['chosenTrajectorie'] ?? 'null');
     }
 
     public function getRenderData(): RoleRender
@@ -102,6 +117,7 @@ class EchoSheet extends AbstractRowSheet implements CharacterSheet
         return $renderData;
     }
 
+    #[\Override]
     public function isReady(): bool
     {
         return '' !== $this->financedBy && '' !== $this->importantAgentType && $this->partialReady();

@@ -9,8 +9,7 @@ abstract class AbstractHubEventHandler
 {
     public function __construct(
         protected HubInterface $hub,
-    ) {
-    }
+    ) {}
 
     /**
      * @param array<string|int, mixed> $data

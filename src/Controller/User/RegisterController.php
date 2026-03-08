@@ -19,6 +19,19 @@ use Symfony\UX\Turbo\TurboBundle;
 #[Route('/register', name: 'app_register')]
 class RegisterController extends AbstractController
 {
+    /**
+     * Summary of __invoke
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface $userPasswordHasher
+     * @param \Symfony\Bundle\SecurityBundle\Security $security
+     * @param \Doctrine\ORM\EntityManagerInterface $entityManager
+     * @param \App\Security\EmailVerifier $emailVerifier
+     * @throws \Symfony\Component\Form\Exception\OutOfBoundsException
+     * @throws \Symfony\Component\Form\Exception\RuntimeException
+     * @throws \LogicException
+     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     * @return Response|\Symfony\Component\HttpFoundation\RedirectResponse
+     */
     public function __invoke(
         Request $request,
         UserPasswordHasherInterface $userPasswordHasher,
@@ -43,11 +56,11 @@ class RegisterController extends AbstractController
             $emailVerifier->sendEmailConfirmation(
                 'app_verify_email',
                 $user,
-                (new TemplatedEmail())
+                new TemplatedEmail()
                     ->from(new Address('webmaster@worldmecaniste.com', 'Bloubill'))
                     ->to((string) $user->getEmail())
                     ->subject('Please Confirm your Email')
-                    ->htmlTemplate('registration/confirmation_email.html.twig')
+                    ->htmlTemplate('registration/confirmation_email.html.twig'),
             );
 
             // do anything else you need here, like send an email

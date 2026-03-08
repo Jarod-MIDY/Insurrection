@@ -12,6 +12,15 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/scene/{scene}/character/{character}/{isPresent}', name: 'app_scene_update_character_presence')]
 class EditCharacterInSceneController extends AbstractController
 {
+    /**
+     * Summary of __invoke
+     * @param \App\Entity\Scene $scene
+     * @param \App\Entity\Character $character
+     * @param \App\Repository\SceneRepository $sceneRepository
+     * @param bool $isPresent
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
     public function __invoke(
         Scene $scene,
         Character $character,
@@ -25,8 +34,8 @@ class EditCharacterInSceneController extends AbstractController
         }
         if (
             null === $scene->getLeader()
-            || ($scene->getGame() !== $player->getGame())
-            || ($this->getUser() !== $player->getLinkedUser())
+            || $scene->getGame() !== $player->getGame()
+            || $this->getUser() !== $player->getLinkedUser()
         ) {
             throw $this->createAccessDeniedException();
         }

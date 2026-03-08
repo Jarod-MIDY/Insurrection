@@ -3,6 +3,7 @@
 namespace App\Twig;
 
 use App\Entity\Player;
+use App\Entity\Scene;
 use App\Entity\TokenAction;
 use App\Form\ActionSufferFormType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,10 +24,10 @@ class ActionSufferFormComponent extends AbstractController
     use ComponentWithFormTrait;
 
     #[LiveProp]
-    public ?TokenAction $initialFormData = null;
+    public null|TokenAction $initialFormData = null;
 
     #[LiveProp]
-    public ?Player $player = null;
+    public null|Player $player = null;
 
     public function __construct()
     {
@@ -38,6 +39,7 @@ class ActionSufferFormComponent extends AbstractController
         $this->player = $player;
     }
 
+    #[\Override]
     protected function instantiateForm(): FormInterface
     {
         if (null === $this->initialFormData) {
@@ -48,6 +50,14 @@ class ActionSufferFormComponent extends AbstractController
         return $this->createForm(ActionSufferFormType::class, $this->initialFormData);
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param EntityManagerInterface $entityManager
+     * @throws \Symfony\Component\Form\Exception\RuntimeException
+     * @throws \LogicException
+     * @return RedirectResponse
+     */
     #[LiveAction]
     public function save(EntityManagerInterface $entityManager): RedirectResponse
     {
@@ -70,7 +80,7 @@ class ActionSufferFormComponent extends AbstractController
             return $this->redirectToRoute('app_home', []);
         }
         $currentScene = $game->getCurrentScene();
-        $tokenAction->setScene($currentScene);
+        $tokenAction->setScene($currentScene instanceof Scene ? $currentScene : null);
         $player->addRadianceToken();
         $entityManager->persist($player);
         $entityManager->persist($tokenAction);

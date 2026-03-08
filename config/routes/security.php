@@ -1,0 +1,8 @@
+<?php
+
+return [
+    '_security_logout' => [
+        'resource' => 'security.route_loader.logout',
+        'type' => 'service',
+    ],
+];

@@ -8,6 +8,10 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<Player>
+ * @method Player|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Player|null findOneBy(mixed[] $criteria, mixed[] $orderBy = null)
+ * @method Player[]    findAll()
+ * @method Player[]    findBy(mixed[] $criteria, mixed[] $orderBy = null, $limit = null, $offset = null)
  */
 class PlayerRepository extends ServiceEntityRepository
 {

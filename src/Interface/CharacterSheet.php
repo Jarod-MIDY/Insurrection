@@ -10,7 +10,7 @@ interface CharacterSheet
     public function __serialize(): array;
 
     /**
-     * @param array<string, string> $data
+     * @param array<string, string|null> $data
      */
     public function __unserialize(array $data): void;
 

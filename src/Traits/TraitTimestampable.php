@@ -48,7 +48,7 @@ trait TraitTimestampable
     /**
      * Returns updatedAt.
      */
-    public function getUpdatedAt(): ?\DateTime
+    public function getUpdatedAt(): null|\DateTime
     {
         return $this->updatedAt;
     }

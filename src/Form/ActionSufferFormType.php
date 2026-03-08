@@ -11,6 +11,14 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ActionSufferFormType extends AbstractType
 {
+    /**
+     * Undocumented function
+     *
+     * @param FormBuilderInterface $builder
+     * @throws \InvalidArgumentException
+     * @return void
+     */
+    #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         if (!key_exists('data', $options)) {
@@ -19,23 +27,29 @@ class ActionSufferFormType extends AbstractType
         $action = $options['data'];
         if (!$action instanceof TokenAction) {
             $class = is_object($action) ? $action::class : gettype($action);
-            throw new \InvalidArgumentException('Unexpected data class '.$class);
+            throw new \InvalidArgumentException('Unexpected data class ' . $class);
         }
         $playerRole = $action->getPlayer()?->getRole();
         if (null === $playerRole) {
             throw new \InvalidArgumentException('Missing player role');
         }
-        $builder
-            ->add('actionSuffer', EnumType::class, [
-                'label' => 'Tu peux SUBIR',
-                'autocomplete' => true,
-                'class' => RolesActionsSuffer::class,
-                'choice_label' => fn (RolesActionsSuffer $choice): string => $choice->value,
-                'choices' => RolesActionsSuffer::getActionsFromRole($playerRole),
-            ])
-        ;
+        $builder->add('actionSuffer', EnumType::class, [
+            'label' => 'Tu peux SUBIR',
+            'autocomplete' => true,
+            'class' => RolesActionsSuffer::class,
+            'choice_label' => fn(RolesActionsSuffer $choice): string => $choice->value,
+            'choices' => RolesActionsSuffer::getActionsFromRole($playerRole),
+        ]);
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param OptionsResolver $resolver
+     * @throws \Symfony\Component\OptionsResolver\Exception\AccessException
+     * @return void
+     */
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
