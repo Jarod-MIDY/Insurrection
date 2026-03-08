@@ -1,7 +1,8 @@
 <?php
+namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 // see https://symfony.com/doc/current/reference/configuration/framework.html
-return [
+return App::config([
     'framework' => [
         'secret' => '%env(APP_SECRET)%',
 
@@ -25,4 +26,4 @@ return [
             ],
         ],
     ],
-];
+]);

@@ -1,6 +1,7 @@
 <?php
+namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-return [
+return App::config([
     'doctrine_migrations' => [
         'migrations_paths' => [
             // namespace is arbitrary but should be different from App\Migrations
@@ -9,4 +10,4 @@ return [
         ],
         'enable_profiler' => false,
     ],
-];
+]);

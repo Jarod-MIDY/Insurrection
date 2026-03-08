@@ -1,6 +1,8 @@
-<?php
+<?php   
+namespace Symfony\Component\DependencyInjection\Loader\Configurator;
+use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 
-return [
+return App::config([
     'doctrine' => [
         'dbal' => [
             'dbname' => '%env(resolve:DATABASE_NAME)%',
@@ -18,7 +20,7 @@ return [
             'validate_xml_mapping' => true,
             'naming_strategy' => 'doctrine.orm.naming_strategy.underscore_number_aware',
             'identity_generation_preferences' => [
-                'Doctrine\DBAL\Platforms\PostgreSQLPlatform' => 'identity',
+                PostgreSQLPlatform::class => 'identity',
             ],
             'auto_mapping' => true,
             'mappings' => [
@@ -75,4 +77,4 @@ return [
             ],
         ],
     ],
-];
+]);

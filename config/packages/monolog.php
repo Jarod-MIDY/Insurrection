@@ -1,6 +1,7 @@
 <?php
+namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-return [
+return App::config([
     'monolog' => [
         'channels' => [
             'deprecation', // Deprecations are logged in the dedicated "deprecation" channel when it exists
@@ -26,7 +27,6 @@ return [
                 //    level: info
                 'console' => [
                     'type' => 'console',
-                    'process_psr_3_messages' => false,
                     'channels' => ["!event", "!doctrine", "!console"],
                 ],
             ],
@@ -40,7 +40,10 @@ return [
                     'type' => 'fingers_crossed',
                     'action_level' => 'error',
                     'handler' => 'nested',
-                    'excluded_http_codes' => [404, 405],
+                    'excluded_http_codes' => [
+                        ['code' => 404],
+                        ['code' => 405],
+                    ],
                     'channels' => ["!event"],
                 ],
                 'nested' => [
@@ -59,7 +62,10 @@ return [
                     'type' => 'fingers_crossed',
                     'action_level' => 'error',
                     'handler' => 'nested',
-                    'excluded_http_codes' => [404, 405],
+                    'excluded_http_codes' => [
+                        ['code' => 404],
+                        ['code' => 405],
+                    ],
                     'buffer_size' => 50, // How many messages should be saved? Prevent memory leaks
                 ],
                 'nested' => [
@@ -70,7 +76,6 @@ return [
                 ],
                 'console' => [
                     'type' => 'console',
-                    'process_psr_3_messages' => false,
                     'channels' => ["!event", "!doctrine"],
                 ],
                 'deprecation' => [
@@ -82,4 +87,4 @@ return [
             ],
         ],
     ],
-];
+]);

@@ -1,6 +1,7 @@
 <?php
+namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-return [
+return App::config([
     'when@dev' => [
         'web_profiler' => [
             'toolbar' => true,
@@ -23,4 +24,4 @@ return [
             'profiler' => ['collect' => false],
         ],
     ],
-];
+]);

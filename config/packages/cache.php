@@ -1,6 +1,7 @@
 <?php
+namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-return [
+return App::config([
     'framework' => [
         'cache' => [
             // Unique name of your app: used to compute stable namespaces for cache keys.
@@ -22,4 +23,4 @@ return [
                 //my.dedicated.cache: null
         ],
     ],
-];
+]);

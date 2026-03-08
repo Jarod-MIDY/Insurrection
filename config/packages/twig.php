@@ -1,8 +1,9 @@
 <?php
+namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-return [
+return App::config([
     'twig' => [
-        'file_name_pattern' => '*.twig',
+        'file_name_pattern' => ['*.twig'],
     ],
 
     'when@test' => [
@@ -10,4 +11,4 @@ return [
             'strict_variables' => true,
         ],
     ],
-];
+]);

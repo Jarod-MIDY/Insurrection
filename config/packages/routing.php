@@ -1,6 +1,7 @@
 <?php
+namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-return [
+return App::config([
     'framework' => [
         'router' => [
             // Configure how to generate URLs in non-HTTP contexts, such as CLI commands.
@@ -16,4 +17,4 @@ return [
             ],
         ],
     ],
-];
+]);

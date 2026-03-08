@@ -1,11 +1,12 @@
 <?php
+namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-return [
+return App::config([
     'framework' => [
         'asset_mapper' => [
             // The paths to make available to the asset mapper.
             'paths' => [
-                'assets/',
+                'assets/' => '',
             ],
             'missing_import_mode' => 'strict',
         ],
@@ -18,4 +19,4 @@ return [
             ],
         ],
     ],
-];
+]);

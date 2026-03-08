@@ -1,7 +1,8 @@
 <?php
+namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 // Enable stateless CSRF protection for forms and logins/logouts
-return [
+return App::config([
     'framework' => [
         'form' => [
             'csrf_protection' => [
@@ -16,4 +17,4 @@ return [
             ],
         ],
     ],
-];
+]);

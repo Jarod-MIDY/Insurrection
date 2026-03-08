@@ -1,6 +1,7 @@
 <?php
+namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-return [
+return App::config([
     'mercure' => [
         'hubs' => [
             'default' => [
@@ -12,4 +13,4 @@ return [
             ],
         ],
     ],
-];
+]);

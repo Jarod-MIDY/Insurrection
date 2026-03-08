@@ -1,10 +1,12 @@
 <?php
 
+namespace Symfony\Component\DependencyInjection\Loader\Configurator;
+
 use App\Entity\Game;
 use App\Entity\User;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
-return [
+return App::config([
     'security' => [
         // https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
         'password_hashers' => [
@@ -72,4 +74,4 @@ return [
             ],
         ],
     ],
-];
+]);

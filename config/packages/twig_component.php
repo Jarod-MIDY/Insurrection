@@ -1,6 +1,7 @@
 <?php
+namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-return [
+return App::config([
     'twig_component' => [
         'anonymous_template_directory' => 'components/',
         'defaults' => [
@@ -8,4 +9,4 @@ return [
             'App\Twig\Components\\' => 'components/',
         ],
     ],
-];
+]);

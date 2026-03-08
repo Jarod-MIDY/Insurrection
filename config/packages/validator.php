@@ -1,6 +1,7 @@
 <?php
+namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-return [
+return App::config([
     'framework' => [
         'validation' => [
             // Enables validator auto-mapping support.
@@ -17,4 +18,4 @@ return [
             ],
         ],
     ],
-];
+]);

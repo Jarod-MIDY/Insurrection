@@ -1,6 +1,7 @@
 <?php
+namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-return [
+return App::config([
     'controllers' => [
         'resource' => [
             'path' => '../src/Controller/',
@@ -8,4 +9,4 @@ return [
         ],
         'type' => 'attribute',
     ],
-];
+]);

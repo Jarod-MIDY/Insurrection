@@ -1,6 +1,7 @@
 <?php
+namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-return [
+return App::config([
     'when@dev' => [
         'debug' => [
             // Forwards VarDumper Data clones to a centralized server allowing to inspect dumps on CLI or in your browser.
@@ -8,4 +9,4 @@ return [
             'dump_destination' => "tcp://%env(VAR_DUMPER_SERVER)%",
         ],
     ],
-];
+]);
