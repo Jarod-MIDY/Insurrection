@@ -7,6 +7,8 @@
 // https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 return [
     'parameters' => [
+        'mailer_from_address' => '%env(default:webmaster@worldmecaniste.com:MAILER_FROM_ADDRESS)%',
+        'mailer_from_name' => '%env(default:Bloubill:MAILER_FROM_NAME)%',
     ],
 
     'services' => [

@@ -1,0 +1,147 @@
+# Code Audit Report - Insurrection Project
+Generated on: 2026-03-08
+
+## Executive Summary
+This audit examined the Insurrection Symfony 7.4 application, a tabletop role-playing game management system. The codebase demonstrates good modern Symfony practices but has several areas requiring attention for security, performance, and maintainability.
+
+## Security Issues
+
+### 🔴 Critical Issues
+
+1. **Hardcoded Email Credentials** (RegisterController.php:60)
+   - Email address 'webmaster@worldmecaniste.com' is hardcoded
+   - Risk: Exposes internal email structure, potential for abuse
+   - Recommendation: Move to environment variables
+
+2. **Plain Text Game Passwords** (Game.php:66, JoinGameController.php:48)
+   - Game passwords stored without hashing
+   - Risk: Database compromise exposes all game passwords
+   - Recommendation: Hash game passwords using the same hasher as user passwords
+
+### 🟡 Medium Issues
+
+1. **Missing Access Controls**
+   - Security configuration shows commented-out access control rules
+   - Risk: No role-based restrictions implemented
+   - Recommendation: Implement proper access controls for admin/game master functions
+
+2. **CSRF Protection Gaps**
+   - While CSRF is enabled for forms, some stateless operations may not be protected
+   - Risk: Potential for cross-site request forgery attacks
+   - Recommendation: Audit all state-changing operations for CSRF protection
+
+3. **User Enumeration in Login**
+   - Login form reveals if username exists via error messages
+   - Risk: Enables username enumeration attacks
+   - Recommendation: Use generic error messages
+
+## Code Quality Issues
+
+### 🟡 Patterns and Improvements
+
+1. **Inconsistent Return Type Declarations**
+   - Some methods return `Response|RedirectResponse` (JoinGameController.php:27)
+   - Impact: Reduces code clarity and type safety
+   - Recommendation: Use union types consistently or return specific types
+
+2. **Magic Numbers and Hardcoded Values**
+   - Player limit hardcoded as 8 in multiple places (Game.php:39, JoinGameController.php:39)
+   - Radiance tokens per player hardcoded as 3 (Game.php:18)
+   - Recommendation: Define constants or configuration parameters
+
+3. **Complex Entity Logic**
+   - Game entity contains business logic that could be moved to services
+   - Player entity has complex role management logic
+   - Recommendation: Extract business logic to dedicated service classes
+
+4. **Missing Exception Handling**
+   - Many controller methods lack proper exception handling
+   - Database operations without try-catch blocks
+   - Recommendation: Implement proper exception handling strategies
+
+### 🟢 Good Practices Observed
+
+1. **Modern Symfony Features**
+   - Proper use of PHP 8.4 features
+   - Entity attributes instead of annotations
+   - Turbo/stimulus integration
+
+2. **Security Implementation**
+   - Password hashing implemented correctly
+   - CSRF protection enabled
+   - Email verification system
+
+3. **Code Organization**
+   - Proper namespace structure
+   - Separation of concerns in controllers
+   - Use of interfaces and traits
+
+## Performance Considerations
+
+1. **N+1 Query Risks**
+   - Entity relationships may cause N+1 queries
+   - Recommendation: Use JOIN queries or DTO projections for complex data
+
+2. **Collection Filtering in Memory**
+   - Player filtering done in PHP rather than database (Game.php:291)
+   - Recommendation: Move filtering to database level
+
+3. **Missing Caching Strategy**
+   - No apparent caching implementation
+   - Recommendation: Implement caching for frequently accessed data
+
+## Database Schema Issues
+
+1. **Naming Inconsistencies**
+   - Table name `user` uses backticks (User.php:16)
+   - Some column names could be more descriptive
+
+2. **Missing Indexes**
+   - Foreign key relationships may need additional indexes
+   - Recommendation: Analyze query patterns and add appropriate indexes
+
+## Frontend Security
+
+1. **XSS Protection**
+   - Twig auto-escaping helps prevent XSS
+   - Recommendation: Ensure all user-generated content is properly escaped
+
+2. **CSRF in Forms**
+   - Forms appear to have CSRF protection
+   - Recommendation: Verify all forms include CSRF tokens
+
+## Recommendations Priority
+
+### Immediate (Critical)
+1. Hash game passwords
+2. Move hardcoded email to environment variables
+3. Implement proper access controls
+
+### Short Term (Medium)
+1. Add comprehensive exception handling
+2. Extract business logic to services
+3. Implement caching strategy
+
+### Long Term (Improvement)
+1. Add comprehensive test suite
+2. Implement audit logging
+3. Add API rate limiting
+4. Consider implementing API documentation
+
+## Configuration Issues
+
+1. **Environment Variables**
+   - Sensitive configuration should be in environment files
+   - Database credentials and email settings need proper environment handling
+
+2. **Development vs Production**
+   - Ensure proper environment-specific configurations
+   - Debug information should be disabled in production
+
+## Compliance and Standards
+
+The codebase follows most Symfony best practices and modern PHP standards. However, security hardening and performance optimization would benefit the application significantly.
+
+## Conclusion
+
+While the application demonstrates solid foundation with modern Symfony practices, addressing the security issues, particularly around password handling and access controls, should be the immediate priority. The code quality is good but would benefit from refactoring business logic into services and implementing proper error handling throughout the application.
