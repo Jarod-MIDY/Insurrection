@@ -11,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\UX\Turbo\TurboBundle;
 
@@ -32,6 +33,7 @@ class JoinGameController extends AbstractController
         Request $request,
         PlayerRepository $playerRepository,
         UpdateLoby $updateLobySSE,
+        PasswordHasherFactoryInterface $hasherFactory,
     ): Response|RedirectResponse {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
         if ($playerRepository->findOneBy(['game' => $game, 'linkedUser' => $this->getUser()])) {
@@ -46,14 +48,17 @@ class JoinGameController extends AbstractController
         }
         $form = $this->createForm(JoinFormType::class);
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid() && $form->get('password')->getData() === $game->getPassword()) {
-            $player = new Player();
-            $player->setGame($game);
-            $player->setLinkedUser($this->getUser());
-            $playerRepository->save($player, true);
-            $updateLobySSE();
+        if ($form->isSubmitted() && $form->isValid()) {
+            $passwordData = $form->get('password')->getData();
+            if ($game->isPasswordValid(is_string($passwordData) ? $passwordData : '', $hasherFactory)) {
+                $player = new Player();
+                $player->setGame($game);
+                $player->setLinkedUser($this->getUser());
+                $playerRepository->save($player, true);
+                $updateLobySSE();
 
-            return $this->redirectToRoute('app_game_show', ['game' => $game->getId()]);
+                return $this->redirectToRoute('app_game_show', ['game' => $game->getId()]);
+            }
         }
 
         $request->setRequestFormat(TurboBundle::STREAM_FORMAT);

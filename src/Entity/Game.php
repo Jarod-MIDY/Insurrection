@@ -9,11 +9,13 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: GameRepository::class)]
-class Game
+class Game implements PasswordAuthenticatedUserInterface
 {
     private const RADIANCE_TOKENS_PER_PLAYER = 3;
 
@@ -243,11 +245,30 @@ class Game
         return $this->password;
     }
 
-    public function setPassword(string $password): static
+    public function setPassword(string $password, ?PasswordHasherFactoryInterface $hasherFactory = null): static
     {
-        $this->password = $password;
+        if ($hasherFactory) {
+            $hasher = $hasherFactory->getPasswordHasher('App\Entity\Game');
+            $this->password = $hasher->hash($password);
+        } else {
+            $this->password = $password;
+        }
 
         return $this;
+    }
+
+    public function isPasswordValid(string $plainPassword, ?PasswordHasherFactoryInterface $hasherFactory = null): bool
+    {
+        if (!$hasherFactory) {
+            return $plainPassword === ($this->password ?? '');
+        }
+
+        if (!$this->password) {
+            return false;
+        }
+
+        $hasher = $hasherFactory->getPasswordHasher('App\Entity\Game');
+        return $hasher->verify($this->password, $plainPassword);
     }
 
     /**

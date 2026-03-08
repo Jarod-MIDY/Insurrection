@@ -1,17 +1,22 @@
 <?php
 
+use App\Entity\Game;
+use App\Entity\User;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+
 return [
     'security' => [
         // https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
         'password_hashers' => [
-            'Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface' => 'auto',
+            PasswordAuthenticatedUserInterface::class => 'auto',
+            Game::class => 'auto',
         ],
         // https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
         'providers' => [
             // used to reload user from session & other features (e.g. switch_user)
             'app_user_provider' => [
                 'entity' => [
-                    'class' => 'App\Entity\User',
+                    'class' => User::class,
                     'property' => 'username',
                 ],
             ],
@@ -58,7 +63,7 @@ return [
                 // important to generate secure password hashes. In tests however, secure hashes
                 // are not important, waste resources and increase test times. The following
                 // reduces the work factor to the lowest possible values.
-                'Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface' => [
+                PasswordAuthenticatedUserInterface::class => [
                     'algorithm' => 'auto',
                     'cost' => 4, // Lowest possible value for bcrypt
                     'time_cost' => 3, // Lowest possible value for argon

@@ -9,6 +9,7 @@ use App\Repository\GameRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\UX\Turbo\TurboBundle;
 
@@ -24,8 +25,11 @@ class CreateGameController extends AbstractController
      * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      * @return Response|\Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function __invoke(Request $request, GameRepository $gameRepository): Response
-    {
+    public function __invoke(
+        Request $request, 
+        GameRepository $gameRepository,
+        PasswordHasherFactoryInterface $hasherFactory
+    ): Response {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
         $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
         $game = new Game();
@@ -34,6 +38,10 @@ class CreateGameController extends AbstractController
         $form = $this->createForm(GameFormType::class, $game);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            // Hash the game password before saving
+            if ($game->getPassword()) {
+                $game->setPassword($game->getPassword(), $hasherFactory);
+            }
             $gameRepository->save($game, true);
 
             return $this->redirectToRoute('app_game_edit', ['game' => $game->getId()]);
