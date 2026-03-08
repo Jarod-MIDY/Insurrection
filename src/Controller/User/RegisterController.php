@@ -19,19 +19,6 @@ use Symfony\UX\Turbo\TurboBundle;
 #[Route('/register', name: 'app_register')]
 class RegisterController extends AbstractController
 {
-    /**
-     * Summary of __invoke
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface $userPasswordHasher
-     * @param \Symfony\Bundle\SecurityBundle\Security $security
-     * @param \Doctrine\ORM\EntityManagerInterface $entityManager
-     * @param \App\Security\EmailVerifier $emailVerifier
-     * @throws \Symfony\Component\Form\Exception\OutOfBoundsException
-     * @throws \Symfony\Component\Form\Exception\RuntimeException
-     * @throws \LogicException
-     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
-     * @return Response|\Symfony\Component\HttpFoundation\RedirectResponse
-     */
     public function __invoke(
         Request $request,
         UserPasswordHasherInterface $userPasswordHasher,
@@ -52,15 +39,17 @@ class RegisterController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
+            $address = $this->getParameter('mailer_from_address');
+            $name = $this->getParameter('mailer_from_name');
+            if (!is_string($address) || !is_string($name)) {
+                throw new \RuntimeException('Website email configuration error');
+            }
             // generate a signed url and email it to the user
             $emailVerifier->sendEmailConfirmation(
                 'app_verify_email',
                 $user,
                 new TemplatedEmail()
-                    ->from(new Address(
-                        $this->getParameter('mailer_from_address'),
-                        $this->getParameter('mailer_from_name')
-                    ))
+                    ->from(new Address($address, $name))
                     ->to((string) $user->getEmail())
                     ->subject('Please Confirm your Email')
                     ->htmlTemplate('registration/confirmation_email.html.twig'),
